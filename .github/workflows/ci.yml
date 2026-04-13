@@ -59,7 +59,7 @@ jobs:
           token: ${{ secrets.EXPO_TOKEN }}
 
       - run: npx expo install expo-updates
-      - run: npx eas update:configure --non-interactive
+      - run: eas update:configure --non-interactive
       - name: Deploy to Expo
         run: eas update --channel staging --auto --non-interactive
         env:
