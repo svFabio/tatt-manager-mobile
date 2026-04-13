@@ -2,7 +2,7 @@
 
 Aplicación móvil desarrollada en **React Native (Expo)** para la gestión integral de un estudio de tatuajes. Permite a los tatuadores administrar solicitudes de citas provenientes de un bot de WhatsApp, organizar su agenda, cotizar trabajos y gestionar su inventario.
 
-## CI/CD 🚀
+## CI/CD
 
 Este proyecto utiliza **GitHub Actions** para automatizar el proceso de integración y despliegue continuo.
 
@@ -13,10 +13,10 @@ Este proyecto utiliza **GitHub Actions** para automatizar el proceso de integrac
   - Verificación de compilación (usando Expo prebuild para validar configuración Android)
 
 - **Build Android**: Se ejecuta automáticamente al hacer push a `main` o `dev`
-  - 🔨 Genera APK de producción usando EAS Build
+  - Genera APK de producción usando EAS Build
 
 - **Deploy Staging**: Se ejecuta al hacer push a `develop` o `dev`
-  - 📱 Despliega automáticamente a Expo en el canal `staging`
+  - Despliega automáticamente a Expo en el canal `staging`
 
 ### Configuración Requerida
 
@@ -27,7 +27,7 @@ Para que los workflows funcionen correctamente, necesitas configurar los siguien
 
 ### Configuración de EAS
 
-✅ **EAS completamente configurado:**
+**EAS completamente configurado:**
 - Archivo `.eas/project.json` con projectId y accountId
 - `app.json` con `owner: "fsvabio"`
 - Versiones remotas activadas (`eas.json`)
@@ -42,9 +42,9 @@ Para que los workflows funcionen correctamente, necesitas configurar los siguien
 
 El proyecto está configurado para usar **versiones remotas automáticas**:
 
-- ✅ `cli.appVersionSource: "remote"` - EAS maneja las versiones automáticamente
-- ✅ `production.autoIncrement: true` - Se incrementan automáticamente en cada build
-- ✅ No necesitas manejar versiones manualmente
+- `cli.appVersionSource: "remote"` - EAS maneja las versiones automáticamente
+- `production.autoIncrement: true` - Se incrementan automáticamente en cada build
+- No necesitas manejar versiones manualmente
 
 Esto evita conflictos de versiones en CI y stores de apps.
 
