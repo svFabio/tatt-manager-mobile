@@ -27,13 +27,16 @@ Para que los workflows funcionen correctamente, necesitas configurar los siguien
 
 ### Configuración de EAS
 
-✅ **EAS ya está configurado** en el proyecto con el archivo `.eas/project.json`.
+✅ **EAS completamente configurado:**
+- Archivo `.eas/project.json` con projectId y accountId
+- `app.json` con `owner: "fsvabio"`
+- Versiones remotas activadas (`eas.json`)
+- CI configurado para builds y deploys
 
 **Secrets requeridos en GitHub:**
 - `EXPO_TOKEN`: Token de acceso a Expo
-- `EAS_PROJECT_ID`: `30886f30-4462-40f8-9416-76326295af8e` (ya incluido)
 
-**Nota:** No necesitas configurar EAS localmente, ya está listo para CI.
+**Estado:** Listo para CI sin configuración adicional.
 
 ### Configuración de Versiones Automáticas
 
