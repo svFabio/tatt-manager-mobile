@@ -4,6 +4,11 @@
     "slug": "tatt-manager",
     "owner": "fsvabio",
     "version": "1.0.0",
+    "extra": {
+      "eas": {
+        "projectId": "30886f30-4462-40f8-9416-76326295af8e"
+      }
+    },
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "tattoostudio",
