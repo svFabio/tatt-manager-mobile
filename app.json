@@ -1,7 +1,8 @@
 {
   "expo": {
     "name": "Tattoo Studio Manager",
-    "slug": "tattoo-studio-manager",
+    "slug": "tatt-manager",
+    "owner": "fsvabio",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
