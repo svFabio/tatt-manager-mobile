@@ -1,21 +1,31 @@
 import React, { useState } from "react";
-import { View, Text, KeyboardAvoidingView, Platform } from "react-native";
+import { View, Text, KeyboardAvoidingView, Platform, ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { CustomButton, InputField } from "@/src/components/ui";
+import api from "@/src/api/axios";
+import { useAuthStore } from "@/src/store/useAuthStore";
 
-/**
- * Pantalla de Login (placeholder).
- * Actualmente redirige directamente a las tabs.
- * Conectar con tu backend cuando implementes autenticación.
- */
 export default function LoginScreen() {
-  const [email, setEmail] = useState("");
+  const [email, setEmail]       = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading]   = useState(false);
+  const [error, setError]       = useState("");
+  const setToken                = useAuthStore((s) => s.setToken);
 
-  const handleLogin = () => {
-    // TODO: Implementar autenticación con el backend
-    router.replace("/");
+  const handleLogin = async () => {
+    if (!email || !password) { setError("Completa todos los campos."); return; }
+    try {
+      setLoading(true);
+      setError("");
+      const { data } = await api.post("/auth/login", { email, password });
+      setToken(data.token);
+      router.replace("/");
+    } catch (e: any) {
+      setError(e.response?.data?.message || "Credenciales incorrectas.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -51,8 +61,9 @@ export default function LoginScreen() {
         />
 
         <View className="mt-4">
+          {error ? <Text className="text-red-400 text-xs text-center mb-3">{error}</Text> : null}
           <CustomButton
-            title="Iniciar Sesión"
+            title={loading ? "Entrando..." : "Iniciar Sesión"}
             variant="primary"
             size="lg"
             fullWidth
