@@ -1,21 +1,13 @@
 import { useEffect, useRef } from "react";
-import { io, Socket } from "socket.io-client";
+import { Socket } from "socket.io-client";
+import { socket } from "@/src/api/socket";
 import { useTattooStore, Request } from "@/src/store/useTattooStore";
-
-const SOCKET_URL = process.env.EXPO_PUBLIC_SOCKET_URL!;
 
 export function useWebSocket(): void {
   const socketRef = useRef<Socket | null>(null);
   const addRequest = useTattooStore((state) => state.addRequest);
 
   useEffect(() => {
-    const socket = io(SOCKET_URL, {
-      transports: ["websocket"],
-      reconnection: true,
-      reconnectionAttempts: 10,
-      reconnectionDelay: 3000,
-    });
-
     socketRef.current = socket;
 
     socket.on("connect", () => {
@@ -30,13 +22,22 @@ export function useWebSocket(): void {
       console.error("[WebSocket] Error de conexión:", error.message);
     });
 
-    socket.on("new-whatsapp-request", (data: Request) => {
+    const handleNewRequest = (data: Partial<Request>) => {
+      if (!data.clientName || !data.id) {
+        console.log("[WebSocket] Evento nueva-solicitud recibido (payload resumido).");
+        return;
+      }
+
       console.log("[WebSocket] Nueva solicitud recibida:", data.clientName);
-      addRequest(data);
-    });
+      addRequest(data as Request);
+    };
+
+    socket.on("new-whatsapp-request", handleNewRequest);
+    socket.on("nueva-solicitud", handleNewRequest);
 
     return () => {
-      socket.disconnect();
+      socket.off("new-whatsapp-request", handleNewRequest);
+      socket.off("nueva-solicitud", handleNewRequest);
       socketRef.current = null;
       console.log("[WebSocket] Socket desconectado (cleanup).");
     };
