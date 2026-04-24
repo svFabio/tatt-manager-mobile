@@ -1,11 +1,21 @@
 // sirve para definir los tipos relacionados con las citas y solicitudes en la aplicación
 export type SolicitudItem = {
     id: number
-    fechaHoraInicio: string | Date | null
-    clienteNombre: string
-    artistaNombre: string
-    recibido: string | Date
     estado: 'PENDIENTE' | 'CONFIRMADA' | 'FINALIZADA' | 'CANCELADA'
+    descripcion?: string
+    tamanoEnCm?: string
+    zonaDelCuerpo?: string
+    fotoReferenciaUrl?: string | null
+    recibidaEn?: string | Date
+    cliente?: {
+        nombre?: string
+        numeroWhatsapp?: string
+    }
+    // Compatibilidad con respuestas planas de /api/citas/*
+    fechaHoraInicio?: string | Date | null
+    clienteNombre?: string
+    artistaNombre?: string
+    recibido?: string | Date
 }
 
 // type para representar el estado de una cita, que puede ser pendiente, confirmada, finalizada o cancelada

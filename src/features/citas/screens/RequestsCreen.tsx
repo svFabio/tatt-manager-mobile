@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useRouter } from 'expo-router';
 import { CitasAPI } from '../../../api/citas';
+import { socket } from '../../../api/socket';
 import { AppointmentCard } from '../components/AppointmentCard';
-import type { EstadoCita, SolicitudItem, CitaItem } from '../../../types/citas';
+import type { EstadoCita, SolicitudItem } from '../../../types/citas';
 
 const FILTERS: { label: string; value: EstadoCita | 'ALL' }[] = [
     { label: 'Todas', value: 'ALL' },
@@ -19,28 +20,42 @@ export default function RequestsScreen() {
     const router = useRouter();
     const [activeFilter, setActiveFilter] = useState<EstadoCita | 'ALL'>('ALL');
     const [loading, setLoading] = useState(true);
-    const [requests, setRequests] = useState<SolicitudItem[] | CitaItem[]>([]);
+    const [requests, setRequests] = useState<SolicitudItem[]>([]);
 
-    useEffect(() => { load(activeFilter); }, [activeFilter]);
-
-    const load = async (filter: EstadoCita | 'ALL') => {
+    const load = useCallback(async () => {
         try {
             setLoading(true);
-            if (filter === 'ALL') {
-                const res = await CitasAPI.getSolicitudes();
-                setRequests(res.data);
-            } else {
-                const res = await CitasAPI.getCitasPorEstado(filter);
-                setRequests(res.data);
-            }
+            const res = await CitasAPI.getSolicitudes();
+            setRequests(res.data);
         } catch (e) {
             console.error('[RequestsScreen]', e);
         } finally {
             setLoading(false);
         }
-    };
+    }, []);
 
-    const filtered = requests;
+    useEffect(() => {
+        load();
+    }, [load]);
+
+    useEffect(() => {
+        const handleNewRequest = () => {
+            // El payload socket llega resumido, por eso refrescamos desde API.
+            load();
+        };
+
+        socket.on('nueva-solicitud', handleNewRequest);
+        socket.on('new-whatsapp-request', handleNewRequest);
+
+        return () => {
+            socket.off('nueva-solicitud', handleNewRequest);
+            socket.off('new-whatsapp-request', handleNewRequest);
+        };
+    }, [load]);
+
+    const filtered = activeFilter === 'ALL'
+        ? requests
+        : requests.filter((request) => request.estado === activeFilter);
 
     return (
         <SafeAreaView className="flex-1 bg-[#0A0A0A]">
