@@ -66,17 +66,17 @@ export default function RequestsScreen() {
                     data={FILTERS}
                     keyExtractor={(f) => f.value}
                     showsHorizontalScrollIndicator={false}
-                    style={{ flexGrow: 0 }}
-                    contentContainerStyle={{ gap: 8, paddingVertical: 12 }}
+                    style={{ height: 64 }}
+                    contentContainerStyle={{ gap: 8, paddingVertical: 10, alignItems: 'center' }}
                     renderItem={({ item: f }) => {
                         const isActive = activeFilter === f.value;
                         return (
                             <TouchableOpacity
                                 onPress={() => setActiveFilter(f.value)}
                                 activeOpacity={0.7}
-                                className={`px-5 py-2 rounded-xl ${isActive ? 'bg-[#7E51FF]' : 'bg-[#1A1A1A]'}`}
+                                className={`px-5 py-3 rounded-xl ${isActive ? 'bg-[#7E51FF]' : 'bg-[#1A1A1A]'}`}
                             >
-                                <Text className={`text-ls font-bold ${isActive ? 'text-white' : 'text-gray-400'}`}>
+                                <Text className={`text-sm font-bold ${isActive ? 'text-white' : 'text-gray-400'}`}>
                                     {f.label}
                                 </Text>
                             </TouchableOpacity>
