@@ -15,7 +15,7 @@ const FILTERS: { label: string; value: EstadoCita | 'ALL' }[] = [
     { label: 'Finalizadas', value: 'FINALIZADA' },
     { label: 'Canceladas', value: 'CANCELADA' },
 ];
-
+   
 export default function RequestsScreen() {
     const router = useRouter();
     const [activeFilter, setActiveFilter] = useState<EstadoCita | 'ALL'>('ALL');
@@ -74,9 +74,12 @@ export default function RequestsScreen() {
                             <TouchableOpacity
                                 onPress={() => setActiveFilter(f.value)}
                                 activeOpacity={0.7}
-                                className={`px-5 py-2 rounded-xl ${isActive ? 'bg-[#7E51FF]' : 'bg-[#1A1A1A]'}`}
+                                className={`px-5 py-3 rounded-xl justify-center items-center ${isActive ? 'bg-[#7E51FF]' : 'bg-[#1A1A1A]'}`}
                             >
-                                <Text className={`text-ls font-bold ${isActive ? 'text-white' : 'text-gray-400'}`}>
+                                <Text 
+                                    style={{ includeFontPadding: false, lineHeight: 22 }}
+                                    className={`text-sm font-bold pb-0.5 ${isActive ? 'text-white' : 'text-gray-400'}`}
+                                >
                                     {f.label}
                                 </Text>
                             </TouchableOpacity>
@@ -84,7 +87,7 @@ export default function RequestsScreen() {
                     }}
                 />
 
-                <Text className="text-gray-500 text-xs mb-4">
+                <Text style={{ includeFontPadding: false, lineHeight: 20 }} className="text-gray-500 text-xs mb-4 pb-1">
                     {filtered.length} solicitud{filtered.length !== 1 ? 'es' : ''}
                 </Text>
 

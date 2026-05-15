@@ -1,10 +1,47 @@
 import { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { CitasAPI } from '../../../api/citas';
+import { useRouter } from 'expo-router';
 
-export const DetalleCotizacion = () => {
+export const DetalleCotizacion = ({ solicitudId, estado }: { solicitudId: number, estado?: string }) => {
+  const router = useRouter();
   const [tiempo, setTiempo] = useState('');
   const [costo, setCosto]   = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const isCotizada = estado !== 'PENDIENTE';
+
+  const enviarCotizacion = async () => {
+    try {
+      setLoading(true);
+      await CitasAPI.cotizarSolicitud(solicitudId, Number(costo), Number(tiempo));
+      Alert.alert('Éxito', 'Cotización enviada al cliente por WhatsApp.', [
+        { text: 'OK', onPress: () => router.back() }
+      ]);
+    } catch (error: any) {
+      console.error('[Cotizar]', error);
+      Alert.alert('Error', 'Hubo un problema al enviar la cotización.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCotizar = () => {
+    if (!tiempo || !costo) {
+      Alert.alert('Error', 'Por favor ingresa el tiempo estimado y el costo.');
+      return;
+    }
+    
+    Alert.alert(
+      'Confirmar Cotización',
+      '¿Estás seguro de enviar esta cotización? Una vez enviada no podrás modificarla.',
+      [
+        { text: 'Cancelar', style: 'cancel' },
+        { text: 'Sí, enviar', onPress: enviarCotizacion }
+      ]
+    );
+  };
 
   return (
     <View className="bg-[#121212] rounded-2xl border border-white/5 p-4">
@@ -21,9 +58,11 @@ export const DetalleCotizacion = () => {
         <TextInput
           value={tiempo}
           onChangeText={setTiempo}
-          placeholder="ej. 4 horas"
+          placeholder="ej. 4"
           placeholderTextColor="#4B5563"
           className="flex-1 text-white text-sm ml-2"
+          keyboardType="numeric"
+          editable={!isCotizada}
         />
       </View>
 
@@ -37,17 +76,32 @@ export const DetalleCotizacion = () => {
           placeholderTextColor="#4B5563"
           className="flex-1 text-white text-sm"
           keyboardType="numeric"
+          editable={!isCotizada}
         />
       </View>
 
-      <TouchableOpacity
-        activeOpacity={0.8}
-        className="bg-[#7E51FF] rounded-2xl py-4 flex-row items-center justify-center"
-        onPress={() => console.log('Cotización:', { tiempo, costo })}
-      >
-        <Text className="text-white text-sm font-bold mr-2">Enviar Cotización</Text>
-        <MaterialIcons name="send" size={16} color="#FFFFFF" />
-      </TouchableOpacity>
+      {isCotizada ? (
+        <View className="bg-[#2A2A2A] rounded-2xl py-4 flex-row items-center justify-center">
+          <Text className="text-gray-400 text-sm font-bold mr-2">Cotización ya enviada</Text>
+          <MaterialIcons name="check-circle" size={16} color="#4ADE80" />
+        </View>
+      ) : (
+        <TouchableOpacity
+          activeOpacity={0.8}
+          className="bg-[#7E51FF] rounded-2xl py-4 flex-row items-center justify-center"
+          onPress={handleCotizar}
+          disabled={loading}
+        >
+          {loading ? (
+            <ActivityIndicator color="white" />
+          ) : (
+            <>
+              <Text className="text-white text-sm font-bold mr-2">Enviar Cotización</Text>
+              <MaterialIcons name="send" size={16} color="#FFFFFF" />
+            </>
+          )}
+        </TouchableOpacity>
+      )}
     </View>
   );
 };

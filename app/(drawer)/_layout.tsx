@@ -9,6 +9,7 @@ import { useRouter, usePathname } from "expo-router";
 
 function CustomDrawerContent(props: any) {
   const { navigation, state } = props;
+  const router = useRouter();
 
   // React Navigation inyecta el estado directamente en el componente Drawer.
   // Esta es la forma 100% nativa y segura de saber qué ruta está activa.
@@ -39,32 +40,32 @@ function CustomDrawerContent(props: any) {
           MENU PRINCIPAL
         </Text>
         <View className="px-3 gap-y-1">
-          <TouchableOpacity onPress={() => navigation.navigate("index")} className={getBtnStyle("index")} activeOpacity={0.7}>
+          <TouchableOpacity onPress={() => router.push("/(drawer)" as any)} className={getBtnStyle("index")} activeOpacity={0.7}>
             <View className="w-8 items-center justify-center"><Ionicons name="home" size={20} color={getIconColor("index")} /></View>
             <Text className={getTextStyle("index")}>Inicio</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => navigation.navigate("calendar")} className={getBtnStyle("calendar")} activeOpacity={0.7}>
+          <TouchableOpacity onPress={() => router.push("/(drawer)/calendar" as any)} className={getBtnStyle("calendar")} activeOpacity={0.7}>
             <View className="w-8 items-center justify-center"><Feather name="calendar" size={20} color={getIconColor("calendar")} /></View>
             <Text className={getTextStyle("calendar")}>Calendario</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => navigation.navigate("requests")} className={getBtnStyle("requests")} activeOpacity={0.7}>
+          <TouchableOpacity onPress={() => router.push("/(drawer)/requests" as any)} className={getBtnStyle("requests")} activeOpacity={0.7}>
             <View className="w-8 items-center justify-center"><Feather name="user-plus" size={20} color={getIconColor("requests")} /></View>
             <Text className={getTextStyle("requests")}>Solicitudes</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => navigation.navigate("end-session")} className={getBtnStyle("end-session")} activeOpacity={0.7}>
+          <TouchableOpacity onPress={() => router.push("/(drawer)/end-session" as any)} className={getBtnStyle("end-session")} activeOpacity={0.7}>
             <View className="w-8 items-center justify-center"><Feather name="log-out" size={20} color={getIconColor("end-session")} /></View>
             <Text className={getTextStyle("end-session")}>Terminar Sesión</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => navigation.navigate("whatsapp")} className={getBtnStyle("whatsapp")} activeOpacity={0.7}>
+          <TouchableOpacity onPress={() => router.push("/(drawer)/whatsapp" as any)} className={getBtnStyle("whatsapp")} activeOpacity={0.7}>
             <View className="w-8 items-center justify-center"><Feather name="link" size={20} color={getIconColor("whatsapp")} /></View>
             <Text className={getTextStyle("whatsapp")}>Vincular WhatsApp</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => navigation.navigate("chat")} className={getBtnStyle("chat")} activeOpacity={0.7}>
+          <TouchableOpacity onPress={() => router.push("/(drawer)/chat" as any)} className={getBtnStyle("chat")} activeOpacity={0.7}>
             <View className="w-8 items-center justify-center"><Ionicons name="chatbubble-outline" size={20} color={getIconColor("chat")} /></View>
             <Text className={getTextStyle("chat")}>Chat WhatsApp</Text>
           </TouchableOpacity>
@@ -75,22 +76,22 @@ function CustomDrawerContent(props: any) {
           ADMINISTRACIÓN
         </Text>
         <View className="px-3 gap-y-1">
-          <TouchableOpacity onPress={() => navigation.navigate("users")} className={getBtnStyle("users")} activeOpacity={0.7}>
+          <TouchableOpacity onPress={() => router.push("/(drawer)/users" as any)} className={getBtnStyle("users")} activeOpacity={0.7}>
             <View className="w-8 items-center justify-center"><Feather name="users" size={20} color={getIconColor("users")} /></View>
             <Text className={getTextStyle("users")}>Usuarios</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => navigation.navigate("stats")} className={getBtnStyle("stats")} activeOpacity={0.7}>
+          <TouchableOpacity onPress={() => router.push("/(drawer)/stats" as any)} className={getBtnStyle("stats")} activeOpacity={0.7}>
             <View className="w-8 items-center justify-center"><Feather name="activity" size={20} color={getIconColor("stats")} /></View>
             <Text className={getTextStyle("stats")}>Estadisticas</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => navigation.navigate("inventory")} className={getBtnStyle("inventory")} activeOpacity={0.7}>
+          <TouchableOpacity onPress={() => router.push("/(drawer)/inventory" as any)} className={getBtnStyle("inventory")} activeOpacity={0.7}>
             <View className="w-8 items-center justify-center"><Feather name="archive" size={20} color={getIconColor("inventory")} /></View>
             <Text className={getTextStyle("inventory")}>Registrar stock</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => navigation.navigate("sessions")} className={getBtnStyle("sessions")} activeOpacity={0.7}>
+          <TouchableOpacity onPress={() => router.push("/(drawer)/sessions" as any)} className={getBtnStyle("sessions")} activeOpacity={0.7}>
             <View className="w-8 items-center justify-center"><MaterialIcons name="history" size={22} color={getIconColor("sessions")} /></View>
             <Text className={getTextStyle("sessions")}>Historial de sesiones</Text>
           </TouchableOpacity>
@@ -124,7 +125,7 @@ export default function DrawerLayout() {
         <Drawer.Screen name="users" options={{ title: "Usuarios", headerShown: true }} />
         <Drawer.Screen name="stats" options={{ title: "Estadisticas", headerShown: true }} />
         <Drawer.Screen name="inventory" options={{ title: "Inventario", headerShown: true }} />
-        <Drawer.Screen name="sessions" options={{ title: "Sesiones", headerShown: true }} />
+        <Drawer.Screen name="sessions" options={{ title: "Historial de Sesiones", headerShown: true }} />
         
         {/* Futuras u ocultas */}
         <Drawer.Screen name="agenda" options={{ title: "Agenda", headerShown: true }} />

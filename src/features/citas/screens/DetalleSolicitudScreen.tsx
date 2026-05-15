@@ -41,7 +41,7 @@ export default function DetalleSolicitudScreen() {
             <ScrollView className="flex-1 px-4" showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 40 }}>
                 <DetalleCliente detalle={detalle} />
                 <DetalleReferencia uri={detalle.referencia} />
-                <DetalleCotizacion />
+                <DetalleCotizacion solicitudId={Number(id)} estado={detalle.estado} />
             </ScrollView>
         </SafeAreaView>
     );

@@ -8,8 +8,8 @@ interface ViewToggleProps {
 }
 
 const OPCIONES: { key: VistaCalendario; label: string }[] = [
-  { key: "month", label: "Month" },
-  { key: "day", label: "Day" },
+  { key: "month", label: "Mes" },
+  { key: "day", label: "Día" },
 ];
 
 export const ViewToggle: React.FC<ViewToggleProps> = ({ vista, onChange }) => {
