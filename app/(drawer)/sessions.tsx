@@ -1,10 +1,14 @@
-import React from "react";
-import { View, Text } from "react-native";
+import React from 'react';
+import { useLocalSearchParams } from 'expo-router';
+import SessionHistoryScreen from '@/src/features/sessions/screens/SessionHistoryScreen';
+import SessionDetailScreen from '@/src/features/sessions/screens/SessionDetailScreen';
 
-export default function SessionsScreen() {
-  return (
-    <View className="flex-1 bg-[#121212] items-center justify-center">
-      <Text className="text-white text-xl font-bold text-center">EN DESARROLLO HISTORIAL DE SESIONES</Text>
-    </View>
-  );
+export default function SessionsPage() {
+  const { detail } = useLocalSearchParams<{ detail?: string }>();
+
+  if (detail) {
+    return <SessionDetailScreen sessionId={Number(detail)} />;
+  }
+
+  return <SessionHistoryScreen />;
 }
