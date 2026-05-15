@@ -37,7 +37,7 @@ export const EventCard: React.FC<EventCardProps> = ({ cita, onPress, style }) =>
       <View className="w-1.5 bg-[#7E51FF]" />
       <View className="flex-1 p-3 ">
         <Text className="text-white font-bold text-base mb-1" numberOfLines={1}>
-          {cita.cliente?.nombre ?? "Sin cliente"}
+          {cita.cliente?.nombre ?? cita.clienteNombre ?? "Sin cliente"}
         </Text>
         <View className="flex-row items-center mb-2">
           <Feather name="clock" size={12} color="#9CA3AF" />

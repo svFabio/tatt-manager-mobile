@@ -42,4 +42,5 @@ export type CitaDetails = {
     tamano: string
     clienteNombre: string
     artistaNombre: string
+    estado?: string
 }

@@ -9,18 +9,18 @@ import { AppointmentCard } from '../components/AppointmentCard';
 import type { EstadoCita, SolicitudItem } from '../../../types/citas';
 
 const FILTERS: { label: string; value: EstadoCita | 'ALL' }[] = [
-    { label: 'Todas', value: 'ALL' },
-    { label: 'Pendientes', value: 'PENDIENTE' },
+    { label: 'Todas',       value: 'ALL'        },
+    { label: 'Pendientes',  value: 'PENDIENTE'  },
     { label: 'Confirmadas', value: 'CONFIRMADA' },
     { label: 'Finalizadas', value: 'FINALIZADA' },
-    { label: 'Canceladas', value: 'CANCELADA' },
+    { label: 'Canceladas',  value: 'CANCELADA'  },
 ];
 
 export default function RequestsScreen() {
     const router = useRouter();
     const [activeFilter, setActiveFilter] = useState<EstadoCita | 'ALL'>('ALL');
-    const [loading, setLoading] = useState(true);
-    const [requests, setRequests] = useState<SolicitudItem[]>([]);
+    const [loading, setLoading]           = useState(true);
+    const [requests, setRequests]         = useState<SolicitudItem[]>([]);
 
     const load = useCallback(async () => {
         try {
@@ -34,32 +34,23 @@ export default function RequestsScreen() {
         }
     }, []);
 
-    useEffect(() => {
-        load();
-    }, [load]);
+    useEffect(() => { load(); }, [load]);
 
     useEffect(() => {
-        const handleNewRequest = () => {
-            // El payload socket llega resumido, por eso refrescamos desde API.
-            load();
-        };
-
-        socket.on('nueva-solicitud', handleNewRequest);
-        socket.on('new-whatsapp-request', handleNewRequest);
-
+        socket.on('nueva-solicitud', load);
+        socket.on('new-whatsapp-request', load);
         return () => {
-            socket.off('nueva-solicitud', handleNewRequest);
-            socket.off('new-whatsapp-request', handleNewRequest);
+            socket.off('nueva-solicitud', load);
+            socket.off('new-whatsapp-request', load);
         };
     }, [load]);
 
     const filtered = activeFilter === 'ALL'
         ? requests
-        : requests.filter((request) => request.estado === activeFilter);
+        : requests.filter((r) => r.estado === activeFilter);
 
     return (
         <SafeAreaView className="flex-1 bg-[#0A0A0A]">
-
             <View className="px-4 -mt-6">
                 <FlatList
                     horizontal
@@ -74,16 +65,20 @@ export default function RequestsScreen() {
                             <TouchableOpacity
                                 onPress={() => setActiveFilter(f.value)}
                                 activeOpacity={0.7}
-                                className={`px-5 py-3 rounded-xl ${isActive ? 'bg-[#7E51FF]' : 'bg-[#1A1A1A]'}`}
+                                className={`px-5 py-3 rounded-xl justify-center items-center ${isActive ? 'bg-[#7E51FF]' : 'bg-[#1A1A1A]'}`}
                             >
-                                <Text className={`text-sm font-bold ${isActive ? 'text-white' : 'text-gray-400'}`}>
+                                <Text
+                                    style={{ includeFontPadding: false, lineHeight: 22 }}
+                                    className={`text-sm font-bold pb-0.5 ${isActive ? 'text-white' : 'text-gray-400'}`}
+                                >
                                     {f.label}
                                 </Text>
                             </TouchableOpacity>
                         );
                     }}
                 />
-                <Text className="text-gray-500 text-xs mb-4">
+
+                <Text style={{ includeFontPadding: false, lineHeight: 20 }} className="text-gray-500 text-xs mb-4 pb-1">
                     {filtered.length} solicitud{filtered.length !== 1 ? 'es' : ''}
                 </Text>
             </View>

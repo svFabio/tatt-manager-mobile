@@ -1,11 +1,4 @@
-import axios from 'axios';
-import { API_URL } from '../config/api';
-
-const api = axios.create({
-  baseURL: API_URL,
-  headers: { 'Content-Type': 'application/json' },
-  timeout: 10000,
-});
+import api from '../api/axios';
 
 export interface Session {
   id: number;
@@ -21,9 +14,9 @@ export interface Session {
 
 export const sessionService = {
   // Obtener todas las sesiones
-  getAll: async (negocioId: number = 1): Promise<Session[]> => {
+  getAll: async (): Promise<Session[]> => {
     try {
-      const response = await api.get(`/sessions?negocioId=${negocioId}`);
+      const response = await api.get('/sessions');
       return response.data;
     } catch (error: any) {
       console.error('Error getAll:', error);
@@ -34,17 +27,16 @@ export const sessionService = {
   // Crear nueva sesión
   create: async (data: any): Promise<Session> => {
     try {
-      const response = await api.post('/sessions', {
-        nombre: data.nombre,
-        telefono: data.telefono,
+      const response = await api.post('/citas/admin', {
+        clienteNombre: data.nombre,
+        clienteTelefono: data.telefono,
         zona: data.zona,
         horas: data.horas,
         fecha: data.fecha,
         horario: data.horario,
-        cotizacion: data.cotizacion,
-        negocioId: 1
+        cotizacion: data.cotizacion
       });
-      return response.data.session;
+      return response.data;
     } catch (error: any) {
       console.error('Error create:', error);
       throw new Error(error.response?.data?.error || 'Error al crear sesión');

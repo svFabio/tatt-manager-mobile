@@ -30,8 +30,10 @@ export interface Cita {
   creadoEn: string;
   clienteId: number | null;
   cliente?: ClienteBasico | null;
+  clienteNombre?: string;
   artistaId: number | null;
   artista?: ArtistaBasico | null;
+  artistaNombre?: string;
 }
 
 export interface CitaDetalle {
