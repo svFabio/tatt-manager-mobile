@@ -59,8 +59,8 @@ export default function RequestsScreen() {
 
     return (
         <SafeAreaView className="flex-1 bg-[#0A0A0A]">
-            <View className="px-4 pt-1 -mt-6 flex-1">
 
+            <View className="px-4 -mt-6">
                 <FlatList
                     horizontal
                     data={FILTERS}
@@ -83,11 +83,12 @@ export default function RequestsScreen() {
                         );
                     }}
                 />
-
                 <Text className="text-gray-500 text-xs mb-4">
                     {filtered.length} solicitud{filtered.length !== 1 ? 'es' : ''}
                 </Text>
+            </View>
 
+            <View className="flex-1 px-4">
                 {loading ? (
                     <ActivityIndicator color="#7E51FF" size="large" className="mt-20" />
                 ) : filtered.length === 0 ? (
