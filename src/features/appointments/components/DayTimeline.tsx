@@ -47,7 +47,7 @@ export const DayTimeline: React.FC<DayTimelineProps> = ({ dia, citas, onSelectCi
 
   return (
     <View className="flex-1">
-      <Text className="text-[#7E51FF] text-xs font-bold tracking-widest text-center py-3">
+      <Text className="text-primary text-xs font-bold tracking-widest text-center py-3">
         {tituloDia}
       </Text>
 
@@ -73,7 +73,7 @@ export const DayTimeline: React.FC<DayTimelineProps> = ({ dia, citas, onSelectCi
               <Text className="text-muted-dark text-xs w-12">
                 {`${String(h).padStart(2, "0")}:00`}
               </Text>
-              <View className="flex-1 h-px bg-[#2A2A2A]" />
+              <View className="flex-1 h-px bg-dark-200" />
             </View>
           ))}
 
@@ -90,8 +90,8 @@ export const DayTimeline: React.FC<DayTimelineProps> = ({ dia, citas, onSelectCi
               }}
               pointerEvents="none"
             >
-              <View className="w-2.5 h-2.5 rounded-full bg-[#FF3B30]" />
-              <View className="flex-1 h-[2px] bg-[#FF3B30]" />
+              <View className="w-2.5 h-2.5 rounded-full bg-alert" />
+              <View className="flex-1 h-[2px] bg-alert" />
             </View>
           ) : null}
 

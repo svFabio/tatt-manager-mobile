@@ -20,14 +20,14 @@ export const MonthHeader: React.FC<MonthHeaderProps> = ({ mes, onPrev, onNext })
         <TouchableOpacity
           onPress={onPrev}
           activeOpacity={0.7}
-          className="w-9 h-9 rounded-full bg-[#1E1E1E] items-center justify-center border border-[#2A2A2A]"
+          className="w-9 h-9 rounded-full bg-dark-100 items-center justify-center border border-dark-200"
         >
           <Feather name="chevron-left" size={18} color="#D1D5DB" />
         </TouchableOpacity>
         <TouchableOpacity
           onPress={onNext}
           activeOpacity={0.7}
-          className="w-9 h-9 rounded-full bg-[#1E1E1E] items-center justify-center border border-[#2A2A2A]"
+          className="w-9 h-9 rounded-full bg-dark-100 items-center justify-center border border-dark-200"
         >
           <Feather name="chevron-right" size={18} color="#D1D5DB" />
         </TouchableOpacity>

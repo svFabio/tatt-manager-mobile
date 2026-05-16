@@ -17,12 +17,12 @@ function CustomDrawerContent(props: any) {
 
   const isRouteActive = (name: string) => currentRouteName === name;
 
-  const getBtnStyle = (name: string) => `flex-row items-center px-3 py-3 rounded-xl ${isRouteActive(name) ? "bg-[#1E1E1E]" : ""}`;
+  const getBtnStyle = (name: string) => `flex-row items-center px-3 py-3 rounded-xl ${isRouteActive(name) ? "bg-dark-100" : ""}`;
   const getTextStyle = (name: string) => isRouteActive(name) ? "text-white font-medium ml-3 text-base" : "text-gray-300 font-medium ml-3 text-base";
-  const getIconColor = (name: string) => isRouteActive(name) ? "#7E51FF" : "#D1D5DB";
+  const getIconColor = (name: string) => isRouteActive(name) ? "#D4AF37" : "#D1D5DB";
 
   return (
-    <SafeAreaView className="flex-1 bg-[#121212]" edges={["top", "bottom"]}>
+    <SafeAreaView className="flex-1 bg-dark" edges={["top", "bottom"]}>
       <DrawerContentScrollView {...props} contentContainerStyle={{ paddingVertical: 24 }}>
         
         {/* Cabecera del Usuario */}
@@ -110,7 +110,7 @@ export default function DrawerLayout() {
         drawerContent={(props) => <CustomDrawerContent {...props} />}
         screenOptions={{
           headerStyle: { backgroundColor: "#121212", borderBottomWidth: 0, shadowOpacity: 0, elevation: 0 },
-          headerTintColor: "#7E51FF",
+          headerTintColor: "#D4AF37",
           headerTitleStyle: { fontWeight: "bold", color: "#FFFFFF" },
         }}
       >

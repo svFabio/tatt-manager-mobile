@@ -14,7 +14,7 @@ export const WhatsAppConnected: React.FC<WhatsAppConnectedProps> = ({
   onRestart,
 }) => {
   return (
-    <View className="flex-1 bg-[#121212] items-center justify-center p-8">
+    <View className="flex-1 bg-dark items-center justify-center p-8">
       <View className="w-20 h-20 rounded-full bg-green-500/20 items-center justify-center border border-green-500/30">
         <Ionicons name="checkmark" size={40} color="#4ade80" />
       </View>

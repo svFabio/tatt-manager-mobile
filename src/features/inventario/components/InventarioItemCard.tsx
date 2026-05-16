@@ -60,7 +60,7 @@ export function InventarioItemCard({ item, onUpdated }: Props) {
             unidad={item.unidad}
             onClose={() => setModalVisible(false)}
         />
-        <View className="bg-[#1A1A1A] rounded-2xl p-4 mb-3">
+        <View className="bg-dark-100 rounded-2xl p-4 mb-3">
             <View className="flex-row items-start justify-between mb-3">
                 <View className="flex-row items-center flex-1 mr-2">
                     <View
@@ -101,7 +101,7 @@ export function InventarioItemCard({ item, onUpdated }: Props) {
                     value={inputValue}
                     onChangeText={setInputValue}
                     keyboardType="numeric"
-                    className="flex-1 text-center text-white font-bold text-base bg-[#2A2A2A] py-3"
+                    className="flex-1 text-center text-white font-bold text-base bg-dark-200 py-3"
                 />
 
                 <TouchableOpacity
@@ -109,7 +109,7 @@ export function InventarioItemCard({ item, onUpdated }: Props) {
                     disabled={loading}
                     className="flex-1 py-3 items-center"
                 >
-                    <Text className="text-[#7E51FF] font-semibold">+10</Text>
+                    <Text className="text-primary font-semibold">+10</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity

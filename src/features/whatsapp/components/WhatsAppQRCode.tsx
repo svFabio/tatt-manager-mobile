@@ -16,8 +16,8 @@ export const WhatsAppQRCode: React.FC<WhatsAppQRCodeProps> = ({
 }) => {
   return (
     <View>
-      <View className="bg-[#1a1a1a] p-6 rounded-3xl border border-[#2b2b2b] items-center mb-6 shadow-xl shadow-black">
-        <View className="flex-row items-center mb-6 bg-[#262626] px-4 py-2 rounded-full border border-[#333]">
+      <View className="bg-dark-100 p-6 rounded-3xl border border-dark-300 items-center mb-6 shadow-xl shadow-black">
+        <View className="flex-row items-center mb-6 bg-dark-200 px-4 py-2 rounded-full border border-dark-300">
           <Ionicons name="qr-code-outline" size={16} color="#9ca3af" />
           <Text className="text-gray-400 text-xs font-bold tracking-widest ml-2 uppercase">
             Código QR de Vinculación
@@ -29,8 +29,8 @@ export const WhatsAppQRCode: React.FC<WhatsAppQRCodeProps> = ({
             <QRCode value={qrValor} size={220} />
           </View>
         ) : (
-          <View className="w-[220px] h-[220px] items-center justify-center bg-[#242424] rounded-[1.5rem] mb-6 border border-[#2F2F2F] border-dashed">
-            <ActivityIndicator size="large" color="#8b5cf6" />
+          <View className="w-[220px] h-[220px] items-center justify-center bg-dark-200 rounded-[1.5rem] mb-6 border border-dark-300 border-dashed">
+            <ActivityIndicator size="large" color="#D4AF37" />
             <Text className="text-gray-500 mt-4 font-medium">Generando...</Text>
           </View>
         )}
@@ -43,22 +43,22 @@ export const WhatsAppQRCode: React.FC<WhatsAppQRCodeProps> = ({
         <TouchableOpacity
           onPress={onRegenerate}
           disabled={actionLoading}
-          className="w-full bg-[#242424] py-4 rounded-2xl flex-row items-center justify-center border border-[#333]"
+          className="w-full bg-dark-200 py-4 rounded-2xl flex-row items-center justify-center border border-dark-300"
         >
           {actionLoading ? (
-             <ActivityIndicator color="#8b5cf6" />
+             <ActivityIndicator color="#D4AF37" />
           ) : (
              <>
-               <Ionicons name="refresh-outline" size={18} color="#8b5cf6" />
-               <Text className="text-[#8b5cf6] font-bold ml-2">Regenerar Código</Text>
+               <Ionicons name="refresh-outline" size={18} color="#D4AF37" />
+               <Text className="text-primary font-bold ml-2">Regenerar Código</Text>
              </>
           )}
         </TouchableOpacity>
       </View>
 
       {/* Steps para QR */}
-      <View className="bg-[#1a1a1a] p-5 rounded-3xl border border-[#2b2b2b] mb-4 flex-row items-center">
-        <View className="w-10 h-10 rounded-full bg-[#262626] items-center justify-center mr-4 border border-[#333]">
+      <View className="bg-dark-100 p-5 rounded-3xl border border-dark-300 mb-4 flex-row items-center">
+        <View className="w-10 h-10 rounded-full bg-dark-200 items-center justify-center mr-4 border border-dark-300">
           <Text className="text-gray-300 font-bold">1</Text>
         </View>
         <View className="flex-1">
@@ -68,8 +68,8 @@ export const WhatsAppQRCode: React.FC<WhatsAppQRCodeProps> = ({
           </Text>
         </View>
       </View>
-      <View className="bg-[#1a1a1a] p-5 rounded-3xl border border-[#2b2b2b] flex-row items-center mb-8">
-        <View className="w-10 h-10 rounded-full bg-[#262626] items-center justify-center mr-4 border border-[#333]">
+      <View className="bg-dark-100 p-5 rounded-3xl border border-dark-300 flex-row items-center mb-8">
+        <View className="w-10 h-10 rounded-full bg-dark-200 items-center justify-center mr-4 border border-dark-300">
           <Text className="text-gray-300 font-bold">2</Text>
         </View>
         <View className="flex-1">

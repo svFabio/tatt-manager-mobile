@@ -24,7 +24,7 @@ export default function DetalleSolicitudScreen() {
 
     if (loading) return (
         <SafeAreaView className="flex-1 bg-[#0A0A0A] items-center justify-center">
-            <ActivityIndicator color="#7E51FF" size="large" />
+            <ActivityIndicator color="#D4AF37" size="large" />
         </SafeAreaView>
     );
 

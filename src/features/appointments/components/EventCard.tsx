@@ -32,9 +32,9 @@ export const EventCard: React.FC<EventCardProps> = ({ cita, onPress, style }) =>
       onPress={onPress}
       activeOpacity={0.8}
       style={style}
-      className="flex-row bg-[#1E1E1E] rounded-2xl overflow-hidden border border-[#2A2A2A] "
+      className="flex-row bg-dark-100 rounded-2xl overflow-hidden border border-dark-200 "
     >
-      <View className="w-1.5 bg-[#7E51FF]" />
+      <View className="w-1.5 bg-primary" />
       <View className="flex-1 p-3 ">
         <Text className="text-white font-bold text-base mb-1" numberOfLines={1}>
           {cita.cliente?.nombre ?? cita.clienteNombre ?? "Sin cliente"}
@@ -47,15 +47,15 @@ export const EventCard: React.FC<EventCardProps> = ({ cita, onPress, style }) =>
         </View>
         <View className="flex-row gap-2 flex-wrap ">
           {tipo ? (
-            <View className="px-2.5 py-1 rounded-full bg-[#2A1F4A]">
-              <Text className="text-[#B89BFF] text-[10px] font-bold tracking-wider">
+            <View className="px-2.5 py-1 rounded-full bg-primary/20">
+              <Text className="text-primary-light text-[10px] font-bold tracking-wider">
                 {tipo}
               </Text>
             </View>
           ) : null}
           {duracion ? (
-            <View className="px-2.5 py-1 rounded-full bg-[#1F2F4A]">
-              <Text className="text-[#9BC2FF] text-[10px] font-bold tracking-wider">
+            <View className="px-2.5 py-1 rounded-full bg-info/20">
+              <Text className="text-info-light text-[10px] font-bold tracking-wider">
                 {duracion}
               </Text>
             </View>

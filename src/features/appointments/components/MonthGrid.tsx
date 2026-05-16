@@ -36,7 +36,7 @@ export const MonthGrid: React.FC<MonthGridProps> = ({
   const hoy = new Date();
 
   return (
-    <View className="bg-[#1A1A1A] mx-4 mt-4 rounded-2xl border border-[#2A2A2A] p-3">
+    <View className="bg-dark-100 mx-4 mt-4 rounded-2xl border border-dark-200 p-3">
       {/* Encabezado días de la semana */}
       <View className="flex-row mb-2">
         {DIAS_SEMANA.map((d) => (
@@ -68,20 +68,20 @@ export const MonthGrid: React.FC<MonthGridProps> = ({
               <View
                 className={`w-9 h-9 rounded-full items-center justify-center ${
                   esSeleccionado
-                    ? "bg-[#7E51FF]"
+                    ? "bg-primary"
                     : esHoy
-                    ? "border border-[#7E51FF]"
+                    ? "border border-primary"
                     : ""
                 }`}
               >
                 <Text
                   className={`text-sm ${
                     !enMes
-                      ? "text-[#3A3A3A]"
+                      ? "text-dark-300"
                       : esSeleccionado
                       ? "text-white font-bold"
                       : esHoy
-                      ? "text-[#7E51FF] font-bold"
+                      ? "text-primary font-bold"
                       : "text-white"
                   }`}
                 >
@@ -90,7 +90,7 @@ export const MonthGrid: React.FC<MonthGridProps> = ({
               </View>
               <View className="h-1.5 mt-1 items-center justify-center">
                 {tieneCitas && enMes && !esSeleccionado ? (
-                  <View className="w-1.5 h-1.5 rounded-full bg-[#7E51FF]" />
+                  <View className="w-1.5 h-1.5 rounded-full bg-primary" />
                 ) : null}
               </View>
             </TouchableOpacity>

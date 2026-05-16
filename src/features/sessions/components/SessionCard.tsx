@@ -33,7 +33,7 @@ const getInitials = (name: string): string => {
 };
 
 // Alternate colours between artists for visual distinction
-const AVATAR_COLORS = ['#7E51FF', '#00A7F2'];
+const AVATAR_COLORS = ['#D4AF37', '#00A7F2'];
 
 export const SessionCard = ({ session, onPress }: Props) => {
   const totalCaps = session.capsUsadas.reduce((sum, c) => sum + c.cantidadUsada, 0);
@@ -131,7 +131,7 @@ export const SessionCard = ({ session, onPress }: Props) => {
               </View>
               <View className="flex-row items-center" style={{ gap: 8 }}>
                 <Text style={{ color: '#ADAAAA', fontSize: 12 }}>Agujas:</Text>
-                <Text style={{ color: '#7E51FF', fontSize: 14, fontWeight: '900' }}>{totalAgujas}</Text>
+                <Text style={{ color: '#D4AF37', fontSize: 14, fontWeight: '900' }}>{totalAgujas}</Text>
               </View>
             </View>
           </View>

@@ -46,11 +46,11 @@ export const WhatsAppLinker: React.FC<WhatsAppLinkerProps> = ({
 
       <View>
         {/* TABS Píldora */}
-        <View className="flex-row bg-[#1f1f1f] p-1.5 rounded-2xl mb-8 border border-[#2b2b2b]">
+        <View className="flex-row bg-dark-100 p-1.5 rounded-2xl mb-8 border border-dark-300">
           <TouchableOpacity
             onPress={() => setMethod("qr")}
             className={`flex-1 py-3 rounded-xl items-center ${
-              method === "qr" ? "bg-[#8b5cf6]" : ""
+              method === "qr" ? "bg-primary" : ""
             }`}
           >
             <Text
@@ -64,7 +64,7 @@ export const WhatsAppLinker: React.FC<WhatsAppLinkerProps> = ({
           <TouchableOpacity
             onPress={() => setMethod("pair")}
             className={`flex-1 py-3 rounded-xl items-center ${
-              method === "pair" ? "bg-[#8b5cf6]" : ""
+              method === "pair" ? "bg-primary" : ""
             }`}
           >
             <Text

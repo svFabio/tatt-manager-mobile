@@ -43,14 +43,14 @@ export default function SessionDetailScreen({ sessionId }: Props) {
 
   if (loading)
     return (
-      <SafeAreaView className="flex-1 bg-[#0E0E0E] items-center justify-center">
-        <ActivityIndicator color="#7E51FF" size="large" />
+      <SafeAreaView className="flex-1 bg-dark items-center justify-center">
+        <ActivityIndicator color="#D4AF37" size="large" />
       </SafeAreaView>
     );
 
   if (!detail)
     return (
-      <SafeAreaView className="flex-1 bg-[#0E0E0E] items-center justify-center px-6">
+      <SafeAreaView className="flex-1 bg-dark items-center justify-center px-6">
         <MaterialIcons name="error-outline" size={48} color="#374151" />
         <Text className="text-gray-500 mt-3 text-sm text-center">No se pudo cargar el detalle</Text>
       </SafeAreaView>
@@ -60,7 +60,7 @@ export default function SessionDetailScreen({ sessionId }: Props) {
   const hasAgujas = detail.agujasUsadas && detail.agujasUsadas.length > 0;
 
   return (
-    <SafeAreaView className="flex-1 bg-[#0E0E0E]" edges={['bottom']}>
+    <SafeAreaView className="flex-1 bg-dark" edges={['bottom']}>
       {/* ─── Header ─── */}
       <View
         className="flex-row items-center px-4"
@@ -71,7 +71,7 @@ export default function SessionDetailScreen({ sessionId }: Props) {
         }}
       >
         <TouchableOpacity onPress={() => router.back()} className="mr-4 p-2 rounded-xl">
-          <MaterialIcons name="arrow-back" size={20} color="#B6A0FF" />
+          <MaterialIcons name="arrow-back" size={20} color="#E8CC6E" />
         </TouchableOpacity>
         <Text className="text-white text-lg font-bold" style={{ letterSpacing: -0.45 }}>
           Detalle de Sesión
@@ -95,7 +95,7 @@ export default function SessionDetailScreen({ sessionId }: Props) {
               className="rounded-xl items-center justify-center"
               style={{ width: 54, height: 54, backgroundColor: '#262626', borderWidth: 1, borderColor: 'rgba(255,255,255,0.05)' }}
             >
-              <Text style={{ color: '#7E51FF', fontWeight: '700', fontSize: 14 }}>
+              <Text style={{ color: '#D4AF37', fontWeight: '700', fontSize: 14 }}>
                 {getInitials(detail.artista.nombre)}
               </Text>
             </View>
@@ -131,7 +131,7 @@ export default function SessionDetailScreen({ sessionId }: Props) {
                 CLIENTE
               </Text>
               <View className="flex-row items-center" style={{ gap: 6 }}>
-                <MaterialIcons name="person" size={10} color="#B6A0FF" />
+                <MaterialIcons name="person" size={10} color="#E8CC6E" />
                 <Text className="text-white text-sm font-bold">{detail.cliente?.nombre ?? '—'}</Text>
               </View>
             </View>
@@ -158,7 +158,7 @@ export default function SessionDetailScreen({ sessionId }: Props) {
                 DURACIÓN
               </Text>
               <View className="flex-row items-center" style={{ gap: 6 }}>
-                <MaterialIcons name="schedule" size={10} color="#B6A0FF" />
+                <MaterialIcons name="schedule" size={10} color="#E8CC6E" />
                 <Text className="text-white text-sm font-semibold">{formatDuration(detail.duracionEnHoras)}</Text>
               </View>
             </View>
@@ -216,7 +216,7 @@ export default function SessionDetailScreen({ sessionId }: Props) {
               <Text className="text-white text-2xl font-bold" style={{ letterSpacing: -0.6 }}>
                 Desglose de Materiales
               </Text>
-              <MaterialIcons name="inventory-2" size={20} color="#B6A0FF" />
+              <MaterialIcons name="inventory-2" size={20} color="#E8CC6E" />
             </View>
 
             {/* Caps de Tinta */}
@@ -267,7 +267,7 @@ export default function SessionDetailScreen({ sessionId }: Props) {
             {hasAgujas && (
               <View className="rounded-2xl p-6 mt-6" style={{ backgroundColor: '#131313' }}>
                 <View className="flex-row items-center mb-4" style={{ gap: 12 }}>
-                  <MaterialIcons name="push-pin" size={16} color="#B6A0FF" />
+                  <MaterialIcons name="push-pin" size={16} color="#E8CC6E" />
                   <Text className="text-white text-base font-semibold">Agujas</Text>
                 </View>
 

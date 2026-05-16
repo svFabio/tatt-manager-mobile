@@ -22,8 +22,8 @@ export const DetalleHeader = () => {
         </Text>
       </View>
 
-      <View className="bg-[#7E51FF]/20 border border-[#7E51FF]/40 px-3 py-1 rounded-full">
-        <Text className="text-[#7E51FF] text-[10px] font-bold tracking-widest uppercase">
+      <View className="bg-primary/20 border border-primary/40 px-3 py-1 rounded-full">
+        <Text className="text-primary text-[10px] font-bold tracking-widest uppercase">
           Cotización
         </Text>
       </View>

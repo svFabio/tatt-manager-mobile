@@ -54,7 +54,7 @@ export default function SessionHistoryScreen() {
   }, [selectedArtista, artistas]);
 
   return (
-    <SafeAreaView className="flex-1 bg-[#0E0E0E]" edges={['bottom']}>
+    <SafeAreaView className="flex-1 bg-dark" edges={['bottom']}>
       {/* ─── Controls: Search & Filter ─── */}
       <View className="px-4 pt-4 pb-2 flex-row items-center" style={{ gap: 8 }}>
         {/* Search Input */}
@@ -94,7 +94,7 @@ export default function SessionHistoryScreen() {
       {/* ─── Sessions List ─── */}
       {loading ? (
         <View className="flex-1 items-center justify-center">
-          <ActivityIndicator color="#7E51FF" size="large" />
+          <ActivityIndicator color="#D4AF37" size="large" />
         </View>
       ) : sessions.length === 0 ? (
         <View className="flex-1 items-center justify-center px-8">

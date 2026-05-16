@@ -84,8 +84,8 @@ export default function WhatsAppScreen() {
 
   if (loading) {
     return (
-      <View className="flex-1 bg-[#121212] items-center justify-center">
-        <ActivityIndicator size="large" color="#8b5cf6" />
+      <View className="flex-1 bg-dark items-center justify-center">
+        <ActivityIndicator size="large" color="#D4AF37" />
       </View>
     );
   }
@@ -103,7 +103,7 @@ export default function WhatsAppScreen() {
 
   // En caso contrario, el Linker (TABS y Código QR/Texto)
   return (
-    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} className="flex-1 bg-[#121212]">
+    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} className="flex-1 bg-dark">
       <ScrollView contentContainerStyle={{ flexGrow: 1, padding: 24 }}>
         <WhatsAppLinker
           method={method}

@@ -30,9 +30,9 @@ function InfoRow({
   value: string;
 }) {
   return (
-    <View className="flex-row py-2.5 border-b border-[#2A2A2A]">
+    <View className="flex-row py-2.5 border-b border-dark-200">
       <View className="w-8 items-center justify-center mt-0.5">
-        <Feather name={icon} size={16} color="#7E51FF" />
+        <Feather name={icon} size={16} color="#D4AF37" />
       </View>
       <View className="flex-1">
         <Text className="text-muted-dark text-[11px] font-semibold tracking-wider uppercase">
@@ -92,13 +92,13 @@ export const AppointmentDetailModal: React.FC<AppointmentDetailModalProps> = ({
       onRequestClose={onClose}
     >
       <View className="flex-1 bg-black/70 justify-center px-5">
-        <View className="bg-[#1A1A1A] rounded-3xl border border-[#2A2A2A] overflow-hidden max-h-[85%]">
+        <View className="bg-dark-100 rounded-3xl border border-dark-200 overflow-hidden max-h-[85%]">
           {/* Header */}
-          <View className="flex-row items-center justify-between px-5 py-4 border-b border-[#2A2A2A]">
+          <View className="flex-row items-center justify-between px-5 py-4 border-b border-dark-200">
             <Text className="text-white text-lg font-bold">Detalle de cita</Text>
             <TouchableOpacity
               onPress={onClose}
-              className="w-8 h-8 rounded-full bg-[#2A2A2A] items-center justify-center"
+              className="w-8 h-8 rounded-full bg-dark-200 items-center justify-center"
             >
               <Feather name="x" size={18} color="#D1D5DB" />
             </TouchableOpacity>
@@ -106,7 +106,7 @@ export const AppointmentDetailModal: React.FC<AppointmentDetailModalProps> = ({
 
           {loading ? (
             <View className="py-10 items-center">
-              <ActivityIndicator color="#7E51FF" />
+              <ActivityIndicator color="#D4AF37" />
               <Text className="text-muted text-sm mt-2">Cargando…</Text>
             </View>
           ) : error ? (

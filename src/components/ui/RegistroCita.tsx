@@ -78,7 +78,7 @@ const RegistroCitaModal = ({ visible, onClose, onSave }: Props) => {
     <Modal visible={visible} animationType="slide" transparent>
       <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} className="flex-1">
         <View className="flex-1 justify-end bg-black/80">
-          <View className="bg-[#121212] p-6 rounded-t-3xl border-t border-gray-800 h-[92%]">
+          <View className="bg-dark p-6 rounded-t-3xl border-t border-gray-800 h-[92%]">
             
             <View className="flex-row justify-between items-center mb-6">
               <Text className="text-white text-xl font-bold">+ Nueva Cita</Text>
@@ -88,14 +88,14 @@ const RegistroCitaModal = ({ visible, onClose, onSave }: Props) => {
             <ScrollView showsVerticalScrollIndicator={false}>
               <Text className="text-gray-400 text-[10px] mb-1 uppercase font-bold">Nombre del Cliente *</Text>
               <TextInput 
-                className="bg-[#1e1e1e] text-white p-4 rounded-xl mb-4 border border-gray-800"
+                className="bg-dark-100 text-white p-4 rounded-xl mb-4 border border-gray-800"
                 placeholder="Ej. Juan Pérez" placeholderTextColor="#444"
                 value={form.nombre} onChangeText={(t) => setForm({...form, nombre: t})}
               />
 
               <Text className="text-gray-400 text-[10px] mb-1 uppercase font-bold">Zona del Cuerpo *</Text>
               <TextInput 
-                className="bg-[#1e1e1e] text-white p-4 rounded-xl mb-4 border border-gray-800"
+                className="bg-dark-100 text-white p-4 rounded-xl mb-4 border border-gray-800"
                 placeholder="Ej. Antebrazo" placeholderTextColor="#444"
                 value={form.zona} onChangeText={(t) => setForm({...form, zona: t})}
               />
@@ -104,17 +104,17 @@ const RegistroCitaModal = ({ visible, onClose, onSave }: Props) => {
                 <View className="flex-1">
                   <Text className="text-gray-400 text-[10px] mb-1 uppercase font-bold">Teléfono *</Text>
                   <TextInput 
-                    className="bg-[#1e1e1e] text-white p-4 rounded-xl mb-4 border border-gray-800"
+                    className="bg-dark-100 text-white p-4 rounded-xl mb-4 border border-gray-800"
                     keyboardType="number-pad" maxLength={8}
                     value={form.telefono} onChangeText={(t) => setForm({...form, telefono: t.replace(/[^0-9]/g, '')})}
                   />
                 </View>
                 <View className="w-32">
                   <Text className="text-gray-400 text-[10px] mb-1 uppercase font-bold">Horas *</Text>
-                  <View className="bg-[#1e1e1e] flex-row justify-between items-center p-3.5 rounded-xl border border-gray-800">
-                    <TouchableOpacity onPress={() => ajustarHoras(-1)}><Text className="text-[#a29bfe] text-xl">▼</Text></TouchableOpacity>
+                  <View className="bg-dark-100 flex-row justify-between items-center p-3.5 rounded-xl border border-gray-800">
+                    <TouchableOpacity onPress={() => ajustarHoras(-1)}><Text className="text-primary text-xl">▼</Text></TouchableOpacity>
                     <Text className="text-white font-bold">{form.horas}</Text>
-                    <TouchableOpacity onPress={() => ajustarHoras(1)}><Text className="text-[#a29bfe] text-xl">▲</Text></TouchableOpacity>
+                    <TouchableOpacity onPress={() => ajustarHoras(1)}><Text className="text-primary text-xl">▲</Text></TouchableOpacity>
                   </View>
                 </View>
               </View>
@@ -131,7 +131,7 @@ const RegistroCitaModal = ({ visible, onClose, onSave }: Props) => {
                     Alert.alert("Selector de fecha", "En móvil se abrirá el selector nativo");
                   }
                 }}
-                className="bg-[#1e1e1e] flex-row justify-between items-center p-4 rounded-xl mb-4 border border-gray-800"
+                className="bg-dark-100 flex-row justify-between items-center p-4 rounded-xl mb-4 border border-gray-800"
               >
                 <View className="flex-row items-center gap-3">
                   <Text className="text-2xl">📅</Text>
@@ -144,7 +144,7 @@ const RegistroCitaModal = ({ visible, onClose, onSave }: Props) => {
                     })}
                   </Text>
                 </View>
-                <Text className="text-[#a29bfe] text-sm font-bold">Cambiar</Text>
+                <Text className="text-primary text-sm font-bold">Cambiar</Text>
               </TouchableOpacity>
 
               {/* Input oculto para web */}
@@ -170,7 +170,7 @@ const RegistroCitaModal = ({ visible, onClose, onSave }: Props) => {
                   <TouchableOpacity 
                     key={h} 
                     onPress={() => setForm({...form, horario: h})}
-                    className={`px-4 py-3 rounded-lg border ${form.horario === h ? 'bg-[#a29bfe] border-[#a29bfe]' : 'bg-[#1e1e1e] border-gray-800'}`}
+                    className={`px-4 py-3 rounded-lg border ${form.horario === h ? 'bg-primary border-primary' : 'bg-dark-100 border-gray-800'}`}
                   >
                     <Text className={form.horario === h ? 'text-black font-bold' : 'text-white'}>{h}</Text>
                   </TouchableOpacity>
@@ -179,7 +179,7 @@ const RegistroCitaModal = ({ visible, onClose, onSave }: Props) => {
 
               <Text className="text-gray-400 text-[10px] mb-1 uppercase font-bold">Cotización (Bs.) *</Text>
               <TextInput 
-                className="bg-[#1e1e1e] text-white p-4 rounded-xl mb-8 border border-gray-800"
+                className="bg-dark-100 text-white p-4 rounded-xl mb-8 border border-gray-800"
                 placeholder="0.00" 
                 keyboardType="numeric"
                 value={form.cotizacion} 
@@ -190,7 +190,7 @@ const RegistroCitaModal = ({ visible, onClose, onSave }: Props) => {
                 <TouchableOpacity onPress={onClose} className="flex-1 p-4 rounded-2xl border border-gray-700">
                   <Text className="text-white text-center font-bold">Cancelar</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={handleCrear} className="flex-1 p-4 rounded-2xl bg-[#a29bfe]">
+                <TouchableOpacity onPress={handleCrear} className="flex-1 p-4 rounded-2xl bg-primary">
                   <Text className="text-black text-center font-bold">Crear Cita</Text>
                 </TouchableOpacity>
               </View>

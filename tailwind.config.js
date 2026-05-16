@@ -17,7 +17,13 @@ module.exports = {
           300: "#3A3A3A",
           400: "#4A4A4A",
         },
-        // Color primario dorado
+        // Color primario dorado (tu color principal)
+        primary: {
+          DEFAULT: "#D4AF37", // Dorado principal
+          light: "#E8CC6E",
+          dark: "#B8941F",
+        },
+        // Color dorado secundario
         gold: {
           DEFAULT: "#D4AF37",
           light: "#E8CC6E",

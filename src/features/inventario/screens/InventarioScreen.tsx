@@ -67,7 +67,7 @@ export default function InventarioScreen() {
                 <StatCard label="ITEMS EN STOCK NORMAL" value={stats.enStockNormal} />
                 <StatCard label="ITEMS EN STOCK BAJO" value={stats.enStockBajo} variant="bajo" />
 
-                <View className="flex-row items-center bg-[#1A1A1A] rounded-xl px-3 mb-4 mt-1">
+                <View className="flex-row items-center bg-dark-100 rounded-xl px-3 mb-4 mt-1">
                     <MaterialIcons name="search" size={20} color="#6B7280" />
                     <TextInput
                         value={buscar}
@@ -82,7 +82,7 @@ export default function InventarioScreen() {
             {/* Lista */}
             <View className="flex-1 px-4">
                 {loading ? (
-                    <ActivityIndicator color="#7E51FF" size="large" className="mt-10" />
+                    <ActivityIndicator color="#D4AF37" size="large" className="mt-10" />
                 ) : items.length === 0 ? (
                     <View className="flex-1 items-center justify-center">
                         <MaterialIcons name="inventory" size={48} color="#374151" />
@@ -104,7 +104,7 @@ export default function InventarioScreen() {
             <TouchableOpacity
                 onPress={() => router.push('/(drawer)/inventory/agregar')}
                 className="absolute bottom-8 right-6 w-14 h-14 rounded-full items-center justify-center shadow-lg"
-                style={{ backgroundColor: '#7E51FF' }}
+                style={{ backgroundColor: '#D4AF37' }}
             >
                 <MaterialIcons name="add" size={28} color="#FFFFFF" />
             </TouchableOpacity>

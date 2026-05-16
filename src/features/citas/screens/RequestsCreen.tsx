@@ -65,7 +65,7 @@ export default function RequestsScreen() {
                             <TouchableOpacity
                                 onPress={() => setActiveFilter(f.value)}
                                 activeOpacity={0.7}
-                                className={`px-5 py-3 rounded-xl justify-center items-center ${isActive ? 'bg-[#7E51FF]' : 'bg-[#1A1A1A]'}`}
+                                className={`px-5 py-3 rounded-xl justify-center items-center ${isActive ? 'bg-primary' : 'bg-dark-100'}`}
                             >
                                 <Text
                                     style={{ includeFontPadding: false, lineHeight: 22 }}
@@ -85,7 +85,7 @@ export default function RequestsScreen() {
 
             <View className="flex-1 px-4">
                 {loading ? (
-                    <ActivityIndicator color="#7E51FF" size="large" className="mt-20" />
+                    <ActivityIndicator color="#D4AF37" size="large" className="mt-20" />
                 ) : filtered.length === 0 ? (
                     <View className="flex-1 items-center justify-center">
                         <MaterialIcons name="inbox" size={48} color="#374151" />

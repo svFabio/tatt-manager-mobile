@@ -89,7 +89,7 @@ export default function AgregarInsumoScreen() {
 
                 {/* Nombre */}
                 <Text className="text-gray-400 text-xs font-semibold tracking-widest mt-4 mb-2">NOMBRE DEL ITEM</Text>
-                <View className="bg-[#1A1A1A] rounded-xl px-4 py-3 mb-4">
+                <View className="bg-dark-100 rounded-xl px-4 py-3 mb-4">
                     <TextInput
                         value={nombre}
                         onChangeText={setNombre}
@@ -101,7 +101,7 @@ export default function AgregarInsumoScreen() {
 
                 {/* Categoría */}
                 <Text className="text-gray-400 text-xs font-semibold tracking-widest mb-2">CATEGORÍA</Text>
-                <View className="flex-row bg-[#1A1A1A] rounded-xl p-1 mb-4">
+                <View className="flex-row bg-dark-100 rounded-xl p-1 mb-4">
                     {CATEGORIAS.map((c) => {
                         const active = categoria === c.value;
                         return (
@@ -121,7 +121,7 @@ export default function AgregarInsumoScreen() {
 
                 {/* Marca */}
                 <Text className="text-gray-400 text-xs font-semibold tracking-widest mb-2">MARCA</Text>
-                <View className="bg-[#1A1A1A] rounded-xl px-4 py-3 mb-4">
+                <View className="bg-dark-100 rounded-xl px-4 py-3 mb-4">
                     <TextInput
                         value={marca}
                         onChangeText={setMarca}
@@ -135,7 +135,7 @@ export default function AgregarInsumoScreen() {
                 <View className="flex-row gap-4 mb-4">
                     <View className="flex-1">
                         <Text className="text-gray-400 text-xs font-semibold tracking-widest mb-2">STOCK INICIAL</Text>
-                        <View className="bg-[#1A1A1A] rounded-xl px-4 py-3">
+                        <View className="bg-dark-100 rounded-xl px-4 py-3">
                             <TextInput
                                 value={stockInicial}
                                 onChangeText={setStockInicial}
@@ -150,7 +150,7 @@ export default function AgregarInsumoScreen() {
                             <Text className="text-gray-400 text-xs font-semibold tracking-widest mr-1">STOCK MÍNIMO</Text>
                             <MaterialIcons name="info-outline" size={13} color="#6B7280" />
                         </View>
-                        <View className="bg-[#1A1A1A] rounded-xl px-4 py-3">
+                        <View className="bg-dark-100 rounded-xl px-4 py-3">
                             <TextInput
                                 value={stockMinimo}
                                 onChangeText={setStockMinimo}
@@ -165,7 +165,7 @@ export default function AgregarInsumoScreen() {
                 {/* Unidad */}
                 <View className="flex-row items-center justify-between mb-6">
                     <Text className="text-gray-400 text-sm">Tipo de Unidad Asignada:</Text>
-                    <View className="rounded-full px-4 py-1.5" style={{ backgroundColor: '#7E51FF' }}>
+                    <View className="rounded-full px-4 py-1.5" style={{ backgroundColor: '#D4AF37' }}>
                         <Text className="text-white text-sm font-semibold">{unidadLabel(categoria)}</Text>
                     </View>
                 </View>
@@ -195,7 +195,7 @@ export default function AgregarInsumoScreen() {
                     onPress={handleGuardar}
                     disabled={loading}
                     className="rounded-2xl py-4 items-center flex-row justify-center"
-                    style={{ backgroundColor: '#7E51FF' }}
+                    style={{ backgroundColor: '#D4AF37' }}
                 >
                     {loading ? (
                         <ActivityIndicator color="#fff" size="small" />

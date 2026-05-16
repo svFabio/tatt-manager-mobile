@@ -115,7 +115,7 @@ export default function CalendarScreen() {
   };
 
   return (
-    <View className="flex-1 bg-[#121212]">
+    <View className="flex-1 bg-dark">
       <MonthHeader mes={mesActual} onPrev={goPrevMonth} onNext={goNextMonth} />
 
       <View className="mt-2">
@@ -130,7 +130,7 @@ export default function CalendarScreen() {
 
       {loading && vista === "month" ? (
         <View className="py-6 items-center">
-          <ActivityIndicator color="#7E51FF" />
+          <ActivityIndicator color="#D4AF37" />
         </View>
       ) : null}
 
@@ -157,9 +157,9 @@ export default function CalendarScreen() {
       <TouchableOpacity
         onPress={handleFabPress}
         activeOpacity={0.85}
-        className="absolute bottom-16 self-center w-16 h-14 rounded-2xl bg-[#7E51FF] items-center justify-center"
+        className="absolute bottom-16 self-center w-16 h-14 rounded-2xl bg-[#D4AF37] items-center justify-center"
         style={{
-          shadowColor: "#7E51FF",
+          shadowColor: "#D4AF37",
           shadowOffset: { width: 0, height: 4 },
           shadowOpacity: 0.4,
           shadowRadius: 10,
