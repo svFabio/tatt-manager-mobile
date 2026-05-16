@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, TextInput, Image, Alert, ActivityIndicator, Modal } from 'react-native';
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
+import { useRouter, useFocusEffect } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
 import api from '../../src/api/axios';
 
@@ -80,9 +80,11 @@ export default function EndSessionScreen() {
     return total;
   }, [agujasUsadasDict]);
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      fetchData();
+    }, [])
+  );
 
   const fetchData = async () => {
     setLoading(true);
@@ -91,8 +93,16 @@ export default function EndSessionScreen() {
       const resTintas = await api.get('/tintas');
       const resAgujas = await api.get('/agujas');
       
+      const now = new Date();
       const citasPendientes = (resCitas.data?.data || resCitas.data || []).filter(
-        (c: Cita) => c.estadoCita !== 'FINALIZADA' && c.estadoCita !== 'CANCELADA'
+        (c: Cita) => {
+          // Descartar finalizadas o canceladas
+          if (c.estadoCita === 'FINALIZADA' || c.estadoCita === 'CANCELADA') return false;
+          
+          // Solo permitir citas que ya pasaron (o están ocurriendo ahora)
+          const citaDate = new Date(c.fechaHoraInicio || (c as any).fecha);
+          return citaDate <= now;
+        }
       );
       
       setCitas(citasPendientes);
@@ -243,32 +253,32 @@ export default function EndSessionScreen() {
 
   if (loading) {
     return (
-      <View className="flex-1 bg-[#0E0E0E] justify-center items-center">
-        <ActivityIndicator size="large" color="#A87CFF" />
+      <View className="flex-1 bg-dark justify-center items-center">
+        <ActivityIndicator size="large" color="#E8CC6E" />
       </View>
     );
   }
 
   return (
-    <View className="flex-1 bg-[#0E0E0E]">
+    <View className="flex-1 bg-dark">
       <ScrollView className="flex-1" contentContainerStyle={{ padding: 20, paddingBottom: 60 }}>
         
-        {/* Selector Cita */}
-        <View className="bg-[#131313] p-5 rounded-xl border border-white/5 mb-4">
-          <Text className="text-[#A87CFF] text-[10px] font-bold tracking-widest mb-3">SELECCIONAR CITA</Text>
+        {/* Selector Sesión */}
+        <View className="bg-dark p-5 rounded-xl border border-white/5 mb-4">
+          <Text className="text-primary-light text-[10px] font-bold tracking-widest mb-3">SELECCIONAR SESIÓN</Text>
           <TouchableOpacity 
-            className="bg-[#1A1A1A] h-12 rounded-lg flex-row items-center px-4"
+            className="bg-dark-100 h-12 rounded-lg flex-row items-center px-4"
             onPress={() => setDropdownCitaOpen(!dropdownCitaOpen)}
           >
-            <Feather name="calendar" size={16} color="#A87CFF" className="mr-3" />
+            <Feather name="calendar" size={16} color="#E8CC6E" className="mr-3" />
             <Text className="flex-1 text-white text-sm font-medium">
-              {selectedCita ? (selectedCita.cliente?.nombre ?? (selectedCita as any).clienteNombre) : 'Seleccionar cliente...'}
+              {selectedCita ? `${selectedCita.cliente?.nombre ?? (selectedCita as any).clienteNombre} - ${new Date(selectedCita.fechaHoraInicio || (selectedCita as any).fecha).toLocaleDateString()}` : 'Seleccionar sesión...'}
             </Text>
             <Feather name="chevron-down" size={16} color="#666" />
           </TouchableOpacity>
           
           {dropdownCitaOpen && (
-            <View className="mt-2 bg-[#1A1A1A] rounded-lg border border-white/5 overflow-hidden">
+            <View className="mt-2 bg-dark-100 rounded-lg border border-white/5 overflow-hidden">
               {citas.map(cita => (
                 <TouchableOpacity
                   key={cita.id}
@@ -278,7 +288,12 @@ export default function EndSessionScreen() {
                     setDropdownCitaOpen(false);
                   }}
                 >
-                  <Text className="text-white text-sm">{cita.cliente?.nombre ?? (cita as any).clienteNombre}</Text>
+                  <Text className="text-white text-sm font-bold">
+                    {cita.cliente?.nombre ?? (cita as any).clienteNombre}
+                  </Text>
+                  <Text className="text-muted-dark text-xs">
+                    {new Date(cita.fechaHoraInicio || (cita as any).fecha).toLocaleString()}
+                  </Text>
                 </TouchableOpacity>
               ))}
               {citas.length === 0 && (
@@ -289,11 +304,11 @@ export default function EndSessionScreen() {
         </View>
 
         {/* Upload Area */}
-        <View className="bg-[#131313] p-5 rounded-xl border border-white/5 mb-4">
-          <Text className="text-[#A87CFF] text-[10px] font-bold tracking-widest mb-3">FOTO DEL RESULTADO FINAL</Text>
+        <View className="bg-dark p-5 rounded-xl border border-white/5 mb-4">
+          <Text className="text-primary-light text-[10px] font-bold tracking-widest mb-3">FOTO DEL RESULTADO FINAL</Text>
           
           <TouchableOpacity 
-              className="flex-row justify-center items-center py-4 bg-transparent border border-dashed border-[#333] rounded-lg mb-3"
+              className="flex-row justify-center items-center py-4 bg-transparent border border-dashed border-dark-300 rounded-lg mb-3"
               onPress={handlePickImage}
           >
               <Feather name="camera" size={18} color="white" className="mr-2" />
@@ -301,7 +316,7 @@ export default function EndSessionScreen() {
           </TouchableOpacity>
 
           {fotoBase64 && (
-            <View className="w-24 h-24 rounded-lg overflow-hidden border border-[#333] relative">
+            <View className="w-24 h-24 rounded-lg overflow-hidden border border-dark-300 relative">
               <Image source={{ uri: fotoBase64 }} className="w-full h-full" resizeMode="cover" />
               <TouchableOpacity 
                 className="absolute top-1 right-1 bg-black/60 p-1 rounded-full"
@@ -314,9 +329,9 @@ export default function EndSessionScreen() {
         </View>
 
         {/* Session Notes */}
-        <View className="bg-[#131313] p-5 rounded-xl border border-white/5 mb-4">
-          <Text className="text-[#A87CFF] text-[10px] font-bold tracking-widest mb-3">NOTAS DE LA SESIÓN</Text>
-          <View className="bg-[#1A1A1A] rounded-lg p-4 h-24 border border-transparent focus:border-[#A87CFF]/50">
+        <View className="bg-dark p-5 rounded-xl border border-white/5 mb-4">
+          <Text className="text-primary-light text-[10px] font-bold tracking-widest mb-3">NOTAS DE LA SESIÓN</Text>
+          <View className="bg-dark-100 rounded-lg p-4 h-24 border border-transparent focus:border-[#E8CC6E]/50">
             <TextInput
               className="flex-1 text-white text-sm"
               placeholder="Detalles sobre la sesión..."
@@ -330,19 +345,19 @@ export default function EndSessionScreen() {
         </View>
 
         {/* Financials */}
-        <View className="bg-[#131313] p-5 rounded-xl border border-white/5 mb-4">
+        <View className="bg-dark p-5 rounded-xl border border-white/5 mb-4">
           <View className="flex-row gap-4 mb-6">
             <View className="flex-1">
-              <Text className="text-[#888] text-[10px] font-bold tracking-widest mb-2">ANTICIPO RECIBIDO</Text>
-              <View className="bg-[#1A1A1A] rounded-lg h-11 flex-row items-center px-3 border border-transparent">
-                <MaterialCommunityIcons name="cash" size={18} color="#A87CFF" className="mr-2" />
+              <Text className="text-muted-dark text-[10px] font-bold tracking-widest mb-2">ANTICIPO RECIBIDO</Text>
+              <View className="bg-dark-100 rounded-lg h-11 flex-row items-center px-3 border border-transparent">
+                <MaterialCommunityIcons name="cash" size={18} color="#E8CC6E" className="mr-2" />
                 <Text className="text-white text-sm flex-1 ml-2">{anticipo}</Text>
               </View>
             </View>
             <View className="flex-1">
-              <Text className="text-[#888] text-[10px] font-bold tracking-widest mb-2">COBRO TATUAJE</Text>
-              <View className="bg-[#1A1A1A] rounded-lg h-11 flex-row items-center px-3 border border-transparent">
-                <MaterialCommunityIcons name="cash-register" size={18} color="#A87CFF" className="mr-2" />
+              <Text className="text-muted-dark text-[10px] font-bold tracking-widest mb-2">COBRO TATUAJE</Text>
+              <View className="bg-dark-100 rounded-lg h-11 flex-row items-center px-3 border border-transparent">
+                <MaterialCommunityIcons name="cash-register" size={18} color="#E8CC6E" className="mr-2" />
                 <TextInput
                   className="flex-1 text-white text-sm ml-2"
                   keyboardType="numeric"
@@ -356,63 +371,70 @@ export default function EndSessionScreen() {
           </View>
 
           <View className="flex-row justify-between items-center">
-            <Text className="text-[#888] text-[10px] font-bold tracking-widest">TOTAL DE SESIÓN</Text>
-            <Text className="text-[#A87CFF] text-2xl font-black">${totalSesion.toFixed(2)}</Text>
+            <Text className="text-muted-dark text-[10px] font-bold tracking-widest">TOTAL DE SESIÓN</Text>
+            <Text className="text-primary-light text-2xl font-black">${totalSesion.toFixed(2)}</Text>
           </View>
         </View>
 
         {/* Caps Management */}
-        <View className="bg-[#131313] p-5 rounded-xl border border-white/5 mb-4">
+        <View className="bg-dark p-5 rounded-xl border border-white/5 mb-4">
           <View className="flex-row justify-between items-center mb-4">
-            <Text className="text-[#A87CFF] text-[10px] font-bold tracking-widest">REGISTRO DE CAPS USADOS</Text>
+            <Text className="text-primary-light text-[10px] font-bold tracking-widest">REGISTRO DE CAPS USADOS</Text>
             <TouchableOpacity onPress={() => setCapsUsadas({})}>
               <Feather name="trash-2" size={16} color="#666" />
             </TouchableOpacity>
           </View>
 
           {tintas.map((tinta, index) => (
-            <View key={tinta.id} className={`bg-[#1A1A1A] rounded-lg p-4 ${index !== tintas.length -1 ? 'mb-3' : ''}`}>
+            <View key={tinta.id} className={`bg-dark-100 rounded-lg p-4 ${index !== tintas.length -1 ? 'mb-3' : ''}`}>
               <View className="flex-row items-center justify-between mb-4">
                 <View className="flex-row items-center flex-1">
                   <View className="w-3 h-3 rounded-full mr-2" style={{ backgroundColor: tinta.colorHex || '#FFF', borderWidth: 1, borderColor: '#333' }} />
                   <Text className="text-white text-xs font-bold mr-2">{tinta.nombre}</Text>
-                  <Text className="text-[#666] text-[10px]">Stock: {tinta.stock?.reduce((acc, s) => acc + s.cantidadActual, 0) || 0} u</Text>
+                  <Text className="text-muted-dark text-[10px]">Stock: {tinta.stock?.reduce((acc, s) => acc + s.cantidadActual, 0) || 0} u</Text>
                 </View>
-                <View className="bg-[#131313] px-2 py-1 rounded flex-row items-center">
-                  <Text className="text-[#888] text-[10px] mr-1">Marca</Text>
+                <View className="bg-dark px-2 py-1 rounded flex-row items-center">
+                  <Text className="text-muted-dark text-[10px] mr-1">Marca</Text>
                   <Feather name="chevron-down" size={12} color="#666" />
                 </View>
               </View>
 
-              <View className="flex-row justify-between px-2">
-                {['CHICA', 'MEDIANA', 'GRANDE'].map(size => {
-                  const label = size === 'CHICA' ? 'S' : size === 'MEDIANA' ? 'M' : 'L';
-                  const count = capsUsadas[tinta.id]?.[size] || 0;
-                  return (
-                    <View key={size} className="items-center">
-                      <Text className="text-[#888] text-[10px] font-bold mb-2">{label}</Text>
-                      <View className="bg-[#131313] rounded-md flex-row items-center">
-                        <TouchableOpacity onPress={() => handleCapChange(tinta.id, size, -1)} className="px-3 py-2">
-                          <Feather name="minus" size={12} color="#888" />
-                        </TouchableOpacity>
-                        <Text className="text-white font-bold w-4 text-center text-xs">{count}</Text>
-                        <TouchableOpacity onPress={() => handleCapChange(tinta.id, size, 1)} className="px-3 py-2">
-                          <Feather name="plus" size={12} color="#FFF" />
-                        </TouchableOpacity>
+              <View className="flex-row justify-start gap-6 px-2 flex-wrap">
+                {tinta.stock && tinta.stock.length > 0 ? (
+                  tinta.stock.map(stockItem => {
+                    const size = stockItem.tamanioCap;
+                    const label = size === 'CHICA' ? 'S' : size === 'MEDIANA' ? 'M' : 'L';
+                    const count = capsUsadas[tinta.id]?.[size] || 0;
+                    return (
+                      <View key={size} className="items-center mb-2">
+                        <Text className="text-muted-dark text-[10px] font-bold mb-2">
+                          {label} <Text className="text-[9px] font-normal">(Stk: {stockItem.cantidadActual})</Text>
+                        </Text>
+                        <View className="bg-dark rounded-md flex-row items-center">
+                          <TouchableOpacity onPress={() => handleCapChange(tinta.id, size, -1)} className="px-3 py-2">
+                            <Feather name="minus" size={12} color="#888" />
+                          </TouchableOpacity>
+                          <Text className="text-white font-bold w-4 text-center text-xs">{count}</Text>
+                          <TouchableOpacity onPress={() => handleCapChange(tinta.id, size, 1)} className="px-3 py-2">
+                            <Feather name="plus" size={12} color="#FFF" />
+                          </TouchableOpacity>
+                        </View>
                       </View>
-                    </View>
-                  );
-                })}
+                    );
+                  })
+                ) : (
+                  <Text className="text-muted-dark text-xs py-2">Esta tinta no tiene stock registrado en ningún tamaño.</Text>
+                )}
               </View>
             </View>
           ))}
-          {tintas.length === 0 && <Text className="text-[#666] text-xs">No hay tintas en inventario.</Text>}
+          {tintas.length === 0 && <Text className="text-muted-dark text-xs">No hay tintas en inventario.</Text>}
         </View>
 
         {/* Agujas Management */}
-        <View className="bg-[#131313] p-5 rounded-xl border border-white/5 mb-4">
+        <View className="bg-dark p-5 rounded-xl border border-white/5 mb-4">
           <View className="flex-row justify-between items-center mb-4">
-            <Text className="text-[#A87CFF] text-[10px] font-bold tracking-widest">REGISTRO DE AGUJAS USADAS</Text>
+            <Text className="text-primary-light text-[10px] font-bold tracking-widest">REGISTRO DE AGUJAS USADAS</Text>
             <TouchableOpacity onPress={() => setAgujasUsadasDict({})}>
               <Feather name="trash-2" size={16} color="#666" />
             </TouchableOpacity>
@@ -421,21 +443,21 @@ export default function EndSessionScreen() {
           {agujas.map((aguja, index) => {
             const count = agujasUsadasDict[aguja.id] || 0;
             return (
-              <View key={aguja.id} className={`bg-[#1A1A1A] rounded-lg p-4 ${index !== agujas.length -1 ? 'mb-3' : ''}`}>
+              <View key={aguja.id} className={`bg-dark-100 rounded-lg p-4 ${index !== agujas.length -1 ? 'mb-3' : ''}`}>
                 <View className="flex-row items-center justify-between mb-4">
                   <View className="flex-row items-center flex-1">
                     <MaterialCommunityIcons name="needle" size={16} color="#FFF" className="mr-2" />
                     <Text className="text-white text-xs font-bold mr-2">{aguja.tipo}</Text>
-                    <Text className="text-[#666] text-[10px]">(Stock: {aguja.cantidadActual} u)</Text>
+                    <Text className="text-muted-dark text-[10px]">(Stock: {aguja.cantidadActual} u)</Text>
                   </View>
-                  <View className="bg-[#131313] px-2 py-1 rounded flex-row items-center">
-                    <Text className="text-[#888] text-[10px] mr-1">Marca</Text>
+                  <View className="bg-dark px-2 py-1 rounded flex-row items-center">
+                    <Text className="text-muted-dark text-[10px] mr-1">Marca</Text>
                     <Feather name="chevron-down" size={12} color="#666" />
                   </View>
                 </View>
 
                 <View className="items-center mt-2">
-                  <View className="bg-[#131313] rounded-md flex-row items-center px-4 py-1">
+                  <View className="bg-dark rounded-md flex-row items-center px-4 py-1">
                     <TouchableOpacity onPress={() => handleAgujaChange(aguja.id, -1)} className="px-4 py-2">
                       <Feather name="minus" size={12} color="#888" />
                     </TouchableOpacity>
@@ -448,7 +470,7 @@ export default function EndSessionScreen() {
               </View>
             );
           })}
-          {agujas.length === 0 && <Text className="text-[#666] text-xs">No hay agujas en inventario.</Text>}
+          {agujas.length === 0 && <Text className="text-muted-dark text-xs">No hay agujas en inventario.</Text>}
 
           {/* Resumen */}
           <View className="bg-[#2A1D00] rounded-lg p-4 mt-4 flex-row border border-[#FFB300]/20">
@@ -465,7 +487,7 @@ export default function EndSessionScreen() {
         {/* Final Action Button */}
         <TouchableOpacity
           className={`flex-row justify-center items-center py-4 rounded-lg mt-2 ${!selectedCitaId || submitting ? 'opacity-50' : ''}`}
-          style={{ backgroundColor: '#A87CFF' }}
+          style={{ backgroundColor: '#E8CC6E' }}
           disabled={!selectedCitaId || submitting}
           onPress={handleFinalizar}
         >
@@ -474,7 +496,7 @@ export default function EndSessionScreen() {
           ) : (
             <>
               <Feather name="check-circle" size={18} color="#0E0E0E" />
-              <Text className="text-[#0E0E0E] text-[11px] font-black tracking-widest ml-2">FINALIZAR CITA Y DESCONTAR STOCK</Text>
+              <Text className="text-[#0E0E0E] text-[11px] font-black tracking-widest ml-2">FINALIZAR SESIÓN Y DESCONTAR STOCK</Text>
             </>
           )}
         </TouchableOpacity>
