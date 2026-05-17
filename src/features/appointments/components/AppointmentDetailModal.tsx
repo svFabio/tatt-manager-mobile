@@ -13,6 +13,7 @@ import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { fetchCitaDetalle } from "../api/calendarApi";
 import type { Cita, CitaDetalle } from "../types";
+import { COLORS } from "../../../theme/colors";
 
 interface AppointmentDetailModalProps {
   cita: Cita | null;
@@ -32,7 +33,7 @@ function InfoRow({
   return (
     <View className="flex-row py-2.5 border-b border-dark-200">
       <View className="w-8 items-center justify-center mt-0.5">
-        <Feather name={icon} size={16} color="#D4AF37" />
+        <Feather name={icon} size={16} color={COLORS.primary.DEFAULT} />
       </View>
       <View className="flex-1">
         <Text className="text-muted-dark text-[11px] font-semibold tracking-wider uppercase">
@@ -106,7 +107,7 @@ export const AppointmentDetailModal: React.FC<AppointmentDetailModalProps> = ({
 
           {loading ? (
             <View className="py-10 items-center">
-              <ActivityIndicator color="#D4AF37" />
+              <ActivityIndicator color={COLORS.primary.DEFAULT} />
               <Text className="text-muted text-sm mt-2">Cargando…</Text>
             </View>
           ) : error ? (

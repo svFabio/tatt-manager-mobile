@@ -77,25 +77,8 @@ export const DayTimeline: React.FC<DayTimelineProps> = ({ dia, citas, onSelectCi
             </View>
           ))}
 
-        
-          {offsetAhora != null ? (
-            <View
-              style={{
-                position: "absolute",
-                top: offsetAhora,
-                left: 48,
-                right: 0,
-                flexDirection: "row",
-                alignItems: "center",
-              }}
-              pointerEvents="none"
-            >
-              <View className="w-2.5 h-2.5 rounded-full bg-alert" />
-              <View className="flex-1 h-[2px] bg-alert" />
-            </View>
-          ) : null}
 
-          
+          {/* Event cards */}
           {citas.map((cita) => {
             if (!cita.fechaHoraInicio) return null;
             const inicio = new Date(cita.fechaHoraInicio);
@@ -121,6 +104,7 @@ export const DayTimeline: React.FC<DayTimelineProps> = ({ dia, citas, onSelectCi
                   left: 56,
                   right: 4,
                   height: alto,
+                  zIndex: 1,
                 }}
               >
                 <EventCard
@@ -131,6 +115,25 @@ export const DayTimeline: React.FC<DayTimelineProps> = ({ dia, citas, onSelectCi
               </View>
             );
           })}
+
+          {/* Current time indicator — rendered LAST so it's visually on top */}
+          {offsetAhora != null ? (
+            <View
+              style={{
+                position: "absolute",
+                top: offsetAhora,
+                left: 48,
+                right: 0,
+                flexDirection: "row",
+                alignItems: "center",
+                zIndex: 10,
+              }}
+              pointerEvents="none"
+            >
+              <View className="w-2.5 h-2.5 rounded-full bg-alert" />
+              <View className="flex-1 h-[2px] bg-alert" />
+            </View>
+          ) : null}
         </View>
       </ScrollView>
     </View>
