@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, TouchableOpacity, TextInput, ActivityIndicator } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { COLORS } from "../../../theme/colors";
 
 interface WhatsAppPairCodeProps {
   pairingCode: string | null;
@@ -22,23 +23,23 @@ export const WhatsAppPairCode: React.FC<WhatsAppPairCodeProps> = ({
   return (
     <View>
       {pairingCode ? (
-        <View className="bg-[#1a1a1a] p-8 rounded-3xl border border-[#8b5cf6]/30 items-center justify-center mb-6 relative overflow-hidden">
+        <View className="bg-dark-100 p-8 rounded-3xl border border-primary/30 items-center justify-center mb-6 relative overflow-hidden">
           <View className="absolute top-0 right-0 p-4 opacity-5">
-            <Ionicons name="keypad" size={100} color="#8b5cf6" />
+            <Ionicons name="keypad" size={100} color={COLORS.primary.DEFAULT} />
           </View>
           <Text className="text-gray-400 font-medium mb-6 text-center text-sm">
             Tu código se ha generado correctamente.
           </Text>
-          <View className="bg-[#242424] px-8 py-5 rounded-2xl border border-[#333]">
+          <View className="bg-dark-200 px-8 py-5 rounded-2xl border border-dark-300">
             <Text className="text-5xl font-mono font-black tracking-[0.2em] text-white">
               {pairingCode}
             </Text>
           </View>
           <TouchableOpacity
             onPress={onResetPairing}
-            className="mt-8 border-b border-[#8b5cf6]/50 pb-1"
+            className="mt-8 border-b border-primary/50 pb-1"
           >
-            <Text className="text-[#8b5cf6] font-semibold text-sm">
+            <Text className="text-primary font-semibold text-sm">
               Solicitar nuevo código
             </Text>
           </TouchableOpacity>
@@ -48,7 +49,7 @@ export const WhatsAppPairCode: React.FC<WhatsAppPairCodeProps> = ({
           <Text className="text-gray-400 text-xs uppercase tracking-widest font-bold mb-3 pl-1">
             Número de teléfono (con código de país)
           </Text>
-          <View className="bg-[#1a1a1a] rounded-2xl border border-[#2b2b2b] px-4 py-1 mb-2">
+          <View className="bg-dark-100 rounded-2xl border border-dark-300 px-4 py-1 mb-2">
             <TextInput
               className="text-white text-lg py-3 font-medium"
               placeholder="Ej: 59171234567"
@@ -69,8 +70,8 @@ export const WhatsAppPairCode: React.FC<WhatsAppPairCodeProps> = ({
             onPress={onRequestPairing}
             className={`w-full py-4 rounded-xl flex-row items-center justify-center shadow-lg ${
               phoneNumber.length >= 7
-                ? "bg-[#8b5cf6] shadow-[#8b5cf6]/20"
-                : "bg-[#374151]"
+                ? "bg-primary shadow-primary/20"
+                : "bg-dark-300"
             }`}
           >
             {actionLoading ? (
@@ -83,10 +84,10 @@ export const WhatsAppPairCode: React.FC<WhatsAppPairCodeProps> = ({
       )}
 
       {/* Info Card Pair */}
-      <View className="bg-[#1a1a1a] p-6 rounded-3xl mt-8 border border-[#2b2b2b]">
+      <View className="bg-dark-100 p-6 rounded-3xl mt-8 border border-dark-300">
         <View className="flex-row items-center mb-6">
-          <Ionicons name="information-circle-outline" size={24} color="#a78bfa" />
-          <Text className="text-[#a78bfa] font-bold text-lg ml-2">
+          <Ionicons name="information-circle-outline" size={24} color={COLORS.primary.light} />
+          <Text className="text-primary-light font-bold text-lg ml-2">
             Como funciona:
           </Text>
         </View>
@@ -99,8 +100,8 @@ export const WhatsAppPairCode: React.FC<WhatsAppPairCodeProps> = ({
             "Ingresa el codigo en WhatsApp nativo",
           ].map((paso, index) => (
             <View key={index} className="flex-row items-center mb-4">
-              <View className="w-8 h-8 rounded-full bg-[#2a2a2a] items-center justify-center mr-4 border border-[#3b3b3b]">
-                <Text className="text-[#8b5cf6] font-bold text-xs">{index + 1}</Text>
+              <View className="w-8 h-8 rounded-full bg-dark-200 items-center justify-center mr-4 border border-dark-400">
+                <Text className="text-primary font-bold text-xs">{index + 1}</Text>
               </View>
               <Text className="text-gray-300 font-medium flex-1 text-sm">
                 {paso}

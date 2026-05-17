@@ -13,7 +13,7 @@ interface CardRequestProps {
 }
 
 export const CardRequest = ({ name, artist, status, recibido, onPress }: CardRequestProps) => (
-    <View className="bg-[#121212] mb-4 p-5 rounded-[28px] border border-white/5">
+    <View className="bg-dark mb-4 p-5 rounded-[28px] border border-white/5">
         {/* Header */}
         <View className="flex-row justify-between items-start mb-4">
             <View className="flex-1 mr-3">

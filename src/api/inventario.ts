@@ -23,6 +23,8 @@ export const InventarioAPI = {
         form.append('marca', body.marca);
         form.append('stockInicial', String(body.stockInicial));
         form.append('stockMinimo', String(body.stockMinimo));
+        if (body.capSize) form.append('capSize', body.capSize);
+        if (body.capMl) form.append('capMl', body.capMl);
         if (body.foto) form.append('foto', body.foto as any);
         return api
             .post<ApiResponse<InventarioItem[]>>('/inventario', form, {
@@ -30,4 +32,14 @@ export const InventarioAPI = {
             })
             .then((r) => r.data);
     },
+
+    editarInsumo: (body: { tipo: string; refId: number; nombre: string; marca: string; cantidadMinima: number }): Promise<ApiResponse<InventarioItem>> =>
+        api
+            .put<ApiResponse<InventarioItem>>('/inventario/editar', body)
+            .then((r) => r.data),
+
+    eliminarInsumo: (body: { tipo: string; refId: number }): Promise<ApiResponse<{ message: string }>> =>
+        api
+            .delete<ApiResponse<{ message: string }>>(`/inventario/eliminar/${body.tipo}/${body.refId}`)
+            .then((r) => r.data),
 } as const;

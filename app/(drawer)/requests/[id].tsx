@@ -1,1 +1,1 @@
-export { default } from "@/src/features/citas/screens/DetalleSolicitudScreen";
+export { default } from "@/src/features/requests/screens/DetalleSolicitudScreen";

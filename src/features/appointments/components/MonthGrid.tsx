@@ -11,6 +11,7 @@ import {
   startOfWeek,
 } from "date-fns";
 import type { Cita } from "../types";
+import { COLORS } from "../../../theme/colors";
 
 interface MonthGridProps {
   mes: Date;
@@ -36,7 +37,7 @@ export const MonthGrid: React.FC<MonthGridProps> = ({
   const hoy = new Date();
 
   return (
-    <View className="bg-[#1A1A1A] mx-4 mt-4 rounded-2xl border border-[#2A2A2A] p-3">
+    <View className="bg-dark-100 mx-4 mt-4 rounded-2xl border border-dark-200 p-3">
       {/* Encabezado días de la semana */}
       <View className="flex-row mb-2">
         {DIAS_SEMANA.map((d) => (
@@ -55,7 +56,7 @@ export const MonthGrid: React.FC<MonthGridProps> = ({
           const esSeleccionado = isSameDay(dia, diaSeleccionado);
           const esHoy = isSameDay(dia, hoy);
           const key = format(dia, "yyyy-MM-dd");
-          const tieneCitas = (citasPorDia.get(key)?.length ?? 0) > 0;
+          const numCitas = citasPorDia.get(key)?.length ?? 0;
 
           return (
             <TouchableOpacity
@@ -66,32 +67,43 @@ export const MonthGrid: React.FC<MonthGridProps> = ({
               style={{ width: `${100 / 7}%` }}
             >
               <View
-                className={`w-9 h-9 rounded-full items-center justify-center ${
-                  esSeleccionado
-                    ? "bg-[#7E51FF]"
-                    : esHoy
-                    ? "border border-[#7E51FF]"
-                    : ""
-                }`}
+                style={{
+                  width: 36,
+                  height: 36,
+                  borderRadius: 18,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  backgroundColor: esSeleccionado ? COLORS.primary.DEFAULT : 'transparent',
+                  borderWidth: !esSeleccionado && esHoy ? 1.5 : 0,
+                  borderColor: !esSeleccionado && esHoy ? COLORS.primary.DEFAULT : 'transparent',
+                }}
               >
                 <Text
-                  className={`text-sm ${
-                    !enMes
-                      ? "text-[#3A3A3A]"
+                  style={{
+                    fontSize: 14,
+                    color: !enMes
+                      ? COLORS.dark[300]
                       : esSeleccionado
-                      ? "text-white font-bold"
+                      ? '#FFFFFF'
                       : esHoy
-                      ? "text-[#7E51FF] font-bold"
-                      : "text-white"
-                  }`}
+                      ? COLORS.primary.DEFAULT
+                      : '#FFFFFF',
+                    fontWeight: esSeleccionado || esHoy ? '700' : '400',
+                  }}
                 >
                   {format(dia, "d")}
                 </Text>
               </View>
-              <View className="h-1.5 mt-1 items-center justify-center">
-                {tieneCitas && enMes && !esSeleccionado ? (
-                  <View className="w-1.5 h-1.5 rounded-full bg-[#7E51FF]" />
-                ) : null}
+              <View className="h-1.5 mt-1 flex-row items-center justify-center" style={{ gap: 2 }}>
+                {enMes && numCitas > 0
+                  ? Array.from({ length: Math.min(numCitas, 3) }).map((_, i) => (
+                      <View
+                        key={i}
+                        className="w-1.5 h-1.5 rounded-full"
+                        style={{ backgroundColor: esSeleccionado ? '#FFFFFF' : COLORS.primary.DEFAULT }}
+                      />
+                    ))
+                  : null}
               </View>
             </TouchableOpacity>
           );

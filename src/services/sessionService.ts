@@ -5,6 +5,7 @@ export interface Session {
   nombre: string;
   telefono: string;
   zona: string;
+  tamano?: string;
   horas?: number;
   fecha: string;
   horario: string;
@@ -30,8 +31,9 @@ export const sessionService = {
       const response = await api.post('/citas/admin', {
         clienteNombre: data.nombre,
         clienteTelefono: data.telefono,
-        zona: data.zona,
-        horas: data.horas,
+        zonaDelCuerpo: data.zona,
+        tamanoEnCm: data.tamano,
+        duracionEnHoras: data.horas,
         fecha: data.fecha,
         horario: data.horario,
         cotizacion: data.cotizacion

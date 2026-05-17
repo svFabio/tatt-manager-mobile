@@ -5,6 +5,7 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useRouter } from 'expo-router';
 import { SessionsAPI, type SessionListItem, type ArtistaOption } from '../../../api/sessions';
 import { SessionCard } from '../components/SessionCard';
+import { COLORS } from '../../../theme/colors';
 
 export default function SessionHistoryScreen() {
   const router = useRouter();
@@ -54,19 +55,19 @@ export default function SessionHistoryScreen() {
   }, [selectedArtista, artistas]);
 
   return (
-    <SafeAreaView className="flex-1 bg-[#0E0E0E]" edges={['bottom']}>
+    <SafeAreaView className="flex-1 bg-dark" edges={['bottom']}>
       {/* ─── Controls: Search & Filter ─── */}
       <View className="px-4 pt-4 pb-2 flex-row items-center" style={{ gap: 8 }}>
         {/* Search Input */}
-        <View className="flex-1 h-[42px] rounded justify-center" style={{ backgroundColor: '#131313' }}>
+        <View className="flex-1 h-[42px] rounded-xl justify-center" style={{ backgroundColor: COLORS.dark[100] }}>
           <View className="absolute left-3 z-10">
-            <MaterialIcons name="search" size={14} color="#ADAAAA" />
+            <MaterialIcons name="search" size={14} color={COLORS.text.muted} />
           </View>
           <TextInput
             value={search}
             onChangeText={setSearch}
             placeholder="Buscar"
-            placeholderTextColor="#ADAAAA"
+            placeholderTextColor={COLORS.text.muted}
             className="flex-1 text-white text-sm"
             style={{ paddingLeft: 36, paddingRight: 12 }}
           />
@@ -76,35 +77,43 @@ export default function SessionHistoryScreen() {
         <TouchableOpacity
           activeOpacity={0.8}
           onPress={() => setDropdownOpen(true)}
-          className="h-[42px] rounded flex-row items-center px-3"
+          className="h-[42px] rounded-xl flex-row items-center px-3"
           style={{
-            backgroundColor: '#131313',
+            backgroundColor: COLORS.dark[100],
             borderWidth: 1,
-            borderColor: '#262626',
+            borderColor: COLORS.dark[200],
             minWidth: 120,
           }}
         >
           <Text className="text-white text-sm flex-1" numberOfLines={1}>
             {selectedArtistaName}
           </Text>
-          <MaterialIcons name="keyboard-arrow-down" size={18} color="#6B7280" style={{ marginLeft: 4 }} />
+          <MaterialIcons name="keyboard-arrow-down" size={18} color={COLORS.text.muted} style={{ marginLeft: 4 }} />
         </TouchableOpacity>
       </View>
 
       {/* ─── Sessions List ─── */}
       {loading ? (
         <View className="flex-1 items-center justify-center">
-          <ActivityIndicator color="#7E51FF" size="large" />
+          <ActivityIndicator color={COLORS.primary.DEFAULT} size="large" />
         </View>
       ) : sessions.length === 0 ? (
         <View className="flex-1 items-center justify-center px-8">
-          <MaterialIcons name="history" size={48} color="#374151" />
-          <Text className="text-gray-500 mt-3 text-sm text-center">
-            No se encontraron sesiones finalizadas
+          <View
+            className="w-20 h-20 rounded-3xl items-center justify-center mb-4"
+            style={{ backgroundColor: COLORS.primary.ghost }}
+          >
+            <MaterialIcons name="history" size={36} color={COLORS.primary.DEFAULT} />
+          </View>
+          <Text style={{ color: COLORS.text.secondary }} className="text-base font-semibold text-center">
+            No se encontraron sesiones
+          </Text>
+          <Text style={{ color: COLORS.text.muted }} className="text-sm mt-1 text-center">
+            Las sesiones finalizadas aparecerán aquí
           </Text>
         </View>
       ) : (
-        <View className="flex-1 mx-4 mt-2 rounded-lg overflow-hidden" style={{ backgroundColor: '#131313', borderWidth: 1, borderColor: '#262626' }}>
+        <View className="flex-1 mx-4 mt-2 rounded-2xl overflow-hidden" style={{ backgroundColor: COLORS.dark[100], borderWidth: 1, borderColor: COLORS.border.subtle }}>
           <FlatList
             data={sessions}
             keyExtractor={(item) => item.id.toString()}
@@ -123,7 +132,7 @@ export default function SessionHistoryScreen() {
       {/* ─── Artista Picker Modal ─── */}
       <Modal visible={dropdownOpen} transparent animationType="fade" onRequestClose={() => setDropdownOpen(false)}>
         <Pressable className="flex-1 bg-black/60 justify-center items-center" onPress={() => setDropdownOpen(false)}>
-          <View className="w-[280px] rounded-2xl p-4" style={{ backgroundColor: '#1A1A1A' }}>
+          <View className="w-[280px] rounded-2xl p-4" style={{ backgroundColor: COLORS.dark[100] }}>
             <Text className="text-white text-base font-bold mb-4">Filtrar por artista</Text>
 
             {/* "Todos" option */}
@@ -133,7 +142,7 @@ export default function SessionHistoryScreen() {
                 setDropdownOpen(false);
               }}
               className="py-3 px-3 rounded-lg mb-1"
-              style={{ backgroundColor: selectedArtista === null ? '#262626' : 'transparent' }}
+              style={{ backgroundColor: selectedArtista === null ? COLORS.dark[200] : 'transparent' }}
             >
               <Text className="text-white text-sm">Todos los artistas</Text>
             </TouchableOpacity>
@@ -146,7 +155,7 @@ export default function SessionHistoryScreen() {
                   setDropdownOpen(false);
                 }}
                 className="py-3 px-3 rounded-lg mb-1"
-                style={{ backgroundColor: selectedArtista === a.id ? '#262626' : 'transparent' }}
+                style={{ backgroundColor: selectedArtista === a.id ? COLORS.dark[200] : 'transparent' }}
               >
                 <Text className="text-white text-sm">{a.nombre}</Text>
               </TouchableOpacity>

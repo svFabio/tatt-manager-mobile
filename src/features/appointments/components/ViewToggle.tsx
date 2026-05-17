@@ -14,7 +14,7 @@ const OPCIONES: { key: VistaCalendario; label: string }[] = [
 
 export const ViewToggle: React.FC<ViewToggleProps> = ({ vista, onChange }) => {
   return (
-    <View className="flex-row self-center bg-[#1E1E1E] rounded-full p-1 border border-[#2A2A2A]">
+    <View className="flex-row self-center bg-dark-100 rounded-full p-1 border border-dark-200">
       {OPCIONES.map((op) => {
         const activo = vista === op.key;
         return (
@@ -22,7 +22,7 @@ export const ViewToggle: React.FC<ViewToggleProps> = ({ vista, onChange }) => {
             key={op.key}
             onPress={() => onChange(op.key)}
             activeOpacity={0.8}
-            className={`px-6 py-2 rounded-full ${activo ? "bg-[#7E51FF]" : ""}`}
+            className={`px-6 py-2 rounded-full ${activo ? "bg-primary" : ""}`}
           >
             <Text
               className={`text-sm font-semibold ${

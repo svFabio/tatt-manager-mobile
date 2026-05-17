@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, ActivityIndicator, Alert } fro
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { CitasAPI } from '../../../api/citas';
 import { useRouter } from 'expo-router';
+import { COLORS } from '../../../theme/colors';
 
 export const DetalleCotizacion = ({ solicitudId, estado }: { solicitudId: number, estado?: string }) => {
   const router = useRouter();
@@ -44,16 +45,16 @@ export const DetalleCotizacion = ({ solicitudId, estado }: { solicitudId: number
   };
 
   return (
-    <View className="bg-[#121212] rounded-2xl border border-white/5 p-4">
+    <View className="bg-dark rounded-2xl border border-white/5 p-4">
       <View className="flex-row items-center mb-4">
-        <MaterialIcons name="request-quote" size={18} color="#7E51FF" />
+        <MaterialIcons name="request-quote" size={18} color={COLORS.primary.DEFAULT} />
         <Text className="text-white text-base font-bold ml-2">Cotización</Text>
       </View>
 
       <Text className="text-gray-500 text-[10px] uppercase tracking-widest mb-2">
         Tiempo estimado de sesión
       </Text>
-      <View className="flex-row items-center bg-[#1A1A1A] rounded-xl px-3 py-3 mb-4 border border-white/5">
+      <View className="flex-row items-center bg-dark-100 rounded-xl px-3 py-3 mb-4 border border-white/5">
         <MaterialIcons name="access-time" size={16} color="#6B7280" />
         <TextInput
           value={tiempo}
@@ -67,7 +68,7 @@ export const DetalleCotizacion = ({ solicitudId, estado }: { solicitudId: number
       </View>
 
       <Text className="text-gray-500 text-[10px] uppercase tracking-widest mb-2">Costo total</Text>
-      <View className="flex-row items-center bg-[#1A1A1A] rounded-xl px-3 py-3 mb-6 border border-white/5">
+      <View className="flex-row items-center bg-dark-100 rounded-xl px-3 py-3 mb-6 border border-white/5">
         <Text className="text-gray-400 text-sm font-bold mr-2">$</Text>
         <TextInput
           value={costo}
@@ -81,14 +82,14 @@ export const DetalleCotizacion = ({ solicitudId, estado }: { solicitudId: number
       </View>
 
       {isCotizada ? (
-        <View className="bg-[#2A2A2A] rounded-2xl py-4 flex-row items-center justify-center">
+        <View className="bg-dark-200 rounded-2xl py-4 flex-row items-center justify-center">
           <Text className="text-gray-400 text-sm font-bold mr-2">Cotización ya enviada</Text>
           <MaterialIcons name="check-circle" size={16} color="#4ADE80" />
         </View>
       ) : (
         <TouchableOpacity
           activeOpacity={0.8}
-          className="bg-[#7E51FF] rounded-2xl py-4 flex-row items-center justify-center"
+          className="bg-primary rounded-2xl py-4 flex-row items-center justify-center"
           onPress={handleCotizar}
           disabled={loading}
         >

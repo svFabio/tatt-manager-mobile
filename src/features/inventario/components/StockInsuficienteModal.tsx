@@ -34,7 +34,7 @@ export function StockInsuficienteModal({ visible, nombre, cantidad, unidad, onCl
                     </Text>
 
                     {/* Stock actual */}
-                    <View className="bg-[#1A1A1A] rounded-2xl px-4 py-3 flex-row items-center justify-between mb-6 border border-white/5">
+                    <View className="bg-dark-100 rounded-2xl px-4 py-3 flex-row items-center justify-between mb-6 border border-white/5">
                         <Text className="text-gray-500 text-xs uppercase tracking-widest">Stock actual</Text>
                         <Text className="text-red-400 font-bold text-base">
                             {cantidad}{' '}
@@ -46,7 +46,7 @@ export function StockInsuficienteModal({ visible, nombre, cantidad, unidad, onCl
                     <TouchableOpacity
                         onPress={onClose}
                         activeOpacity={0.8}
-                        className="bg-[#7E51FF] rounded-2xl py-4 items-center"
+                        className="bg-primary rounded-2xl py-4 items-center"
                     >
                         <Text className="text-white font-bold text-sm">Entendido</Text>
                     </TouchableOpacity>
