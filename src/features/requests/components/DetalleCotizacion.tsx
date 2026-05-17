@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, ActivityIndicator, Alert } fro
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { CitasAPI } from '../../../api/citas';
 import { useRouter } from 'expo-router';
+import { COLORS } from '../../../theme/colors';
 
 export const DetalleCotizacion = ({ solicitudId, estado }: { solicitudId: number, estado?: string }) => {
   const router = useRouter();
@@ -46,7 +47,7 @@ export const DetalleCotizacion = ({ solicitudId, estado }: { solicitudId: number
   return (
     <View className="bg-dark rounded-2xl border border-white/5 p-4">
       <View className="flex-row items-center mb-4">
-        <MaterialIcons name="request-quote" size={18} color="#D4AF37" />
+        <MaterialIcons name="request-quote" size={18} color={COLORS.primary.DEFAULT} />
         <Text className="text-white text-base font-bold ml-2">Cotización</Text>
       </View>
 

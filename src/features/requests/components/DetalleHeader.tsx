@@ -18,7 +18,7 @@ export const DetalleHeader = () => {
         </TouchableOpacity>
 
         <Text className="text-white text-base font-bold">
-          Detaller de solicitud
+          Detalle de solicitud
         </Text>
       </View>
 

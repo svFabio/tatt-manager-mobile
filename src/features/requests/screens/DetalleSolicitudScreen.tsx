@@ -9,6 +9,7 @@ import { DetalleHeader } from '../components/DetalleHeader';
 import { DetalleCliente } from '../components/DetalleCliente';
 import { DetalleReferencia } from '../components/DetalleReferencia';
 import { DetalleCotizacion } from '../components/DetalleCotizacion';
+import { COLORS } from '../../../theme/colors';
 
 export default function DetalleSolicitudScreen() {
     const { id } = useLocalSearchParams<{ id: string }>();
@@ -23,20 +24,20 @@ export default function DetalleSolicitudScreen() {
     }, [id]);
 
     if (loading) return (
-        <SafeAreaView className="flex-1 bg-[#0A0A0A] items-center justify-center">
-            <ActivityIndicator color="#D4AF37" size="large" />
+        <SafeAreaView className="flex-1 items-center justify-center" style={{ backgroundColor: COLORS.bg }}>
+            <ActivityIndicator color={COLORS.primary.DEFAULT} size="large" />
         </SafeAreaView>
     );
 
     if (!detalle) return (
-        <SafeAreaView className="flex-1 bg-[#0A0A0A] items-center justify-center px-6">
-            <MaterialIcons name="error-outline" size={48} color="#374151" />
+        <SafeAreaView className="flex-1 items-center justify-center px-6" style={{ backgroundColor: COLORS.bg }}>
+            <MaterialIcons name="error-outline" size={48} color={COLORS.text.muted} />
             <Text className="text-gray-500 mt-3 text-sm text-center">No se pudo cargar la solicitud</Text>
         </SafeAreaView>
     );
 
     return (
-        <SafeAreaView className="flex-1 bg-[#0A0A0A]">
+        <SafeAreaView className="flex-1" style={{ backgroundColor: COLORS.bg }}>
             <DetalleHeader />
             <ScrollView className="flex-1 px-4" showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 40 }}>
                 <DetalleCliente detalle={detalle} />

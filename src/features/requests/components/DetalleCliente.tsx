@@ -1,6 +1,7 @@
 import { View, Text } from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import type { CitaDetails } from '../../../types/citas';
+import { COLORS } from '../../../theme/colors';
 
 const formatDate = (value: string | Date): string =>
   new Date(value).toLocaleDateString('es-MX', { day: '2-digit', month: 'short', year: 'numeric' });
@@ -22,7 +23,7 @@ export const DetalleCliente = ({ detalle }: Props) => (
   <>
     <View className="flex-row items-center mt-3 mb-1">
       <View className="w-8 h-8 rounded-full bg-primary/30 items-center justify-center mr-3">
-        <MaterialIcons name="person" size={16} color="#D4AF37" />
+        <MaterialIcons name="person" size={16} color={COLORS.primary.DEFAULT} />
       </View>
       <Text className="text-white text-base font-semibold">{detalle.clienteNombre}</Text>
     </View>

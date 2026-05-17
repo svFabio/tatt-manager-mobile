@@ -5,8 +5,9 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useRouter } from 'expo-router';
 import { CitasAPI } from '../../../api/citas';
 import { socket } from '../../../api/socket';
-import { AppointmentCard } from '../components/AppointmentCard';
+import { RequestCard } from '../components/RequestCard';
 import type { EstadoCita, SolicitudItem } from '../../../types/citas';
+import { COLORS } from '../../../theme/colors';
 
 const FILTERS: { label: string; value: EstadoCita | 'ALL' }[] = [
     { label: 'Todas',       value: 'ALL'        },
@@ -50,7 +51,7 @@ export default function RequestsScreen() {
         : requests.filter((r) => r.estado === activeFilter);
 
     return (
-        <SafeAreaView className="flex-1 bg-[#0A0A0A]">
+        <SafeAreaView className="flex-1" style={{ backgroundColor: COLORS.bg }}>
             <View className="px-4 -mt-6">
                 <FlatList
                     horizontal
@@ -85,18 +86,24 @@ export default function RequestsScreen() {
 
             <View className="flex-1 px-4">
                 {loading ? (
-                    <ActivityIndicator color="#D4AF37" size="large" className="mt-20" />
+                    <ActivityIndicator color={COLORS.primary.DEFAULT} size="large" className="mt-20" />
                 ) : filtered.length === 0 ? (
                     <View className="flex-1 items-center justify-center">
-                        <MaterialIcons name="inbox" size={48} color="#374151" />
-                        <Text className="text-gray-600 mt-3 text-sm">Sin solicitudes</Text>
+                        <View
+                            className="w-20 h-20 rounded-3xl items-center justify-center mb-4"
+                            style={{ backgroundColor: COLORS.primary.ghost }}
+                        >
+                            <MaterialIcons name="inbox" size={36} color={COLORS.primary.DEFAULT} />
+                        </View>
+                        <Text style={{ color: COLORS.text.secondary }} className="text-base font-semibold">Sin solicitudes</Text>
+                        <Text style={{ color: COLORS.text.muted }} className="text-sm mt-1">Aparecerán aquí cuando lleguen</Text>
                     </View>
                 ) : (
                     <FlatList
                         data={filtered}
                         keyExtractor={(item) => item.id.toString()}
                         renderItem={({ item }) => (
-                            <AppointmentCard
+                            <RequestCard
                                 item={item}
                                 onPress={() => router.push({ pathname: '/(drawer)/requests/[id]', params: { id: item.id } })}
                             />
