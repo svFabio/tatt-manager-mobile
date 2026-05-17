@@ -1,19 +1,47 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, TextInput, Alert } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, TextInput, Alert, ActivityIndicator, Animated } from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { InventarioAPI } from '../../../api/inventario';
 import type { InventarioItem } from '../../../types/inventario';
 import { StockInsuficienteModal } from './StockInsuficienteModal';
+import { COLORS } from '../../../theme/colors';
+
+import { useRouter } from 'expo-router';
 
 interface Props {
     item: InventarioItem;
     onUpdated: (updated: InventarioItem) => void;
+    index?: number;
 }
 
-export function InventarioItemCard({ item, onUpdated }: Props) {
+export function InventarioItemCard({ item, onUpdated, index = 0 }: Props) {
+    const router = useRouter();
     const [inputValue, setInputValue] = useState(item.cantidadActual.toString());
     const [loading, setLoading]       = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
+    const [fadeAnim] = useState(new Animated.Value(0));
+    const [slideAnim] = useState(new Animated.Value(20));
+
+    useEffect(() => {
+        Animated.parallel([
+            Animated.timing(fadeAnim, {
+                toValue: 1,
+                duration: 350,
+                delay: index * 60,
+                useNativeDriver: true,
+            }),
+            Animated.timing(slideAnim, {
+                toValue: 0,
+                duration: 350,
+                delay: index * 60,
+                useNativeDriver: true,
+            }),
+        ]).start();
+    }, []);
+
+    useEffect(() => {
+        setInputValue(item.cantidadActual.toString());
+    }, [item.cantidadActual]);
 
     const applyDelta = async (delta: number) => {
         if (loading) return;
@@ -49,7 +77,12 @@ export function InventarioItemCard({ item, onUpdated }: Props) {
         applyDelta(delta);
     };
 
-    const dotColor = item.colorHex ?? '#6B7280';
+    const dotColor = item.colorHex ?? COLORS.text.muted;
+
+    const getCatIcon = () => {
+        if (item.tipo === 'tinta') return 'palette';
+        return 'build';
+    };
 
     return (
         <>
@@ -60,67 +93,112 @@ export function InventarioItemCard({ item, onUpdated }: Props) {
             unidad={item.unidad}
             onClose={() => setModalVisible(false)}
         />
-        <View className="bg-dark-100 rounded-2xl p-4 mb-3">
+        <Animated.View
+            style={{
+                opacity: fadeAnim,
+                transform: [{ translateY: slideAnim }],
+            }}
+        >
+        <View
+            className="rounded-2xl p-4 mb-3"
+            style={{
+                backgroundColor: COLORS.dark[100],
+                borderWidth: 1,
+                borderColor: item.esBajo ? COLORS.danger.border : COLORS.border.subtle,
+            }}
+        >
             <View className="flex-row items-start justify-between mb-3">
                 <View className="flex-row items-center flex-1 mr-2">
                     <View
-                        className="w-3 h-3 rounded-full mr-3 mt-1"
-                        style={{ backgroundColor: dotColor }}
-                    />
+                        className="w-9 h-9 rounded-xl items-center justify-center mr-3"
+                        style={{ backgroundColor: `${dotColor}20` }}
+                    >
+                        <MaterialIcons name={getCatIcon() as any} size={18} color={dotColor} />
+                    </View>
                     <View className="flex-1">
                         <Text className="text-white font-semibold text-base" numberOfLines={1}>
                             {item.nombre}
                         </Text>
-                        <Text className="text-gray-500 text-xs mt-0.5">{item.marca}</Text>
+                        <Text style={{ color: COLORS.text.muted }} className="text-xs mt-0.5">{item.marca}</Text>
                     </View>
                 </View>
 
                 <View className="items-end">
                     {item.esBajo && (
-                        <View className="bg-red-900 rounded px-2 py-0.5 mb-1">
-                            <Text className="text-red-400 text-xs font-bold">BAJO</Text>
+                        <View className="flex-row items-center rounded-lg px-2.5 py-1 mb-1.5"
+                            style={{ backgroundColor: 'rgba(153, 27, 27, 0.6)' }}
+                        >
+                            <MaterialIcons name="error-outline" size={12} color={COLORS.danger.text} style={{ marginRight: 4 }} />
+                            <Text style={{ color: COLORS.danger.text, fontSize: 10, fontWeight: 'bold', letterSpacing: 1 }}>BAJO</Text>
                         </View>
                     )}
-                    <Text className="text-white font-bold text-lg">
-                        {item.cantidadActual}{' '}
-                        <Text className="text-gray-500 text-sm font-normal">{item.unidad}</Text>
-                    </Text>
+                    <View className="flex-row items-center">
+                        <Text className="text-white font-bold text-lg mr-3">
+                            {item.cantidadActual}{' '}
+                            <Text style={{ color: COLORS.text.muted }} className="text-sm font-normal">{item.unidad}</Text>
+                        </Text>
+                        <TouchableOpacity
+                            onPress={() => {
+                                // @ts-ignore
+                                router.push({ pathname: '/(drawer)/inventory/edit', params: { item: JSON.stringify(item) } });
+                            }}
+                            className="p-2 rounded-lg ml-1"
+                            style={{ backgroundColor: COLORS.primary.ghost }}
+                        >
+                            <MaterialIcons name="edit" size={22} color={COLORS.primary.DEFAULT} />
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </View>
 
-            <View className="flex-row items-center bg-[#0A0A0A] rounded-xl overflow-hidden">
+            <View className="flex-row items-center rounded-xl overflow-hidden" style={{ backgroundColor: COLORS.dark[200] }}>
                 <TouchableOpacity
                     onPress={() => applyDelta(-10)}
                     disabled={loading}
                     className="flex-1 py-3 items-center"
+                    activeOpacity={0.6}
                 >
-                    <Text className="text-white font-semibold">-10</Text>
+                    <Text style={{ color: COLORS.text.secondary }} className="font-bold text-sm">−10</Text>
                 </TouchableOpacity>
+
+                <View style={{ width: 1, height: 20, backgroundColor: COLORS.dark[300] }} />
 
                 <TextInput
                     value={inputValue}
                     onChangeText={setInputValue}
                     keyboardType="numeric"
-                    className="flex-1 text-center text-white font-bold text-base bg-dark-200 py-3"
+                    className="flex-1 text-center text-white font-bold text-base py-3"
+                    style={{ backgroundColor: COLORS.bg }}
                 />
+
+                <View style={{ width: 1, height: 20, backgroundColor: COLORS.dark[300] }} />
 
                 <TouchableOpacity
                     onPress={() => applyDelta(10)}
                     disabled={loading}
                     className="flex-1 py-3 items-center"
+                    activeOpacity={0.6}
                 >
-                    <Text className="text-primary font-semibold">+10</Text>
+                    <Text style={{ color: COLORS.primary.DEFAULT, fontWeight: 'bold', fontSize: 14 }}>+10</Text>
                 </TouchableOpacity>
+
+                <View style={{ width: 1, height: 20, backgroundColor: COLORS.dark[300] }} />
 
                 <TouchableOpacity
                     onPress={handleConfirm}
                     disabled={loading}
-                    className="px-4 py-3 items-center"
+                    className="px-5 py-3 items-center"
+                    activeOpacity={0.6}
                 >
-                    <MaterialIcons name="check" size={20} color="#22C55E" />
+                    {loading ? (
+                        <ActivityIndicator size="small" color={COLORS.success.DEFAULT} />
+                    ) : (
+                        <MaterialIcons name="check-circle" size={22} color={COLORS.success.DEFAULT} />
+                    )}
                 </TouchableOpacity>
             </View>
         </View>
+        </Animated.View>
         </>
     );
 }

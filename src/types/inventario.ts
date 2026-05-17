@@ -42,4 +42,6 @@ export interface NuevoInsumoBody {
     stockInicial: number;
     stockMinimo: number;
     foto?: FotoAsset;
+    capSize?: string;
+    capMl?: string;
 }
