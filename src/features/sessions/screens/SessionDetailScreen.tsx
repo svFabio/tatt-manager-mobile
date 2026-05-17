@@ -5,6 +5,7 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SessionsAPI, type SessionDetail } from '../../../api/sessions';
+import { COLORS } from '../../../theme/colors';
 
 interface Props {
   sessionId: number;
@@ -43,14 +44,14 @@ export default function SessionDetailScreen({ sessionId }: Props) {
 
   if (loading)
     return (
-      <SafeAreaView className="flex-1 bg-[#0E0E0E] items-center justify-center">
-        <ActivityIndicator color="#7E51FF" size="large" />
+      <SafeAreaView className="flex-1 bg-dark items-center justify-center">
+        <ActivityIndicator color={COLORS.primary.DEFAULT} size="large" />
       </SafeAreaView>
     );
 
   if (!detail)
     return (
-      <SafeAreaView className="flex-1 bg-[#0E0E0E] items-center justify-center px-6">
+      <SafeAreaView className="flex-1 bg-dark items-center justify-center px-6">
         <MaterialIcons name="error-outline" size={48} color="#374151" />
         <Text className="text-gray-500 mt-3 text-sm text-center">No se pudo cargar el detalle</Text>
       </SafeAreaView>
@@ -60,18 +61,18 @@ export default function SessionDetailScreen({ sessionId }: Props) {
   const hasAgujas = detail.agujasUsadas && detail.agujasUsadas.length > 0;
 
   return (
-    <SafeAreaView className="flex-1 bg-[#0E0E0E]" edges={['bottom']}>
+    <SafeAreaView className="flex-1 bg-dark" edges={['bottom']}>
       {/* ─── Header ─── */}
       <View
         className="flex-row items-center px-4"
         style={{
           height: 64,
-          backgroundColor: '#000000',
+          backgroundColor: COLORS.bg,
           borderBottomWidth: 0,
         }}
       >
         <TouchableOpacity onPress={() => router.back()} className="mr-4 p-2 rounded-xl">
-          <MaterialIcons name="arrow-back" size={20} color="#B6A0FF" />
+          <MaterialIcons name="arrow-back" size={20} color={COLORS.primary.light} />
         </TouchableOpacity>
         <Text className="text-white text-lg font-bold" style={{ letterSpacing: -0.45 }}>
           Detalle de Sesión
@@ -86,22 +87,22 @@ export default function SessionDetailScreen({ sessionId }: Props) {
             style={{
               width: 56,
               height: 56,
-              backgroundColor: '#131313',
+              backgroundColor: COLORS.dark[100],
               borderWidth: 1,
-              borderColor: 'rgba(72,72,71,0.15)',
+              borderColor: COLORS.border.subtle,
             }}
           >
             <View
               className="rounded-xl items-center justify-center"
-              style={{ width: 54, height: 54, backgroundColor: '#262626', borderWidth: 1, borderColor: 'rgba(255,255,255,0.05)' }}
+              style={{ width: 54, height: 54, backgroundColor: COLORS.dark[200], borderWidth: 1, borderColor: COLORS.border.subtle }}
             >
-              <Text style={{ color: '#7E51FF', fontWeight: '700', fontSize: 14 }}>
+              <Text style={{ color: COLORS.primary.DEFAULT, fontWeight: '700', fontSize: 14 }}>
                 {getInitials(detail.artista.nombre)}
               </Text>
             </View>
           </View>
           <View>
-            <Text style={{ color: '#ADAAAA', fontSize: 12, letterSpacing: 1.2, textTransform: 'uppercase' }}>
+            <Text style={{ color: COLORS.text.muted, fontSize: 12, letterSpacing: 1.2, textTransform: 'uppercase' }}>
               ARTISTA
             </Text>
             <Text className="text-white text-xl font-bold" style={{ letterSpacing: -0.5 }}>
@@ -114,9 +115,9 @@ export default function SessionDetailScreen({ sessionId }: Props) {
         <View
           className="rounded-2xl"
           style={{
-            backgroundColor: '#131313',
+            backgroundColor: COLORS.dark[100],
             borderWidth: 1,
-            borderColor: 'rgba(72,72,71,0.15)',
+            borderColor: COLORS.border.subtle,
             height: 124,
           }}
         >
@@ -125,19 +126,19 @@ export default function SessionDetailScreen({ sessionId }: Props) {
             {/* Client */}
             <View
               className="flex-1 justify-center px-4"
-              style={{ borderRightWidth: 1, borderRightColor: 'rgba(72,72,71,0.2)' }}
+              style={{ borderRightWidth: 1, borderRightColor: COLORS.border.subtle }}
             >
-              <Text style={{ color: '#ADAAAA', fontSize: 10, letterSpacing: 1, textTransform: 'uppercase', marginBottom: 2 }}>
+              <Text style={{ color: COLORS.text.muted, fontSize: 10, letterSpacing: 1, textTransform: 'uppercase', marginBottom: 2 }}>
                 CLIENTE
               </Text>
               <View className="flex-row items-center" style={{ gap: 6 }}>
-                <MaterialIcons name="person" size={10} color="#B6A0FF" />
+                <MaterialIcons name="person" size={10} color={COLORS.primary.light} />
                 <Text className="text-white text-sm font-bold">{detail.cliente?.nombre ?? '—'}</Text>
               </View>
             </View>
             {/* Date */}
             <View className="flex-1 justify-center px-4">
-              <Text style={{ color: '#ADAAAA', fontSize: 10, letterSpacing: 1, textTransform: 'uppercase', marginBottom: 2 }}>
+              <Text style={{ color: COLORS.text.muted, fontSize: 10, letterSpacing: 1, textTransform: 'uppercase', marginBottom: 2 }}>
                 FECHA
               </Text>
               <View className="flex-row items-center" style={{ gap: 6 }}>
@@ -152,34 +153,34 @@ export default function SessionDetailScreen({ sessionId }: Props) {
             {/* Duration */}
             <View
               className="flex-1 justify-center px-4"
-              style={{ borderRightWidth: 1, borderRightColor: 'rgba(72,72,71,0.2)' }}
+              style={{ borderRightWidth: 1, borderRightColor: COLORS.border.subtle }}
             >
-              <Text style={{ color: '#ADAAAA', fontSize: 10, letterSpacing: 1, textTransform: 'uppercase', marginBottom: 2 }}>
+              <Text style={{ color: COLORS.text.muted, fontSize: 10, letterSpacing: 1, textTransform: 'uppercase', marginBottom: 2 }}>
                 DURACIÓN
               </Text>
               <View className="flex-row items-center" style={{ gap: 6 }}>
-                <MaterialIcons name="schedule" size={10} color="#B6A0FF" />
+                <MaterialIcons name="schedule" size={10} color={COLORS.primary.light} />
                 <Text className="text-white text-sm font-semibold">{formatDuration(detail.duracionEnHoras)}</Text>
               </View>
             </View>
             {/* Zone */}
             <View className="flex-1 justify-center px-4">
-              <Text style={{ color: '#ADAAAA', fontSize: 10, letterSpacing: 1, textTransform: 'uppercase', marginBottom: 2 }}>
+              <Text style={{ color: COLORS.text.muted, fontSize: 10, letterSpacing: 1, textTransform: 'uppercase', marginBottom: 2 }}>
                 ZONA
               </Text>
               <View className="flex-row items-center" style={{ gap: 6 }}>
                 <MaterialIcons name="place" size={10} color="#00A7F2" />
-                <Text className="text-white text-sm font-bold">{detail.cita?.zonaDelCuerpo ?? '—'}</Text>
+                <Text className="text-white text-sm font-bold">{detail.cita?.zonaDelCuerpo || detail.cita?.solicitud?.zonaDelCuerpo || '—'}</Text>
               </View>
             </View>
           </View>
         </View>
 
         {/* ─── Resultado Final (Photo) ─── */}
-        <View className="rounded-2xl p-6 items-center" style={{ backgroundColor: '#131313' }}>
+        <View className="rounded-2xl p-6 items-center" style={{ backgroundColor: COLORS.dark[100] }}>
           <Text
             style={{
-              color: '#ADAAAA',
+              color: COLORS.text.muted,
               fontSize: 14,
               letterSpacing: 1.4,
               textTransform: 'uppercase',
@@ -190,7 +191,7 @@ export default function SessionDetailScreen({ sessionId }: Props) {
             RESULTADO FINAL
           </Text>
           {detail.fotoResultadoUrl ? (
-            <View className="rounded-3xl overflow-hidden" style={{ width: 157, height: 103, backgroundColor: '#131313', borderWidth: 1, borderColor: 'rgba(72,72,71,0.15)' }}>
+            <View className="rounded-3xl overflow-hidden" style={{ width: 157, height: 103, backgroundColor: COLORS.dark[100], borderWidth: 1, borderColor: COLORS.border.subtle }}>
               <Image
                 source={{ uri: detail.fotoResultadoUrl }}
                 style={{ width: 157, height: 103 }}
@@ -198,9 +199,9 @@ export default function SessionDetailScreen({ sessionId }: Props) {
               />
             </View>
           ) : (
-            <View className="items-center justify-center" style={{ width: 157, height: 103, backgroundColor: '#1A1A1A', borderRadius: 24, borderWidth: 1, borderColor: 'rgba(72,72,71,0.15)' }}>
-              <MaterialIcons name="photo-camera" size={32} color="#374151" />
-              <Text style={{ color: '#4B5563', fontSize: 10, marginTop: 4 }}>Sin foto</Text>
+            <View className="items-center justify-center" style={{ width: 157, height: 103, backgroundColor: COLORS.dark[200], borderRadius: 24, borderWidth: 1, borderColor: COLORS.border.subtle }}>
+              <MaterialIcons name="photo-camera" size={32} color={COLORS.text.dimmed} />
+              <Text style={{ color: COLORS.text.muted, fontSize: 10, marginTop: 4 }}>Sin foto</Text>
             </View>
           )}
         </View>
@@ -211,17 +212,17 @@ export default function SessionDetailScreen({ sessionId }: Props) {
             {/* Section header */}
             <View
               className="flex-row items-center justify-between pb-4"
-              style={{ borderBottomWidth: 1, borderBottomColor: 'rgba(72,72,71,0.2)' }}
+              style={{ borderBottomWidth: 1, borderBottomColor: COLORS.border.subtle }}
             >
               <Text className="text-white text-2xl font-bold" style={{ letterSpacing: -0.6 }}>
                 Desglose de Materiales
               </Text>
-              <MaterialIcons name="inventory-2" size={20} color="#B6A0FF" />
+              <MaterialIcons name="inventory-2" size={20} color={COLORS.primary.light} />
             </View>
 
             {/* Caps de Tinta */}
             {hasCaps && (
-              <View className="rounded-2xl p-6 mt-6" style={{ backgroundColor: '#131313' }}>
+              <View className="rounded-2xl p-6 mt-6" style={{ backgroundColor: COLORS.dark[100] }}>
                 <View className="flex-row items-center mb-4" style={{ gap: 12 }}>
                   <MaterialIcons name="opacity" size={16} color="#00AFFE" />
                   <Text className="text-white text-base font-semibold">Caps de Tinta</Text>
@@ -232,7 +233,7 @@ export default function SessionDetailScreen({ sessionId }: Props) {
                     <View
                       key={cap.id}
                       className="flex-row items-center justify-between p-3 rounded-lg"
-                      style={{ backgroundColor: '#262626', borderWidth: 1, borderColor: 'rgba(72,72,71,0.15)' }}
+                      style={{ backgroundColor: COLORS.dark[200], borderWidth: 1, borderColor: COLORS.border.subtle }}
                     >
                       <View className="flex-row items-center" style={{ gap: 12 }}>
                         <View
@@ -247,12 +248,12 @@ export default function SessionDetailScreen({ sessionId }: Props) {
                         />
                         <View>
                           <Text className="text-white text-sm font-medium">{cap.tinta.nombre}</Text>
-                          <Text style={{ color: '#ADAAAA', fontSize: 10 }}>{cap.tinta.marca}</Text>
+                          <Text style={{ color: COLORS.text.muted, fontSize: 10 }}>{cap.tinta.marca}</Text>
                         </View>
                       </View>
                       <View className="flex-row" style={{ gap: 8 }}>
-                        <View className="px-2 py-1 rounded" style={{ backgroundColor: '#131313' }}>
-                          <Text style={{ color: '#ADAAAA', fontSize: 12, fontFamily: 'monospace' }}>
+                        <View className="px-2 py-1 rounded" style={{ backgroundColor: COLORS.dark[100] }}>
+                          <Text style={{ color: COLORS.text.muted, fontSize: 12, fontFamily: 'monospace' }}>
                             {cap.cantidadUsada} {cap.tamanioCap[0]}
                           </Text>
                         </View>
@@ -265,9 +266,9 @@ export default function SessionDetailScreen({ sessionId }: Props) {
 
             {/* Agujas */}
             {hasAgujas && (
-              <View className="rounded-2xl p-6 mt-6" style={{ backgroundColor: '#131313' }}>
+              <View className="rounded-2xl p-6 mt-6" style={{ backgroundColor: COLORS.dark[100] }}>
                 <View className="flex-row items-center mb-4" style={{ gap: 12 }}>
-                  <MaterialIcons name="push-pin" size={16} color="#B6A0FF" />
+                  <MaterialIcons name="push-pin" size={16} color={COLORS.primary.light} />
                   <Text className="text-white text-base font-semibold">Agujas</Text>
                 </View>
 
@@ -276,13 +277,13 @@ export default function SessionDetailScreen({ sessionId }: Props) {
                     <View
                       key={au.id}
                       className="flex-row items-center justify-between p-3 rounded-lg"
-                      style={{ backgroundColor: '#262626', borderWidth: 1, borderColor: 'rgba(72,72,71,0.15)' }}
+                      style={{ backgroundColor: COLORS.dark[200], borderWidth: 1, borderColor: COLORS.border.subtle }}
                     >
                       <View>
                         <Text className="text-white text-sm font-semibold">{au.aguja.nombre}</Text>
                         <Text
                           style={{
-                            color: '#ADAAAA',
+                            color: COLORS.text.muted,
                             fontSize: 10,
                             letterSpacing: 0.5,
                             textTransform: 'uppercase',
@@ -291,8 +292,8 @@ export default function SessionDetailScreen({ sessionId }: Props) {
                           {au.aguja.marca} - {au.aguja.tipo}
                         </Text>
                       </View>
-                      <View className="px-2 py-1 rounded" style={{ backgroundColor: '#131313' }}>
-                        <Text style={{ color: '#ADAAAA', fontSize: 12, fontFamily: 'monospace' }}>
+                      <View className="px-2 py-1 rounded" style={{ backgroundColor: COLORS.dark[100] }}>
+                        <Text style={{ color: COLORS.text.muted, fontSize: 12, fontFamily: 'monospace' }}>
                           {au.cantidadUsada} UNID
                         </Text>
                       </View>

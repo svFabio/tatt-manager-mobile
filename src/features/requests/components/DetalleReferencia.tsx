@@ -11,7 +11,7 @@ export const DetalleReferencia = ({ uri }: Props) => (
     {uri ? (
       <Image source={{ uri }} className="w-full h-52 rounded-2xl mb-5" resizeMode="cover" />
     ) : (
-      <View className="w-full h-52 rounded-2xl bg-[#1A1A1A] items-center justify-center mb-5">
+      <View className="w-full h-52 rounded-2xl bg-dark-100 items-center justify-center mb-5">
         <MaterialIcons name="image-not-supported" size={40} color="#374151" />
         <Text className="text-gray-600 text-xs mt-2">Sin referencia</Text>
       </View>

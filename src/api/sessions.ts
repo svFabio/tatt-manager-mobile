@@ -7,7 +7,13 @@ export interface SessionListItem {
   cerradaEn: string;
   artista: { id: number; nombre: string };
   cliente: { id: number; nombre: string };
-  cita: { id: number; tipoCita: string; fechaHoraInicio: string | null; zonaDelCuerpo: string | null };
+  cita: { 
+    id: number; 
+    tipoCita: string; 
+    fechaHoraInicio: string | null; 
+    zonaDelCuerpo: string | null;
+    solicitud?: { zonaDelCuerpo: string | null };
+  };
   capsUsadas: {
     id: number;
     tamanioCap: string;

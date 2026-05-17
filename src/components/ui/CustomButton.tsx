@@ -5,6 +5,7 @@ import {
   ActivityIndicator,
   type TouchableOpacityProps,
 } from "react-native";
+import { COLORS } from "../../theme/colors";
 
 // ─── Tipos ─────────────────────────────────────────────────────────────────
 
@@ -85,7 +86,7 @@ export const CustomButton: React.FC<CustomButtonProps> = ({
       {loading ? (
         <ActivityIndicator
           size="small"
-          color={variant === "primary" ? "#121212" : "#D4AF37"}
+          color={variant === "primary" ? COLORS.dark.DEFAULT : COLORS.primary.DEFAULT}
           className="mr-2"
         />
       ) : null}

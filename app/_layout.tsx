@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
 import { View } from "react-native";
 import { useWebSocket } from "@/src/hooks/useWebSocket";
+import { COLORS } from "@/src/theme/colors";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -53,7 +54,7 @@ function RootLayoutNav() {
       <Stack
         screenOptions={{
           headerStyle: { backgroundColor: "#121212" },
-          headerTintColor: "#D4AF37",
+          headerTintColor: COLORS.primary.DEFAULT,
           headerTitleStyle: { fontWeight: "bold" },
           contentStyle: { backgroundColor: "#121212" },
         }}
