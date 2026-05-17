@@ -19,21 +19,21 @@ module.exports = {
         },
         // Color primario dorado (tu color principal)
         primary: {
-          DEFAULT: "#D4AF37", // Dorado principal
-          light: "#E8CC6E",
-          dark: "#B8941F",
+          DEFAULT: "#4338CA", 
+          light: "#6366F1",
+          dark: "#312E81",
         },
         // Color dorado secundario
         gold: {
-          DEFAULT: "#D4AF37",
-          light: "#E8CC6E",
-          dark: "#B8941F",
+          DEFAULT: "#4D09E0",
+          light: "#7B3FF5",
+          dark: "#3A07A8",
           50: "#FBF5E0",
           100: "#F5E8B5",
           200: "#EDDA87",
           300: "#E4CC59",
           400: "#DCC13B",
-          500: "#D4AF37",
+          500: "#4D09E0",
           600: "#C49B2D",
           700: "#B08623",
           800: "#9C711A",
