@@ -6,6 +6,7 @@ import { View, Text, TouchableOpacity } from "react-native";
 import { DrawerContentScrollView } from "@react-navigation/drawer";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter, usePathname } from "expo-router";
+import { COLORS } from "@/src/theme/colors";
 
 function CustomDrawerContent(props: any) {
   const { navigation, state } = props;
@@ -18,8 +19,8 @@ function CustomDrawerContent(props: any) {
   const isRouteActive = (name: string) => currentRouteName === name;
 
   const getBtnStyle = (name: string) => `flex-row items-center px-3 py-3 rounded-xl ${isRouteActive(name) ? "bg-dark-100" : ""}`;
-  const getTextStyle = (name: string) => isRouteActive(name) ? "text-white font-medium ml-3 text-base" : "text-gray-300 font-medium ml-3 text-base";
-  const getIconColor = (name: string) => isRouteActive(name) ? "#D4AF37" : "#D1D5DB";
+  const getTextStyle = (name: string) => isRouteActive(name) ? "text-white font-semibold ml-3 text-base" : "text-gray-400 font-medium ml-3 text-base";
+  const getIconColor = (name: string) => isRouteActive(name) ? COLORS.primary.DEFAULT : "#9CA3AF";
 
   return (
     <SafeAreaView className="flex-1 bg-dark" edges={["top", "bottom"]}>
@@ -57,7 +58,7 @@ function CustomDrawerContent(props: any) {
 
           <TouchableOpacity onPress={() => router.push("/(drawer)/end-session" as any)} className={getBtnStyle("end-session")} activeOpacity={0.7}>
             <View className="w-8 items-center justify-center"><Feather name="log-out" size={20} color={getIconColor("end-session")} /></View>
-            <Text className={getTextStyle("end-session")}>Terminar Sesión</Text>
+            <Text className={getTextStyle("end-session")}>Finalizar sesión</Text>
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => router.push("/(drawer)/whatsapp" as any)} className={getBtnStyle("whatsapp")} activeOpacity={0.7}>
@@ -88,7 +89,7 @@ function CustomDrawerContent(props: any) {
 
           <TouchableOpacity onPress={() => router.push("/(drawer)/inventory" as any)} className={getBtnStyle("inventory")} activeOpacity={0.7}>
             <View className="w-8 items-center justify-center"><Feather name="archive" size={20} color={getIconColor("inventory")} /></View>
-            <Text className={getTextStyle("inventory")}>Registrar stock</Text>
+            <Text className={getTextStyle("inventory")}>Inventario</Text>
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => router.push("/(drawer)/sessions" as any)} className={getBtnStyle("sessions")} activeOpacity={0.7}>
@@ -110,7 +111,7 @@ export default function DrawerLayout() {
         drawerContent={(props) => <CustomDrawerContent {...props} />}
         screenOptions={{
           headerStyle: { backgroundColor: "#121212", borderBottomWidth: 0, shadowOpacity: 0, elevation: 0 },
-          headerTintColor: "#D4AF37",
+          headerTintColor: COLORS.primary.DEFAULT,
           headerTitleStyle: { fontWeight: "bold", color: "#FFFFFF" },
         }}
       >

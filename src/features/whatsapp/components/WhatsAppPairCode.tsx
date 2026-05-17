@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, TouchableOpacity, TextInput, ActivityIndicator } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { COLORS } from "../../../theme/colors";
 
 interface WhatsAppPairCodeProps {
   pairingCode: string | null;
@@ -24,7 +25,7 @@ export const WhatsAppPairCode: React.FC<WhatsAppPairCodeProps> = ({
       {pairingCode ? (
         <View className="bg-dark-100 p-8 rounded-3xl border border-primary/30 items-center justify-center mb-6 relative overflow-hidden">
           <View className="absolute top-0 right-0 p-4 opacity-5">
-            <Ionicons name="keypad" size={100} color="#D4AF37" />
+            <Ionicons name="keypad" size={100} color={COLORS.primary.DEFAULT} />
           </View>
           <Text className="text-gray-400 font-medium mb-6 text-center text-sm">
             Tu código se ha generado correctamente.
@@ -85,7 +86,7 @@ export const WhatsAppPairCode: React.FC<WhatsAppPairCodeProps> = ({
       {/* Info Card Pair */}
       <View className="bg-dark-100 p-6 rounded-3xl mt-8 border border-dark-300">
         <View className="flex-row items-center mb-6">
-          <Ionicons name="information-circle-outline" size={24} color="#E8CC6E" />
+          <Ionicons name="information-circle-outline" size={24} color={COLORS.primary.light} />
           <Text className="text-primary-light font-bold text-lg ml-2">
             Como funciona:
           </Text>

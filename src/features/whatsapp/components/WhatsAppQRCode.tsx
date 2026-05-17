@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, TouchableOpacity, ActivityIndicator } from "react-native";
 import QRCode from "react-native-qrcode-svg";
 import { Ionicons } from "@expo/vector-icons";
+import { COLORS } from "../../../theme/colors";
 
 interface WhatsAppQRCodeProps {
   qrValor: string | null;
@@ -30,7 +31,7 @@ export const WhatsAppQRCode: React.FC<WhatsAppQRCodeProps> = ({
           </View>
         ) : (
           <View className="w-[220px] h-[220px] items-center justify-center bg-dark-200 rounded-[1.5rem] mb-6 border border-dark-300 border-dashed">
-            <ActivityIndicator size="large" color="#D4AF37" />
+            <ActivityIndicator size="large" color={COLORS.primary.DEFAULT} />
             <Text className="text-gray-500 mt-4 font-medium">Generando...</Text>
           </View>
         )}
@@ -46,10 +47,10 @@ export const WhatsAppQRCode: React.FC<WhatsAppQRCodeProps> = ({
           className="w-full bg-dark-200 py-4 rounded-2xl flex-row items-center justify-center border border-dark-300"
         >
           {actionLoading ? (
-             <ActivityIndicator color="#D4AF37" />
+             <ActivityIndicator color={COLORS.primary.DEFAULT} />
           ) : (
              <>
-               <Ionicons name="refresh-outline" size={18} color="#D4AF37" />
+               <Ionicons name="refresh-outline" size={18} color={COLORS.primary.DEFAULT} />
                <Text className="text-primary font-bold ml-2">Regenerar Código</Text>
              </>
           )}
