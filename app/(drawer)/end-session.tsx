@@ -4,6 +4,7 @@ import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter, useFocusEffect } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
 import api from '../../src/api/axios';
+import { COLORS } from '../../src/theme/colors';
 
 // --- Types ---
 interface Cita {
@@ -39,6 +40,7 @@ export default function EndSessionScreen() {
   const [citas, setCitas] = useState<Cita[]>([]);
   const [tintas, setTintas] = useState<Tinta[]>([]);
   const [agujas, setAgujas] = useState<Aguja[]>([]);
+  const [emptyCaps, setEmptyCaps] = useState<Aguja[]>([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
 
@@ -106,8 +108,22 @@ export default function EndSessionScreen() {
       );
       
       setCitas(citasPendientes);
-      setTintas(resTintas.data?.data || resTintas.data || []);
-      setAgujas(resAgujas.data?.data || resAgujas.data || []);
+
+      // Only show items that actually have stock available
+      const allTintas: Tinta[] = resTintas.data?.data || resTintas.data || [];
+      const tintasConStock = allTintas.filter((t) => {
+        const totalStock = (t.stock || []).reduce((sum, s) => sum + (s.cantidadActual || 0), 0);
+        return totalStock > 0;
+      });
+      setTintas(tintasConStock);
+
+      const allAgujas: Aguja[] = resAgujas.data?.data || resAgujas.data || [];
+      const agujasConStock = allAgujas.filter((a) => (a.cantidadActual || 0) > 0);
+      setAgujas(agujasConStock);
+
+      const allCaps: Aguja[] = resAgujas.data?.caps || [];
+      const capsConStock = allCaps.filter((a) => (a.cantidadActual || 0) > 0);
+      setEmptyCaps(capsConStock);
     } catch (error) {
       console.error('Error fetching data:', error);
       Alert.alert('Error', 'No se pudieron cargar los datos de la sesión.');
@@ -241,7 +257,18 @@ export default function EndSessionScreen() {
     try {
       await api.post('/registro-sesion', payload);
       Alert.alert('Éxito', 'La sesión se cerró y guardó correctamente.', [
-        { text: 'OK', onPress: () => router.back() }
+        { 
+          text: 'OK', 
+          onPress: () => {
+            setSelectedCitaId(null);
+            setFotoBase64(null);
+            setObservaciones('');
+            setCobroTatuaje('');
+            setCapsUsadas({});
+            setAgujasUsadasDict({});
+            router.back();
+          } 
+        }
       ]);
     } catch (error: any) {
       console.error('Error cerrando sesión:', error.response?.data || error);
@@ -254,7 +281,7 @@ export default function EndSessionScreen() {
   if (loading) {
     return (
       <View className="flex-1 bg-dark justify-center items-center">
-        <ActivityIndicator size="large" color="#E8CC6E" />
+        <ActivityIndicator size="large" color={COLORS.primary.light} />
       </View>
     );
   }
@@ -270,7 +297,7 @@ export default function EndSessionScreen() {
             className="bg-dark-100 h-12 rounded-lg flex-row items-center px-4"
             onPress={() => setDropdownCitaOpen(!dropdownCitaOpen)}
           >
-            <Feather name="calendar" size={16} color="#E8CC6E" className="mr-3" />
+            <Feather name="calendar" size={16} color={COLORS.primary.light} className="mr-3" />
             <Text className="flex-1 text-white text-sm font-medium">
               {selectedCita ? `${selectedCita.cliente?.nombre ?? (selectedCita as any).clienteNombre} - ${new Date(selectedCita.fechaHoraInicio || (selectedCita as any).fecha).toLocaleDateString()}` : 'Seleccionar sesión...'}
             </Text>
@@ -331,7 +358,7 @@ export default function EndSessionScreen() {
         {/* Session Notes */}
         <View className="bg-dark p-5 rounded-xl border border-white/5 mb-4">
           <Text className="text-primary-light text-[10px] font-bold tracking-widest mb-3">NOTAS DE LA SESIÓN</Text>
-          <View className="bg-dark-100 rounded-lg p-4 h-24 border border-transparent focus:border-[#E8CC6E]/50">
+          <View className="bg-dark-100 rounded-lg p-4 h-24 border border-transparent focus:border-[#7B3FF5]/50">
             <TextInput
               className="flex-1 text-white text-sm"
               placeholder="Detalles sobre la sesión..."
@@ -350,14 +377,14 @@ export default function EndSessionScreen() {
             <View className="flex-1">
               <Text className="text-muted-dark text-[10px] font-bold tracking-widest mb-2">ANTICIPO RECIBIDO</Text>
               <View className="bg-dark-100 rounded-lg h-11 flex-row items-center px-3 border border-transparent">
-                <MaterialCommunityIcons name="cash" size={18} color="#E8CC6E" className="mr-2" />
+                <MaterialCommunityIcons name="cash" size={18} color={COLORS.primary.light} className="mr-2" />
                 <Text className="text-white text-sm flex-1 ml-2">{anticipo}</Text>
               </View>
             </View>
             <View className="flex-1">
               <Text className="text-muted-dark text-[10px] font-bold tracking-widest mb-2">COBRO TATUAJE</Text>
               <View className="bg-dark-100 rounded-lg h-11 flex-row items-center px-3 border border-transparent">
-                <MaterialCommunityIcons name="cash-register" size={18} color="#E8CC6E" className="mr-2" />
+                <MaterialCommunityIcons name="cash-register" size={18} color={COLORS.primary.light} className="mr-2" />
                 <TextInput
                   className="flex-1 text-white text-sm ml-2"
                   keyboardType="numeric"
@@ -391,7 +418,7 @@ export default function EndSessionScreen() {
                 <View className="flex-row items-center flex-1">
                   <View className="w-3 h-3 rounded-full mr-2" style={{ backgroundColor: tinta.colorHex || '#FFF', borderWidth: 1, borderColor: '#333' }} />
                   <Text className="text-white text-xs font-bold mr-2">{tinta.nombre}</Text>
-                  <Text className="text-muted-dark text-[10px]">Stock: {tinta.stock?.reduce((acc, s) => acc + s.cantidadActual, 0) || 0} u</Text>
+                  <Text className="text-muted-dark text-[10px]">Stock total: {tinta.stock?.[0]?.cantidadActual || 0} ml</Text>
                 </View>
                 <View className="bg-dark px-2 py-1 rounded flex-row items-center">
                   <Text className="text-muted-dark text-[10px] mr-1">Marca</Text>
@@ -399,31 +426,30 @@ export default function EndSessionScreen() {
                 </View>
               </View>
 
-              <View className="flex-row justify-start gap-6 px-2 flex-wrap">
-                {tinta.stock && tinta.stock.length > 0 ? (
-                  tinta.stock.map(stockItem => {
-                    const size = stockItem.tamanioCap;
-                    const label = size === 'CHICA' ? 'S' : size === 'MEDIANA' ? 'M' : 'L';
-                    const count = capsUsadas[tinta.id]?.[size] || 0;
-                    return (
-                      <View key={size} className="items-center mb-2">
-                        <Text className="text-muted-dark text-[10px] font-bold mb-2">
-                          {label} <Text className="text-[9px] font-normal">(Stk: {stockItem.cantidadActual})</Text>
-                        </Text>
-                        <View className="bg-dark rounded-md flex-row items-center">
-                          <TouchableOpacity onPress={() => handleCapChange(tinta.id, size, -1)} className="px-3 py-2">
-                            <Feather name="minus" size={12} color="#888" />
-                          </TouchableOpacity>
-                          <Text className="text-white font-bold w-4 text-center text-xs">{count}</Text>
-                          <TouchableOpacity onPress={() => handleCapChange(tinta.id, size, 1)} className="px-3 py-2">
-                            <Feather name="plus" size={12} color="#FFF" />
-                          </TouchableOpacity>
-                        </View>
+              <View className="flex-row justify-around w-full px-2 mt-2">
+                {emptyCaps.map(capItem => {
+                  const size = capItem.tipo;
+                  const label = size === 'CHICA' ? 'S' : size === 'MEDIANA' ? 'M' : size === 'GRANDE' ? 'L' : size;
+                  const count = capsUsadas[tinta.id]?.[size] || 0;
+                  return (
+                    <View key={size} className="items-center">
+                      <Text className="text-muted-dark text-[10px] font-bold mb-2">
+                        {label} <Text className="text-[9px] font-normal">(Stk: {capItem.cantidadActual})</Text>
+                      </Text>
+                      <View className="bg-dark rounded-md flex-row items-center">
+                        <TouchableOpacity onPress={() => handleCapChange(tinta.id, size, -1)} className="px-3 py-2">
+                          <Feather name="minus" size={12} color="#888" />
+                        </TouchableOpacity>
+                        <Text className="text-white font-bold w-4 text-center text-xs">{count}</Text>
+                        <TouchableOpacity onPress={() => handleCapChange(tinta.id, size, 1)} className="px-3 py-2">
+                          <Feather name="plus" size={12} color="#FFF" />
+                        </TouchableOpacity>
                       </View>
-                    );
-                  })
-                ) : (
-                  <Text className="text-muted-dark text-xs py-2">Esta tinta no tiene stock registrado en ningún tamaño.</Text>
+                    </View>
+                  );
+                })}
+                {emptyCaps.length === 0 && (
+                  <Text className="text-muted-dark text-xs py-2 text-center w-full">No hay caps vacías en el inventario general.</Text>
                 )}
               </View>
             </View>
@@ -473,11 +499,11 @@ export default function EndSessionScreen() {
           {agujas.length === 0 && <Text className="text-muted-dark text-xs">No hay agujas en inventario.</Text>}
 
           {/* Resumen */}
-          <View className="bg-[#2A1D00] rounded-lg p-4 mt-4 flex-row border border-[#FFB300]/20">
-            <Feather name="info" size={16} color="#FFB300" className="mt-0.5" />
+          <View className="bg-[#2A1D00] rounded-lg p-4 mt-4 flex-row border border-[#7B3FF5]/20">
+            <Feather name="info" size={16} color={COLORS.primary.light} className="mt-0.5" />
             <View className="flex-1 ml-3">
-              <Text className="text-[#FFB300] text-[10px] font-bold tracking-widest mb-1">RESUMEN DE DESCUENTO</Text>
-              <Text className="text-[#FFB300]/80 text-[11px] leading-4">
+              <Text className="text-[#7B3FF5] text-[10px] font-bold tracking-widest mb-1">RESUMEN DE DESCUENTO</Text>
+              <Text className="text-[#7B3FF5]/80 text-[11px] leading-4">
                 Se descontarán un total de {totalCapsUsadas} caps y {totalAgujasUsadas} aguja/s del inventario general al finalizar esta sesión.
               </Text>
             </View>
@@ -487,7 +513,7 @@ export default function EndSessionScreen() {
         {/* Final Action Button */}
         <TouchableOpacity
           className={`flex-row justify-center items-center py-4 rounded-lg mt-2 ${!selectedCitaId || submitting ? 'opacity-50' : ''}`}
-          style={{ backgroundColor: '#E8CC6E' }}
+          style={{ backgroundColor: '#7B3FF5' }}
           disabled={!selectedCitaId || submitting}
           onPress={handleFinalizar}
         >
