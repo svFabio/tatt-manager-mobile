@@ -11,6 +11,10 @@
     "apk": {
       "android": {
         "buildType": "apk"
+      },
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://tatt-manager-backend.onrender.com/api",
+        "EXPO_PUBLIC_SOCKET_URL": "https://tatt-manager-backend.onrender.com"
       }
     },
     "preview": {

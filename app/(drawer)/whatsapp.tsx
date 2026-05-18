@@ -27,7 +27,7 @@ export default function WhatsAppScreen() {
     setActionLoading(true);
     try {
       await WhatsAppAPI.startWhatsApp();
-      await refreshStatus();
+      await refreshStatus(false);
     } catch (e) {
       Alert.alert("Error", "No se pudo iniciar el bot");
     } finally {
@@ -40,7 +40,7 @@ export default function WhatsAppScreen() {
     try {
       await WhatsAppAPI.logoutWhatsApp();
       setPairingCode(null);
-      await refreshStatus();
+      await refreshStatus(false);
     } catch (e) {
       Alert.alert("Error", "No se pudo cerrar sesión");
     } finally {
@@ -53,7 +53,7 @@ export default function WhatsAppScreen() {
     try {
       await WhatsAppAPI.restartWhatsApp();
       setPairingCode(null);
-      await refreshStatus();
+      await refreshStatus(false);
     } catch (e) {
       // silencioso
     } finally {
