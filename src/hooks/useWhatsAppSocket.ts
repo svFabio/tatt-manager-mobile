@@ -18,9 +18,9 @@ export const useWhatsAppSocket = (negocioId: number = 1) => {
   const [loading, setLoading] = useState(true);
 
   // 1. Cargar el estado inicial
-  const refreshStatus = async () => {
+  const refreshStatus = async (showLoading = true) => {
     try {
-      setLoading(true);
+      if (showLoading) setLoading(true);
       const data = await WhatsAppAPI.getStatus();
       setWsState({
         conectado: data.conectado,
@@ -30,7 +30,7 @@ export const useWhatsAppSocket = (negocioId: number = 1) => {
     } catch (error) {
       console.error("Error obteniendo estado de WP", error);
     } finally {
-      setLoading(false);
+      if (showLoading) setLoading(false);
     }
   };
 

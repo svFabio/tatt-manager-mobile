@@ -27,8 +27,12 @@ api.interceptors.response.use(
       );
     } else if (error.request) {
       console.error("[API Error] No se recibió respuesta del servidor.");
+      error.message = "El servidor está arrancando o no hay internet. Intenta en unos segundos.";
     } else {
       console.error("[API Error]", error.message);
+      if (error.message === "Network Error") {
+        error.message = "El servidor está arrancando o no hay internet. Intenta en unos segundos.";
+      }
     }
     return Promise.reject(error);
   }
