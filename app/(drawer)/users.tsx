@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
-    Alert, FlatList, Modal, Share, TouchableOpacity, View, ActivityIndicator, Animated, } from 'react-native';
+    Alert, FlatList, Modal, Share, TouchableOpacity, View, ActivityIndicator, Animated, Clipboard
+} from 'react-native';
 import { Text } from '@/src/components/StyledText';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Feather, MaterialIcons } from '@expo/vector-icons';
@@ -93,7 +94,7 @@ const UserRow = ({ item, isMe, onMenuPress }: UserRowProps) => (
             <Text style={{ color: COLORS.text.muted, fontSize: 12 }}>{item.email}</Text>
         </View>
 
-        {/* Three-dot menu — hidden for current user */}
+        {/* Three-dot menu */}
         {!isMe && (
             <TouchableOpacity
                 onPress={() => onMenuPress(item)}
@@ -132,7 +133,7 @@ const Toast = ({ message, visible }: ToastProps) => {
                 right: 20,
                 zIndex: 999,
                 opacity,
-                backgroundColor: COLORS.danger.DEFAULT,
+                backgroundColor: '#1E293B',
                 borderRadius: 12,
                 padding: 14,
             }}
@@ -163,6 +164,7 @@ export default function UsersScreen() {
 
     const [toastMsg, setToastMsg] = useState('');
     const [toastVisible, setToastVisible] = useState(false);
+    const [showRegenerateModal, setShowRegenerateModal] = useState(false);
 
     const showToast = (msg: string) => {
         setToastMsg(msg);
@@ -206,15 +208,29 @@ export default function UsersScreen() {
     const handleCopyCode = async () => {
         if (!invCode) return;
         try {
-            await Share.share({ message: invCode });
-        } catch { /* user cancelled */ }
+            Clipboard.setString(invCode);
+            showToast('¡Código copiado al portapapeles!');
+        } catch {
+            showToast('No se pudo copiar el código. Inténtalo de nuevo.');
+        }
     };
 
-    const handleRegenerate = async () => {
+    
+    //para que sirve un Handle? es una convención para nombrar funciones que manejan 
+    // eventos o acciones específicas, como onPress, onChange, etc. 
+    // En este caso, handleRegenerate es la función que se ejecuta cuando
+    //  el usuario presiona el botón de regenerar código de invitación.
+    const handleRegenerate = () => {
+        setShowRegenerateModal(true);
+    };
+
+    const confirmRegenerate = async () => {
+        setShowRegenerateModal(false);
         try {
             setRegenerating(true);
             const nuevo = await UsersAPI.regenerateCode();
             setInvCode(nuevo);
+            showToast('¡Código regenerado con éxito!');
         } catch {
             showToast('No se pudo regenerar el código. Inténtalo de nuevo.');
         } finally {
@@ -358,10 +374,11 @@ export default function UsersScreen() {
                         gap: 8,
                     }}
                 >
-                    {regenerating
-                        ? <ActivityIndicator size="small" color={COLORS.primary.DEFAULT} />
-                        : <Feather name="refresh-cw" size={16} color={COLORS.primary.DEFAULT} />
-                    }
+                    {regenerating ? (
+                        <ActivityIndicator size="small" color={COLORS.primary.DEFAULT} />
+                    ) : (
+                        <Feather name="refresh-cw" size={16} color={COLORS.primary.DEFAULT} />
+                    )}
                     <Text style={{ color: COLORS.primary.DEFAULT, fontWeight: '700', fontSize: 14 }}>
                         Regenerar
                     </Text>
@@ -409,6 +426,74 @@ export default function UsersScreen() {
                 />
             )}
 
+            {/* ─── Modal Elegante de Regeneración ─────────────────────────────────── */}
+            <Modal
+                visible={showRegenerateModal}
+                transparent
+                animationType="fade"
+                onRequestClose={() => setShowRegenerateModal(false)}
+            >
+                <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.7)', justifyContent: 'center', alignItems: 'center', padding: 24 }}>
+                    <View
+                        style={{
+                            backgroundColor: COLORS.dark[100],
+                            borderRadius: 24,
+                            borderWidth: 1,
+                            borderColor: COLORS.border.subtle,
+                            padding: 24,
+                            width: '100%',
+                            maxWidth: 340,
+                            alignItems: 'center'
+                        }}
+                    >
+                        <View style={{ backgroundColor: 'rgba(239, 68, 68, 0.1)', width: 56, height: 56, borderRadius: 28, alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
+                            <Feather name="alert-triangle" size={28} color={COLORS.danger.text || '#EF4444'} />
+                        </View>
+
+                        <Text style={{ color: COLORS.text.primary, fontWeight: '700', fontSize: 18, textAlign: 'center', marginBottom: 10 }}>
+                            ¿Regenerar código?
+                        </Text>
+                        <Text style={{ color: COLORS.text.muted, fontSize: 13, textAlign: 'center', lineHeight: 18, marginBottom: 24 }}>
+                            Si regeneras el código, el anterior dejará de funcionar inmediatamente. ¿Deseas continuar?
+                        </Text>
+
+                        <View style={{ flexDirection: 'row', gap: 12, width: '100%' }}>
+                            <TouchableOpacity
+                                onPress={() => setShowRegenerateModal(false)}
+                                activeOpacity={0.8}
+                                style={{
+                                    flex: 1,
+                                    backgroundColor: COLORS.dark[200],
+                                    paddingVertical: 12,
+                                    borderRadius: 12,
+                                    alignItems: 'center'
+                                }}
+                            >
+                                <Text style={{ color: COLORS.text.secondary, fontWeight: '600', fontSize: 14 }}>
+                                    Cancelar
+                                </Text>
+                            </TouchableOpacity>
+
+                            <TouchableOpacity
+                                onPress={confirmRegenerate}
+                                activeOpacity={0.8}
+                                style={{
+                                    flex: 1,
+                                    backgroundColor: COLORS.danger.DEFAULT || '#EF4444',
+                                    paddingVertical: 12,
+                                    borderRadius: 12,
+                                    alignItems: 'center'
+                                }}
+                            >
+                                <Text style={{ color: '#fff', fontWeight: '700', fontSize: 14 }}>
+                                    Continuar
+                                </Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
+
             {/* Context bottom sheet */}
             <Modal
                 visible={showMenu}
@@ -432,7 +517,6 @@ export default function UsersScreen() {
                             paddingBottom: 32,
                         }}
                     >
-                        {/* Handle */}
                         <View
                             style={{
                                 width: 36,
@@ -444,7 +528,6 @@ export default function UsersScreen() {
                             }}
                         />
 
-                        {/* Header */}
                         <Text style={{ color: COLORS.text.muted, fontSize: 11, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.2, marginBottom: 4 }}>
                             Opciones de Usuario
                         </Text>
@@ -454,17 +537,17 @@ export default function UsersScreen() {
 
                         <View style={{ height: 1, backgroundColor: COLORS.border.subtle, marginBottom: 4 }} />
 
-                        {/* Cambiar Rol */}
                         <TouchableOpacity
                             onPress={handleCambiarRol}
                             disabled={changingRol}
                             activeOpacity={0.7}
                             style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 16, gap: 14 }}
                         >
-                            {changingRol
-                                ? <ActivityIndicator size="small" color={COLORS.primary.light} />
-                                : <MaterialIcons name="swap-horiz" size={22} color={COLORS.primary.light} />
-                            }
+                            {changingRol ? (
+                                <ActivityIndicator size="small" color={COLORS.primary.light} />
+                            ) : (
+                                <MaterialIcons name="swap-horiz" size={22} color={COLORS.primary.light} />
+                            )}
                             <View style={{ flex: 1 }}>
                                 <Text style={{ color: COLORS.text.primary, fontWeight: '600', fontSize: 15 }}>
                                     Cambiar Rol
@@ -477,17 +560,17 @@ export default function UsersScreen() {
 
                         <View style={{ height: 1, backgroundColor: COLORS.border.subtle }} />
 
-                        {/* Revocar acceso */}
                         <TouchableOpacity
                             onPress={handleRevocarAcceso}
                             disabled={revoking}
                             activeOpacity={0.7}
                             style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: 16, gap: 14 }}
                         >
-                            {revoking
-                                ? <ActivityIndicator size="small" color={COLORS.danger.text} />
-                                : <MaterialIcons name="delete-outline" size={22} color={COLORS.danger.text} />
-                            }
+                            {revoking ? (
+                                <ActivityIndicator size="small" color={COLORS.danger.text} />
+                            ) : (
+                                <MaterialIcons name="delete-outline" size={22} color={COLORS.danger.text} />
+                            )}
                             <Text style={{ color: COLORS.danger.text, fontWeight: '600', fontSize: 15 }}>
                                 Revocar Acceso al Estudio
                             </Text>
@@ -495,7 +578,6 @@ export default function UsersScreen() {
 
                         <View style={{ height: 1, backgroundColor: COLORS.border.subtle, marginBottom: 4 }} />
 
-                        {/* Cancelar */}
                         <TouchableOpacity
                             onPress={closeMenu}
                             activeOpacity={0.7}
