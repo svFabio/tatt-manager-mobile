@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, TextInput, Alert, ActivityIndicator, Animated } from 'react-native';
+import { View, TouchableOpacity, Alert, ActivityIndicator, Animated } from 'react-native';
+import { Text, TextInput } from '@/src/components/StyledText';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { InventarioAPI } from '../../../api/inventario';
 import type { InventarioItem } from '../../../types/inventario';

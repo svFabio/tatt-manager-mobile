@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
+import { View, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
+import { Text, TextInput } from '@/src/components/StyledText';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { CitasAPI } from '../../../api/citas';
 import { useRouter } from 'expo-router';

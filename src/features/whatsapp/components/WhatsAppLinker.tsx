@@ -1,5 +1,6 @@
 import React from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, TouchableOpacity } from 'react-native';
+import { Text } from '@/src/components/StyledText';
 import { WhatsAppQRCode } from "./WhatsAppQRCode";
 import { WhatsAppPairCode } from "./WhatsAppPairCode";
 import { COLORS } from "@/src/theme/colors";
@@ -36,10 +37,7 @@ export const WhatsAppLinker: React.FC<WhatsAppLinkerProps> = ({
 }) => {
   return (
     <View>
-      <View className="mb-8 mt-4">
-        <Text className="text-3xl font-extrabold text-white mb-2 tracking-tight">
-          Vincular WhatsApp
-        </Text>
+      <View className="mb-8 mt-2">
         <Text className="text-base" style={{ color: COLORS.text.secondary }}>
           Elige como conectar tu numero al bot
         </Text>

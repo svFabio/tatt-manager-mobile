@@ -1,4 +1,5 @@
-import { View, Text } from 'react-native';
+import { View } from "react-native";
+import { Text } from "@/src/components/StyledText";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import type { CitaDetails } from '../../../types/citas';
 import { COLORS } from '../../../theme/colors';

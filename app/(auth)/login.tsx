@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { View, Text, KeyboardAvoidingView, Platform, ActivityIndicator } from "react-native";
+import { View, KeyboardAvoidingView, Platform, ActivityIndicator } from 'react-native';
+import { Text } from '@/src/components/StyledText';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { CustomButton, InputField } from "@/src/components/ui";

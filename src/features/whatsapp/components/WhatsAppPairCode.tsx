@@ -1,5 +1,6 @@
 import React from "react";
-import { View, Text, TouchableOpacity, TextInput, ActivityIndicator } from "react-native";
+import { View, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { Text, TextInput } from '@/src/components/StyledText';
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS } from "@/src/theme/colors";
 

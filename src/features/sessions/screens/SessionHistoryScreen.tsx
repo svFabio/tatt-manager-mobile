@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { View, Text, TextInput, FlatList, TouchableOpacity, ActivityIndicator, Modal, Pressable } from 'react-native';
+import { View, FlatList, TouchableOpacity, ActivityIndicator, Modal, Pressable } from 'react-native';
+import { Text, TextInput } from '@/src/components/StyledText';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useRouter } from 'expo-router';

@@ -1,13 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
-  View,
-  Text,
-  Modal,
-  TouchableOpacity,
-  ActivityIndicator,
-  ScrollView,
-  Image,
-} from "react-native";
+  View, Modal, TouchableOpacity, ActivityIndicator, ScrollView, Image, } from 'react-native';
+import { Text } from '@/src/components/StyledText';
 import { Feather } from "@expo/vector-icons";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";

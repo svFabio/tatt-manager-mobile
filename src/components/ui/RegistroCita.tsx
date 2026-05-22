@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
-  View, Text, Modal, TextInput, TouchableOpacity,
-  ScrollView, Alert, KeyboardAvoidingView, Platform,
-  ActivityIndicator, Animated
+  View, Modal, TouchableOpacity, ScrollView, Alert, KeyboardAvoidingView, Platform, ActivityIndicator, Animated
 } from 'react-native';
+import { Text, TextInput } from '@/src/components/StyledText';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { COLORS } from '../../theme/colors';

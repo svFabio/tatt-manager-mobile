@@ -2,14 +2,15 @@ import React from "react";
 import { Drawer } from "expo-router/drawer";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { FontAwesome, Feather, MaterialIcons, Ionicons } from "@expo/vector-icons";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, TouchableOpacity } from "react-native";
+import { Text } from "@/src/components/StyledText";
 import { DrawerContentScrollView } from "@react-navigation/drawer";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useRouter, usePathname } from "expo-router";
+import { useRouter } from "expo-router";
 import { COLORS } from "@/src/theme/colors";
 
 function CustomDrawerContent(props: any) {
-  const { navigation, state } = props;
+  const { state } = props;
   const router = useRouter();
 
   // React Navigation inyecta el estado directamente en el componente Drawer.
@@ -112,7 +113,7 @@ export default function DrawerLayout() {
         screenOptions={{
           headerStyle: { backgroundColor: COLORS.dark.DEFAULT, borderBottomWidth: 0, shadowOpacity: 0, elevation: 0 },
           headerTintColor: COLORS.primary.DEFAULT,
-          headerTitleStyle: { fontWeight: "bold", color: COLORS.text.primary },
+          headerTitleStyle: { fontFamily: "Montserrat_700Bold", color: COLORS.text.primary },
         }}
       >
         <Drawer.Screen name="index" options={{ title: "Inicio", headerShown: true }} />

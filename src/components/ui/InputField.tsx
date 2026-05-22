@@ -1,5 +1,6 @@
 import React from "react";
-import { TextInput, View, Text, type TextInputProps } from "react-native";
+import { View, type TextInputProps } from "react-native";
+import { Text, TextInput } from "@/src/components/StyledText";
 
 interface InputFieldProps extends TextInputProps {
   /** Etiqueta del campo */

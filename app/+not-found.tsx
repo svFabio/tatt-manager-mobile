@@ -1,5 +1,6 @@
 import { Link, Stack } from "expo-router";
-import { View, Text } from "react-native";
+import { Text } from "@/src/components/StyledText";
+import { View } from "react-native";
 import { CustomButton } from "@/src/components/ui";
 
 export default function NotFoundScreen() {

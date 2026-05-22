@@ -1,4 +1,5 @@
-import { Modal, View, Text, TouchableOpacity } from 'react-native';
+import { Modal, View, TouchableOpacity } from 'react-native';
+import { Text } from '@/src/components/StyledText';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { COLORS } from '../../../theme/colors';
 

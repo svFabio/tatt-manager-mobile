@@ -1,5 +1,6 @@
 import React from "react";
-import { View, Text, TouchableOpacity, ActivityIndicator } from "react-native";
+import { View, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { Text } from '@/src/components/StyledText';
 import QRCode from "react-native-qrcode-svg";
 import { Ionicons } from "@expo/vector-icons";
 import { COLORS } from "@/src/theme/colors";

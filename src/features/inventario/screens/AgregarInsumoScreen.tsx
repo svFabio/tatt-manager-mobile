@@ -1,9 +1,8 @@
 import React, { useState, useRef } from 'react';
 import {
-    View, Text, TextInput, TouchableOpacity,
-    ScrollView, Alert, ActivityIndicator, Image,
-    Animated
+    View, TouchableOpacity, ScrollView, Alert, ActivityIndicator, Image, Animated
 } from 'react-native';
+import { Text, TextInput } from '@/src/components/StyledText';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import * as ImagePicker from 'expo-image-picker';

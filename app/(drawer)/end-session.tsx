@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, TextInput, Image, Alert, ActivityIndicator, Modal } from 'react-native';
+import { View, TouchableOpacity, ScrollView, Image, Alert, ActivityIndicator, Modal } from 'react-native';
+import { Text, TextInput } from '@/src/components/StyledText';
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter, useFocusEffect } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';

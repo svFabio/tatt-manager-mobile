@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ScrollView, ActivityIndicator } from 'react-native';
+import { View, ScrollView, ActivityIndicator } from 'react-native';
+import { Text } from '@/src/components/StyledText';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useLocalSearchParams } from 'expo-router';

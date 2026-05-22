@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
+import { Text } from '@/src/components/StyledText';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { Badge } from './Badge';
 import type { EstadoCita } from '../../../types/citas';

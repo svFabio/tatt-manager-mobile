@@ -1,12 +1,7 @@
 import React, { useState } from "react";
 import {
-  View,
-  Text,
-  TouchableOpacity,
-  ActivityIndicator,
-  ScrollView,
-  Alert,
-} from "react-native";
+  View, TouchableOpacity, ActivityIndicator, ScrollView, Alert, } from 'react-native';
+import { Text } from '@/src/components/StyledText';
 import { Feather } from "@expo/vector-icons";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { COLORS, PRIMARY_SHADOW } from "@/src/theme/colors";

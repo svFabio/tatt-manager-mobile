@@ -1,5 +1,6 @@
 import React from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, TouchableOpacity } from 'react-native';
+import { Text } from '@/src/components/StyledText';
 import type { VistaCalendario } from "../types";
 
 interface ViewToggleProps {

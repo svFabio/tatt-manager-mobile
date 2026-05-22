@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Alert, KeyboardAvoidingView, Platform, ScrollView, Modal } from 'react-native';
+import { View, TouchableOpacity, Alert, KeyboardAvoidingView, Platform, ScrollView, Modal } from 'react-native';
+import { Text, TextInput } from '@/src/components/StyledText';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { InventarioAPI } from '../../../api/inventario';
