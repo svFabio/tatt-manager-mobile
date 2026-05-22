@@ -56,9 +56,9 @@ export const CitasAPI = {
     },
 
     // COTIZA UNA SOLICITUD PENDIENTE
-    cotizarSolicitud: async (id: number, precioCotizado: number, horasEstimadas: number): Promise<ApiResponse<Record<string, unknown>>> => {
+    cotizarSolicitud: async (id: number, precioCotizado: number, horasEstimadas: number, mensajePersonalizado?: string): Promise<ApiResponse<Record<string, unknown>>> => {
         return api
-            .patch<ApiResponse<Record<string, unknown>>>(`/solicitudes/${id}/cotizar`, { precioCotizado, horasEstimadas })
+            .patch<ApiResponse<Record<string, unknown>>>(`/solicitudes/${id}/cotizar`, { precioCotizado, horasEstimadas, mensajePersonalizado })
             .then((r) => r.data);
     },
 } as const;

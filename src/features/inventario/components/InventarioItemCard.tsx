@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, TouchableOpacity, Alert, ActivityIndicator, Animated } from 'react-native';
 import { Text, TextInput } from '@/src/components/StyledText';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { InventarioAPI } from '../../../api/inventario';
 import type { InventarioItem } from '../../../types/inventario';
 import { StockInsuficienteModal } from './StockInsuficienteModal';
@@ -82,8 +83,10 @@ export function InventarioItemCard({ item, onUpdated, index = 0 }: Props) {
     const dotColor = item.colorHex ?? COLORS.text.muted;
 
     const getCatIcon = () => {
-        if (item.tipo === 'tinta') return 'palette';
-        return 'build';
+        if (item.tipo === 'tinta') return 'water-opacity'; // Gota de tinta
+        if (item.tipo === 'aguja' || item.nombre.toLowerCase().includes('aguja')) return 'needle'; // Aguja
+        if (item.nombre.toLowerCase().includes('cap') || item.tipo === 'cap' as any) return 'cup'; // Cap
+        return 'archive-outline'; // Default
     };
 
     return (
@@ -115,7 +118,7 @@ export function InventarioItemCard({ item, onUpdated, index = 0 }: Props) {
                         className="w-9 h-9 rounded-xl items-center justify-center mr-3"
                         style={{ backgroundColor: `${dotColor}20` }}
                     >
-                        <MaterialIcons name={getCatIcon() as keyof typeof MaterialIcons.glyphMap} size={18} color={dotColor} />
+                        <MaterialCommunityIcons name={getCatIcon() as keyof typeof MaterialCommunityIcons.glyphMap} size={20} color={dotColor} />
                     </View>
                     <View className="flex-1">
                         <Text className="text-white font-semibold text-base" numberOfLines={1}>

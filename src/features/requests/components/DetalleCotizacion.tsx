@@ -10,6 +10,7 @@ export const DetalleCotizacion = ({ solicitudId, estado }: { solicitudId: number
   const router = useRouter();
   const [tiempo, setTiempo] = useState('');
   const [costo, setCosto]   = useState('');
+  const [mensaje, setMensaje] = useState('');
   const [loading, setLoading] = useState(false);
 
   const isCotizada = estado !== 'PENDIENTE';
@@ -17,7 +18,7 @@ export const DetalleCotizacion = ({ solicitudId, estado }: { solicitudId: number
   const enviarCotizacion = async () => {
     try {
       setLoading(true);
-      await CitasAPI.cotizarSolicitud(solicitudId, Number(costo), Number(tiempo));
+      await CitasAPI.cotizarSolicitud(solicitudId, Number(costo), Number(tiempo), mensaje.trim() || undefined);
       Alert.alert('Éxito', 'Cotización enviada al cliente por WhatsApp.', [
         { text: 'OK', onPress: () => router.back() }
       ]);
@@ -32,6 +33,12 @@ export const DetalleCotizacion = ({ solicitudId, estado }: { solicitudId: number
   const handleCotizar = () => {
     if (!tiempo || !costo) {
       Alert.alert('Error', 'Por favor ingresa el tiempo estimado y el costo.');
+      return;
+    }
+    
+    const numTiempo = Number(tiempo);
+    if (isNaN(numTiempo) || numTiempo < 1 || numTiempo > 7) {
+      Alert.alert('Atención', 'El tiempo estimado debe ser entre 1 y 7 horas. (Si es mayor, usa el mensaje personalizado para agendar manualmente en sesiones).');
       return;
     }
     
@@ -53,7 +60,7 @@ export const DetalleCotizacion = ({ solicitudId, estado }: { solicitudId: number
       </View>
 
       <Text className="text-[10px] uppercase tracking-widest mb-2" style={{ color: COLORS.text.muted }}>
-        Tiempo estimado de sesión
+        Tiempo estimado de sesión (Max: 7hrs)
       </Text>
       <View className="flex-row items-center bg-dark-100 rounded-xl px-3 py-3 mb-4 border border-white/5">
         <MaterialIcons name="access-time" size={16} color={COLORS.text.muted} />
@@ -69,7 +76,7 @@ export const DetalleCotizacion = ({ solicitudId, estado }: { solicitudId: number
       </View>
 
       <Text className="text-[10px] uppercase tracking-widest mb-2" style={{ color: COLORS.text.muted }}>Costo total</Text>
-      <View className="flex-row items-center bg-dark-100 rounded-xl px-3 py-3 mb-6 border border-white/5">
+      <View className="flex-row items-center bg-dark-100 rounded-xl px-3 py-3 mb-4 border border-white/5">
         <Text className="text-sm font-bold mr-2" style={{ color: COLORS.text.secondary }}>$</Text>
         <TextInput
           value={costo}
@@ -78,6 +85,22 @@ export const DetalleCotizacion = ({ solicitudId, estado }: { solicitudId: number
           placeholderTextColor={COLORS.text.dimmed}
           className="flex-1 text-white text-sm"
           keyboardType="numeric"
+          editable={!isCotizada}
+        />
+      </View>
+
+      <Text className="text-[10px] uppercase tracking-widest mb-2" style={{ color: COLORS.text.muted }}>
+        Mensaje Opcional (Ej. Agendaremos varias sesiones)
+      </Text>
+      <View className="bg-dark-100 rounded-xl px-3 py-3 mb-6 border border-white/5">
+        <TextInput
+          value={mensaje}
+          onChangeText={setMensaje}
+          placeholder="Escribe un mensaje para el cliente..."
+          placeholderTextColor={COLORS.text.dimmed}
+          className="text-white text-sm"
+          multiline
+          numberOfLines={2}
           editable={!isCotizada}
         />
       </View>
