@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text, TouchableOpacity, ActivityIndicator } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { COLORS } from "@/src/theme/colors";
 
 interface WhatsAppConnectedProps {
   actionLoading: boolean;
@@ -15,34 +16,39 @@ export const WhatsAppConnected: React.FC<WhatsAppConnectedProps> = ({
 }) => {
   return (
     <View className="flex-1 bg-dark items-center justify-center p-8">
-      <View className="w-20 h-20 rounded-full bg-green-500/20 items-center justify-center border border-green-500/30">
-        <Ionicons name="checkmark" size={40} color="#4ade80" />
+      <View
+        className="w-20 h-20 rounded-full items-center justify-center"
+        style={{ backgroundColor: COLORS.status.confirmada.bg, borderWidth: 1, borderColor: COLORS.success.DEFAULT + '30' }}
+      >
+        <Ionicons name="checkmark" size={40} color={COLORS.success.DEFAULT} />
       </View>
       <Text className="text-xl font-bold text-white mt-6 mb-2">
         Bot operativo
       </Text>
-      <Text className="text-gray-400 text-center mb-8">
+      <Text className="text-center mb-8" style={{ color: COLORS.text.secondary }}>
         El sistema está escuchando mensajes de WhatsApp correctamente.
       </Text>
 
       <TouchableOpacity
         onPress={onLogout}
         disabled={actionLoading}
-        className="bg-red-500/20 border border-red-500/50 py-3 px-8 rounded-xl flex-row items-center justify-center w-full"
+        className="py-3 px-8 rounded-xl flex-row items-center justify-center w-full"
+        style={{ backgroundColor: COLORS.danger.bg, borderWidth: 1, borderColor: COLORS.danger.border }}
       >
         {actionLoading ? (
-          <ActivityIndicator color="#f87171" />
+          <ActivityIndicator color={COLORS.danger.text} />
         ) : (
-          <Text className="text-red-400 font-bold">Desvincular WhatsApp</Text>
+          <Text className="font-bold" style={{ color: COLORS.danger.text }}>Desvincular WhatsApp</Text>
         )}
       </TouchableOpacity>
 
       <TouchableOpacity
         onPress={onRestart}
         disabled={actionLoading}
-        className="bg-gray-800/50 py-3 px-8 rounded-xl flex-row items-center justify-center w-full mt-4"
+        className="py-3 px-8 rounded-xl flex-row items-center justify-center w-full mt-4"
+        style={{ backgroundColor: COLORS.dark[200] }}
       >
-        <Text className="text-gray-300 font-bold">Forzar Reinicio del Bot</Text>
+        <Text className="font-bold" style={{ color: COLORS.text.secondary }}>Forzar Reinicio del Bot</Text>
       </TouchableOpacity>
     </View>
   );

@@ -67,29 +67,22 @@ export const MonthGrid: React.FC<MonthGridProps> = ({
               style={{ width: `${100 / 7}%` }}
             >
               <View
-                style={{
-                  width: 36,
-                  height: 36,
-                  borderRadius: 18,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  backgroundColor: esSeleccionado ? COLORS.primary.DEFAULT : 'transparent',
-                  borderWidth: !esSeleccionado && esHoy ? 1.5 : 0,
-                  borderColor: !esSeleccionado && esHoy ? COLORS.primary.DEFAULT : 'transparent',
-                }}
+                className={`w-9 h-9 rounded-full items-center justify-center ${
+                  esSeleccionado ? 'bg-primary' : 'bg-transparent'
+                } ${
+                  !esSeleccionado && esHoy ? 'border-[1.5px] border-primary' : 'border-0 border-transparent'
+                }`}
               >
                 <Text
-                  style={{
-                    fontSize: 14,
-                    color: !enMes
-                      ? COLORS.dark[300]
+                  className={`text-sm ${
+                    !enMes
+                      ? 'text-dark-300'
                       : esSeleccionado
-                      ? '#FFFFFF'
+                      ? 'text-white'
                       : esHoy
-                      ? COLORS.primary.DEFAULT
-                      : '#FFFFFF',
-                    fontWeight: esSeleccionado || esHoy ? '700' : '400',
-                  }}
+                      ? 'text-primary'
+                      : 'text-white'
+                  } ${esSeleccionado || esHoy ? 'font-bold' : 'font-normal'}`}
                 >
                   {format(dia, "d")}
                 </Text>
@@ -99,8 +92,7 @@ export const MonthGrid: React.FC<MonthGridProps> = ({
                   ? Array.from({ length: Math.min(numCitas, 3) }).map((_, i) => (
                       <View
                         key={i}
-                        className="w-1.5 h-1.5 rounded-full"
-                        style={{ backgroundColor: esSeleccionado ? '#FFFFFF' : COLORS.primary.DEFAULT }}
+                        className={`w-1.5 h-1.5 rounded-full ${esSeleccionado ? 'bg-white' : 'bg-primary'}`}
                       />
                     ))
                   : null}

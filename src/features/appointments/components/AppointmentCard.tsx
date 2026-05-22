@@ -2,17 +2,25 @@ import React from "react";
 import { View, Text } from "react-native";
 import { Card } from "@/src/components/ui";
 import { type Appointment } from "@/src/store/useTattooStore";
+import { COLORS } from "@/src/theme/colors";
 
 interface AppointmentCardProps {
   appointment: Appointment;
   onPress?: () => void;
 }
 
-const statusColors: Record<Appointment["status"], string> = {
-  scheduled: "bg-blue-500",
-  "in-progress": "bg-gold",
-  completed: "bg-green-500",
-  cancelled: "bg-alert",
+const statusBgColors: Record<Appointment["status"], string> = {
+  scheduled: COLORS.status.confirmada.bg,
+  "in-progress": COLORS.warning.ghost,
+  completed: COLORS.status.confirmada.bg,
+  cancelled: COLORS.status.cancelada.bg,
+};
+
+const statusDotColors: Record<Appointment["status"], string> = {
+  scheduled: COLORS.status.confirmada.text,
+  "in-progress": COLORS.warning.text,
+  completed: COLORS.status.finalizada.text,
+  cancelled: COLORS.status.cancelada.text,
 };
 
 const statusLabels: Record<Appointment["status"], string> = {
@@ -41,7 +49,8 @@ export const AppointmentCard: React.FC<AppointmentCardProps> = ({
       {/* Indicador de estado lateral */}
       <View className="flex-row">
         <View
-          className={`w-1 rounded-full mr-3 ${statusColors[appointment.status]}`}
+          className="w-1 rounded-full mr-3"
+          style={{ backgroundColor: statusDotColors[appointment.status] }}
         />
         <View className="flex-1">
           {/* Header */}
@@ -66,7 +75,10 @@ export const AppointmentCard: React.FC<AppointmentCardProps> = ({
 
           {/* Estado */}
           <View className="flex-row items-center mt-2">
-            <View className={`w-2 h-2 rounded-full ${statusColors[appointment.status]} mr-2`} />
+            <View
+              className="w-2 h-2 rounded-full mr-2"
+              style={{ backgroundColor: statusDotColors[appointment.status] }}
+            />
             <Text className="text-muted-light text-xs font-medium">
               {statusLabels[appointment.status]}
             </Text>

@@ -2,13 +2,14 @@ import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { format } from "date-fns";
+import type { StyleProp, ViewStyle } from "react-native";
 import type { Cita } from "../types";
 import { COLORS } from "../../../theme/colors";
 
 interface EventCardProps {
   cita: Cita;
   onPress?: () => void;
-  style?: any;
+  style?: StyleProp<ViewStyle>;
 }
 
 function formatDuracion(horas: number | string | null | undefined): string {
@@ -32,38 +33,31 @@ export const EventCard: React.FC<EventCardProps> = ({ cita, onPress, style }) =>
     <TouchableOpacity
       onPress={onPress}
       activeOpacity={0.8}
-      style={[
-        {
-          backgroundColor: COLORS.dark[100],
-          borderColor: COLORS.dark[200],
-          borderWidth: 1,
-        },
-        style,
-      ]}
-      className="flex-row rounded-2xl overflow-hidden"
+      style={style}
+      className="flex-row rounded-2xl overflow-hidden bg-dark-100 border border-dark-200"
     >
-      <View style={{ width: 6, backgroundColor: COLORS.primary.DEFAULT }} />
+      <View className="w-1.5 bg-primary" />
       <View className="flex-1 p-3">
-        <Text style={{ color: COLORS.text.primary }} className="font-bold text-base mb-1" numberOfLines={1}>
+        <Text className="text-text-primary font-bold text-base mb-1" numberOfLines={1}>
           {cita.cliente?.nombre ?? cita.clienteNombre ?? "Sin cliente"}
         </Text>
         <View className="flex-row items-center mb-2">
           <Feather name="clock" size={12} color={COLORS.text.secondary} />
-          <Text style={{ color: COLORS.text.muted }} className="text-xs ml-1.5">
+          <Text className="text-text-muted text-xs ml-1.5">
             {horaInicio} — {horaFin}
           </Text>
         </View>
         <View className="flex-row gap-2 flex-wrap">
           {tipo ? (
-            <View style={{ backgroundColor: COLORS.primary.ghost }} className="px-2.5 py-1 rounded-full">
-              <Text style={{ color: COLORS.primary.light }} className="text-[10px] font-bold tracking-wider">
+            <View className="bg-primary-ghost px-2.5 py-1 rounded-full">
+              <Text className="text-primary-light text-[10px] font-bold tracking-wider">
                 {tipo}
               </Text>
             </View>
           ) : null}
           {duracion ? (
-            <View style={{ backgroundColor: 'rgba(255, 255, 255, 0.08)' }} className="px-2.5 py-1 rounded-full">
-              <Text style={{ color: COLORS.text.secondary }} className="text-[10px] font-bold tracking-wider">
+            <View className="bg-white/10 px-2.5 py-1 rounded-full">
+              <Text className="text-text-secondary text-[10px] font-bold tracking-wider">
                 {duracion}
               </Text>
             </View>

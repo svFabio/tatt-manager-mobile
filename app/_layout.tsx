@@ -53,10 +53,10 @@ function RootLayoutNav() {
       <StatusBar style="light" />
       <Stack
         screenOptions={{
-          headerStyle: { backgroundColor: "#121212" },
+          headerStyle: { backgroundColor: COLORS.dark.DEFAULT },
           headerTintColor: COLORS.primary.DEFAULT,
           headerTitleStyle: { fontWeight: "bold" },
-          contentStyle: { backgroundColor: "#121212" },
+          contentStyle: { backgroundColor: COLORS.dark.DEFAULT },
         }}
       >
         <Stack.Screen name="(drawer)" options={{ headerShown: false }} />

@@ -32,7 +32,7 @@ export default function DetalleSolicitudScreen() {
     if (!detalle) return (
         <SafeAreaView className="flex-1 items-center justify-center px-6" style={{ backgroundColor: COLORS.bg }}>
             <MaterialIcons name="error-outline" size={48} color={COLORS.text.muted} />
-            <Text className="text-gray-500 mt-3 text-sm text-center">No se pudo cargar la solicitud</Text>
+            <Text className="mt-3 text-sm text-center" style={{ color: COLORS.text.secondary }}>No se pudo cargar la solicitud</Text>
         </SafeAreaView>
     );
 

@@ -32,8 +32,8 @@ export const InputField: React.FC<InputFieldProps> = ({
           placeholder:text-muted-dark
           ${className || ""}
         `}
-        placeholderTextColor="#6B7280"
-        {...props}
+        placeholderTextColor={COLORS.text.muted}
+        {...rest}
       />
       {error ? (
         <Text className="text-alert text-xs mt-1">{error}</Text>

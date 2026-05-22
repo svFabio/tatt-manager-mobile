@@ -5,7 +5,7 @@ import {
   ActivityIndicator, Animated
 } from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { COLORS } from '../../theme/colors';
 import api from '../../api/axios';
 
@@ -32,7 +32,7 @@ interface FieldErrors {
 interface Props {
   visible: boolean;
   onClose: () => void;
-  onSave: (nuevaCita: any) => void;
+  onSave: (nuevaCita: Omit<SessionForm, 'cotizacion'> & { cotizacion: number }) => void;
   selectedDate?: Date;
 }
 
@@ -103,7 +103,7 @@ const RegistroCitaModal = ({ visible, onClose, onSave, selectedDate }: Props) =>
     setForm(prev => ({ ...prev, horas: Math.max(1, Math.min(12, prev.horas + monto)), horario: '' }));
   };
 
-  const handleDateChange = (_: any, selected?: Date) => {
+  const handleDateChange = (_: DateTimePickerEvent, selected?: Date) => {
     setShowDatePicker(false);
     if (selected) {
       // Don't allow past dates
@@ -162,7 +162,7 @@ const RegistroCitaModal = ({ visible, onClose, onSave, selectedDate }: Props) =>
         ...form,
         cotizacion: parseFloat(form.cotizacion),
       });
-    } catch (e: any) {
+    } catch (e: unknown) {
       // Error handling is done in the parent (calendar.tsx)
     } finally {
       setSaving(false);
@@ -354,14 +354,11 @@ const RegistroCitaModal = ({ visible, onClose, onSave, selectedDate }: Props) =>
                           key={h}
                           onPress={() => { setForm({ ...form, horario: h }); setErrors(e => ({ ...e, horario: false })); }}
                           activeOpacity={0.7}
-                          className="px-5 py-3 rounded-xl"
-                          style={{
-                            backgroundColor: selected ? COLORS.primary.DEFAULT : COLORS.dark[100],
-                            borderWidth: 1.5,
-                            borderColor: selected ? COLORS.primary.DEFAULT : COLORS.dark[200],
-                          }}
+                          className={`px-5 py-3 rounded-xl border-[1.5px] ${
+                            selected ? 'bg-primary border-primary' : 'bg-dark-100 border-dark-200'
+                          }`}
                         >
-                          <Text style={{ color: selected ? '#FFFFFF' : COLORS.text.secondary, fontWeight: selected ? '700' : '500', fontSize: 14 }}>
+                          <Text className={`text-sm ${selected ? 'text-white font-bold' : 'text-text-secondary font-medium'}`}>
                             {h}
                           </Text>
                         </TouchableOpacity>
@@ -376,7 +373,7 @@ const RegistroCitaModal = ({ visible, onClose, onSave, selectedDate }: Props) =>
                 <Text className="text-[10px] mb-1.5 uppercase font-bold tracking-widest" style={labelStyle('cotizacion')}>Cotización (Bs.) *</Text>
                 <View className="flex-row items-center rounded-xl mb-6 overflow-hidden" style={inputStyle('cotizacion')}>
                   <View className="px-4 py-4" style={{ backgroundColor: COLORS.primary.ghost }}>
-                    <Text style={{ color: COLORS.primary.DEFAULT, fontWeight: '700', fontSize: 16 }}>Bs.</Text>
+                    <Text className="text-base font-bold" style={{ color: COLORS.primary.DEFAULT }}>Bs.</Text>
                   </View>
                   <TextInput
                     className="flex-1 text-white p-4 text-base"
@@ -411,7 +408,7 @@ const RegistroCitaModal = ({ visible, onClose, onSave, selectedDate }: Props) =>
                   }}
                 >
                   {saving ? (
-                    <ActivityIndicator color="#FFFFFF" size="small" />
+                    <ActivityIndicator color={COLORS.text.primary} size="small" />
                   ) : loadingHorarios ? (
                     <>
                       <ActivityIndicator color={COLORS.text.muted} size="small" style={{ marginRight: 6 }} />
@@ -419,7 +416,7 @@ const RegistroCitaModal = ({ visible, onClose, onSave, selectedDate }: Props) =>
                     </>
                   ) : (
                     <>
-                      <MaterialIcons name="check" size={18} color="#FFFFFF" style={{ marginRight: 6 }} />
+                      <MaterialIcons name="check" size={18} color={COLORS.text.primary} style={{ marginRight: 6 }} />
                       <Text className="text-white font-bold">{form.horario ? 'Crear Cita' : 'Selecciona horario'}</Text>
                     </>
                   )}

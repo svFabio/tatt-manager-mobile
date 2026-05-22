@@ -1,6 +1,6 @@
 /**
  * Tema global de la aplicación.
- * Fuente única de verdad para colores, sombras y estilos reutilizables.
+ * Fuente única para colores, sombras y estilos reutilizables.
  * NUNCA hardcodear hex en componentes — importar desde aquí.
  */
 
@@ -15,6 +15,23 @@ export const COLORS = {
     200: '#2A2A2A',
     300: '#3A3A3A',
     400: '#4A4A4A',
+  },
+
+  // ── Dorado ──
+  gold: {
+    DEFAULT: "#4D09E0",
+    light: "#7B3FF5",
+    dark: "#3A07A8",
+    50: "#FBF5E0",
+    100: "#F5E8B5",
+    200: "#EDDA87",
+    300: "#E4CC59",
+    400: "#DCC13B",
+    500: "#4D09E0",
+    600: "#C49B2D",
+    700: "#B08623",
+    800: "#9C711A",
+    900: "#7A5610",
   },
 
   // ── Primario ──

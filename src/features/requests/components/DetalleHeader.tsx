@@ -1,6 +1,7 @@
 import { View, Text, TouchableOpacity } from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useRouter } from 'expo-router';
+import { COLORS } from '../../../theme/colors';
 
 export const DetalleHeader = () => {
   const router = useRouter();
@@ -14,7 +15,7 @@ export const DetalleHeader = () => {
           activeOpacity={0.7}
           className="p-1"
         >
-          <MaterialIcons name="arrow-back" size={22} color="#FFFFFF" />
+          <MaterialIcons name="arrow-back" size={22} color={COLORS.text.primary} />
         </TouchableOpacity>
 
         <Text className="text-white text-base font-bold">

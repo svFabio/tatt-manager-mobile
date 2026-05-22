@@ -20,7 +20,7 @@ export const DetalleCotizacion = ({ solicitudId, estado }: { solicitudId: number
       Alert.alert('Éxito', 'Cotización enviada al cliente por WhatsApp.', [
         { text: 'OK', onPress: () => router.back() }
       ]);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('[Cotizar]', error);
       Alert.alert('Error', 'Hubo un problema al enviar la cotización.');
     } finally {
@@ -51,30 +51,30 @@ export const DetalleCotizacion = ({ solicitudId, estado }: { solicitudId: number
         <Text className="text-white text-base font-bold ml-2">Cotización</Text>
       </View>
 
-      <Text className="text-gray-500 text-[10px] uppercase tracking-widest mb-2">
+      <Text className="text-[10px] uppercase tracking-widest mb-2" style={{ color: COLORS.text.muted }}>
         Tiempo estimado de sesión
       </Text>
       <View className="flex-row items-center bg-dark-100 rounded-xl px-3 py-3 mb-4 border border-white/5">
-        <MaterialIcons name="access-time" size={16} color="#6B7280" />
+        <MaterialIcons name="access-time" size={16} color={COLORS.text.muted} />
         <TextInput
           value={tiempo}
           onChangeText={setTiempo}
           placeholder="ej. 4"
-          placeholderTextColor="#4B5563"
+          placeholderTextColor={COLORS.text.dimmed}
           className="flex-1 text-white text-sm ml-2"
           keyboardType="numeric"
           editable={!isCotizada}
         />
       </View>
 
-      <Text className="text-gray-500 text-[10px] uppercase tracking-widest mb-2">Costo total</Text>
+      <Text className="text-[10px] uppercase tracking-widest mb-2" style={{ color: COLORS.text.muted }}>Costo total</Text>
       <View className="flex-row items-center bg-dark-100 rounded-xl px-3 py-3 mb-6 border border-white/5">
-        <Text className="text-gray-400 text-sm font-bold mr-2">$</Text>
+        <Text className="text-sm font-bold mr-2" style={{ color: COLORS.text.secondary }}>$</Text>
         <TextInput
           value={costo}
           onChangeText={setCosto}
           placeholder="0.00"
-          placeholderTextColor="#4B5563"
+          placeholderTextColor={COLORS.text.dimmed}
           className="flex-1 text-white text-sm"
           keyboardType="numeric"
           editable={!isCotizada}
@@ -83,8 +83,8 @@ export const DetalleCotizacion = ({ solicitudId, estado }: { solicitudId: number
 
       {isCotizada ? (
         <View className="bg-dark-200 rounded-2xl py-4 flex-row items-center justify-center">
-          <Text className="text-gray-400 text-sm font-bold mr-2">Cotización ya enviada</Text>
-          <MaterialIcons name="check-circle" size={16} color="#4ADE80" />
+          <Text className="text-sm font-bold mr-2" style={{ color: COLORS.text.secondary }}>Cotización ya enviada</Text>
+          <MaterialIcons name="check-circle" size={16} color={COLORS.success.DEFAULT} />
         </View>
       ) : (
         <TouchableOpacity
@@ -98,7 +98,7 @@ export const DetalleCotizacion = ({ solicitudId, estado }: { solicitudId: number
           ) : (
             <>
               <Text className="text-white text-sm font-bold mr-2">Enviar Cotización</Text>
-              <MaterialIcons name="send" size={16} color="#FFFFFF" />
+              <MaterialIcons name="send" size={16} color={COLORS.text.primary} />
             </>
           )}
         </TouchableOpacity>
