@@ -1,37 +1,51 @@
 import axios from 'axios';
-import { API_URL } from '../config/api'; // Tu archivo con la IP local
+import { API_URL } from '../config/api'; 
+// Si usas Expo/React Native, descombenta tu librería de almacenamiento preferida:
+// import AsyncStorage from '@react-native-async-storage/async-storage'; 
 
-// Instancia de Axios usando tu configuración existente
 const api = axios.create({
   baseURL: API_URL,
 });
 
-// Interceptor para inyectar tus credenciales en cada petición
+// Interceptor asíncrono para inyectar credenciales reales del dispositivo
 api.interceptors.request.use(async (config) => {
-  // Aquí tu lógica actual para recuperar el token del almacenamiento del celular
-  // const token = await ...
-  
-  config.headers.Authorization = `Bearer TU_TOKEN_DE_LOGIN`; 
-  config.headers['negocioId'] = '1'; // Obligatorio para el tenantMiddleware del backend
+  try {
+    // 1. Recuperar el token real guardado en el celular (ejemplo con AsyncStorage)
+    // const token = await AsyncStorage.getItem('userToken');
+    // if (token) {
+    //   config.headers.Authorization = `Bearer ${token}`;
+    // }
+    
+    // Por ahora dejamos tu boceto limpio, pero dinámico:
+    config.headers.Authorization = `Bearer TU_TOKEN_DE_LOGIN`; 
+
+    // 2. Inyectar el negocioId para el tenantMiddleware
+    config.headers['negocioid'] = '1'; // Es buena práctica usar minúsculas en HTTP headers
+    
+  } catch (error) {
+    console.error('Error recuperando credenciales en interceptor:', error);
+  }
   return config;
 });
 
 export const chatService = {
-  // 1. Integración con GET /api/chat/conversaciones (Devuelve el array [])
+  // 1. Obtener lista de conversaciones
   getConversaciones: async () => {
     const response = await api.get('/chat/conversaciones');
     return response.data;
   },
 
-  // 2. Integración con GET /api/chat/mensajes/:jid
+  // 2. Obtener mensajes (Protegido con encodeURIComponent)
   getMensajes: async (jid: string) => {
-    const response = await api.get(`/chat/mensajes/${jid}`);
+    const jidCodificado = encodeURIComponent(jid);
+    const response = await api.get(`/chat/mensajes/${jidCodificado}`);
     return response.data;
   },
 
-  // 3. Integración con POST /api/chat/enviar/:jid
+  // 3. Enviar mensaje manual (Protegido con encodeURIComponent)
   enviarMensaje: async (jid: string, texto: string) => {
-    const response = await api.post(`/chat/enviar/${jid}`, { texto });
+    const jidCodificado = encodeURIComponent(jid);
+    const response = await api.post(`/chat/enviar/${jidCodificado}`, { texto });
     return response.data;
   }
 };

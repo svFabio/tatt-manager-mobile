@@ -1,34 +1,36 @@
-import { useState } from 'react';
-import { Chat, Message } from '../tipes';
+import { useState, useCallback } from 'react';
+import { Chat, Message } from '../tipes'; // Asegúrate de apuntar a tus types correctos
+import { chatService } from '../../../services/chatService';
 
 export const useWhatsAppChat = () => {
   const [selectedChat, setSelectedChat] = useState<Chat | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
+  const [loadingMensajes, setLoadingMensajes] = useState(false);
 
-  const handleSelectChat = (chat: Chat) => {
+  const handleSelectChat = useCallback(async (chat: Chat) => {
     setSelectedChat(chat);
-    // Datos de prueba (MOCK) que coinciden con tu diseño oscuro
-    setMessages([
-      { 
-        id: '1', 
-        texto: 'Hola Arturo! ¿Tienes espacio para un tatuaje pequeño mañana?', 
-        emisor: 'cliente', 
-        tipo: 'texto', 
-        fecha: new Date().toISOString() 
-      },
-      { 
-        id: '2', 
-        texto: '¡Hola! Sí, tengo un hueco a las 4 PM. ¿Qué diseño tienes en mente?', 
-        emisor: 'bot', 
-        tipo: 'texto', 
-        fecha: new Date().toISOString() 
-      },
-    ]);
-  };
+    setLoadingMensajes(true);
+    try {
+      // Consumimos el historial real del backend usando el control de JID codificado
+      const res = await chatService.getMensajes(chat.remoteJid);
+      setMessages(res.data || res);
+    } catch (error) {
+      console.error("Error al obtener mensajes del chat:", error);
+    } finally {
+      setLoadingMensajes(false);
+    }
+  }, []);
+
+  const agregarNuevoMensajeLocal = useCallback((nuevoMsg: Message) => {
+    setMessages((prev) => [...prev, nuevoMsg]);
+  }, []);
 
   return {
     selectedChat,
     messages,
-    handleSelectChat
+    loadingMensajes,
+    handleSelectChat,
+    setMessages,
+    agregarNuevoMensajeLocal
   };
 };

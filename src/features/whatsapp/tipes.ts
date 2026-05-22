@@ -1,17 +1,16 @@
-export interface Message {
-  id: string;
-  texto: string;
-  tipo: 'texto' | 'imagen';
-  archivoUrl?: string;
-  emisor: 'cliente' | 'bot';
-  fecha: string;
+export interface Chat {
+  remoteJid: string;      // ID de WhatsApp (ej: "123456@s.whatsapp.net")
+  ultimoMensaje: string;   // Fecha ISO
+  totalMensajes: number;
+  ultimoContenido: string | null;
+  ultimaDireccion: string | null;
+  clienteNombre: string | null;
+  telefonoReal: string;
 }
 
-export interface Chat {
-  id: string;
-  nombreCliente: string;
-  telefono: string;
-  ultimoMensaje: string;
-  fechaUltimo: string;
-  clienteId?: number;
+export interface Message {
+  id: number | string;
+  contenido: string;
+  direccion: 'in' | 'out'; // 'in' = Cliente, 'out' = Negocio/Administrador
+  timestamp: string;
 }
