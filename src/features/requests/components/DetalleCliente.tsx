@@ -1,4 +1,5 @@
-import { View, Text } from 'react-native';
+import { View } from "react-native";
+import { Text } from "@/src/components/StyledText";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import type { CitaDetails } from '../../../types/citas';
 import { COLORS } from '../../../theme/colors';
@@ -8,7 +9,7 @@ const formatDate = (value: string | Date): string =>
 
 const DetailRow = ({ label, value, highlight }: { label: string; value: string; highlight?: boolean }) => (
   <View className="flex-row justify-between items-center">
-    <Text className="text-gray-500 text-xs uppercase tracking-widest">{label}</Text>
+    <Text className="text-xs uppercase tracking-widest" style={{ color: COLORS.text.muted }}>{label}</Text>
     <Text className={`text-sm font-semibold ${highlight ? 'text-primary' : 'text-white'}`}>
       {value || '—'}
     </Text>
@@ -29,8 +30,8 @@ export const DetalleCliente = ({ detalle }: Props) => (
     </View>
 
     <View className="flex-row items-center mt-2 mb-5">
-      <MaterialIcons name="calendar-today" size={14} color="#6B7280" />
-      <Text className="text-gray-500 text-xs ml-2">Recibido {formatDate(detalle.recibido)}</Text>
+      <MaterialIcons name="calendar-today" size={14} color={COLORS.text.muted} />
+      <Text className="text-xs ml-2" style={{ color: COLORS.text.muted }}>Recibido {formatDate(detalle.recibido)}</Text>
     </View>
 
     <View className="bg-dark rounded-2xl border border-white/5 p-4 mb-5 gap-4">

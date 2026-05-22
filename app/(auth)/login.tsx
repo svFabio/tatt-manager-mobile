@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-import { View, Text, KeyboardAvoidingView, Platform, ActivityIndicator } from "react-native";
+import { View, KeyboardAvoidingView, Platform, ActivityIndicator } from 'react-native';
+import { Text } from '@/src/components/StyledText';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { CustomButton, InputField } from "@/src/components/ui";
 import api from "@/src/api/axios";
 import { useAuthStore } from "@/src/store/useAuthStore";
+import { COLORS } from "@/src/theme/colors";
 
 export default function LoginScreen() {
   const [email, setEmail]       = useState("");
@@ -61,7 +63,7 @@ export default function LoginScreen() {
         />
 
         <View className="mt-4">
-          {error ? <Text className="text-red-400 text-xs text-center mb-3">{error}</Text> : null}
+          {error ? <Text className="text-xs text-center mb-3" style={{ color: COLORS.danger.text }}>{error}</Text> : null}
           <CustomButton
             title={loading ? "Entrando..." : "Iniciar Sesión"}
             variant="primary"

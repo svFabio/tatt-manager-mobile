@@ -1,5 +1,6 @@
 import React from "react";
-import { View, Text, type ViewProps } from "react-native";
+import { View, type ViewProps } from 'react-native';
+import { Text } from '@/src/components/StyledText';
 
 interface CardProps extends ViewProps {
   /** Título de la card */

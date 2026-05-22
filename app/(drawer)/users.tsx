@@ -1,15 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
-    Alert,
-    FlatList,
-    Modal,
-    Share,
-    Text,
-    TouchableOpacity,
-    View,
-    ActivityIndicator,
-    Animated,
-} from 'react-native';
+    Alert, FlatList, Modal, Share, TouchableOpacity, View, ActivityIndicator, Animated, } from 'react-native';
+import { Text } from '@/src/components/StyledText';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Feather, MaterialIcons } from '@expo/vector-icons';
 import { COLORS } from '@/src/theme/colors';

@@ -1,5 +1,7 @@
-import { View, Text, Image } from 'react-native';
+import { View, Image } from 'react-native';
+import { Text } from '@/src/components/StyledText';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { COLORS } from '../../../theme/colors';
 
 interface Props {
   uri: string | null;
@@ -12,8 +14,8 @@ export const DetalleReferencia = ({ uri }: Props) => (
       <Image source={{ uri }} className="w-full h-52 rounded-2xl mb-5" resizeMode="cover" />
     ) : (
       <View className="w-full h-52 rounded-2xl bg-dark-100 items-center justify-center mb-5">
-        <MaterialIcons name="image-not-supported" size={40} color="#374151" />
-        <Text className="text-gray-600 text-xs mt-2">Sin referencia</Text>
+        <MaterialIcons name="image-not-supported" size={40} color={COLORS.text.dimmed} />
+        <Text className="text-text-muted text-xs mt-2">Sin referencia</Text>
       </View>
     )}
   </>

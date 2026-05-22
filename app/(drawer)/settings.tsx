@@ -1,5 +1,6 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { Text } from "@/src/components/StyledText";
+import { View } from "react-native";
 
 export default function SettingsScreen() {
   return (

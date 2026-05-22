@@ -1,7 +1,9 @@
 import React from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, TouchableOpacity } from 'react-native';
+import { Text } from '@/src/components/StyledText';
 import { WhatsAppQRCode } from "./WhatsAppQRCode";
 import { WhatsAppPairCode } from "./WhatsAppPairCode";
+import { COLORS } from "@/src/theme/colors";
 
 export type ConnectionMethod = "qr" | "pair";
 
@@ -35,11 +37,8 @@ export const WhatsAppLinker: React.FC<WhatsAppLinkerProps> = ({
 }) => {
   return (
     <View>
-      <View className="mb-8 mt-4">
-        <Text className="text-3xl font-extrabold text-white mb-2 tracking-tight">
-          Vincular WhatsApp
-        </Text>
-        <Text className="text-gray-400 text-base">
+      <View className="mb-8 mt-2">
+        <Text className="text-base" style={{ color: COLORS.text.secondary }}>
           Elige como conectar tu numero al bot
         </Text>
       </View>
@@ -54,9 +53,8 @@ export const WhatsAppLinker: React.FC<WhatsAppLinkerProps> = ({
             }`}
           >
             <Text
-              className={`font-bold ${
-                method === "qr" ? "text-white" : "text-gray-500"
-              }`}
+              className="font-bold"
+              style={{ color: method === "qr" ? COLORS.text.primary : COLORS.text.muted }}
             >
               Codigo QR
             </Text>
@@ -68,9 +66,8 @@ export const WhatsAppLinker: React.FC<WhatsAppLinkerProps> = ({
             }`}
           >
             <Text
-              className={`font-bold ${
-                method === "pair" ? "text-white" : "text-gray-500"
-              }`}
+              className="font-bold"
+              style={{ color: method === "pair" ? COLORS.text.primary : COLORS.text.muted }}
             >
               Codigo de texto
             </Text>

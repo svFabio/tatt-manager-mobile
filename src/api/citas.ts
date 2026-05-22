@@ -24,8 +24,8 @@ const normalizeDetalle = (id: number, raw: Record<string, unknown>): CitaDetails
     referencia: (raw.referencia as string) ?? (raw.fotoReferenciaUrl as string) ?? "",
     zona: (raw.zona as string) ?? (raw.zonaDelCuerpo as string) ?? "—",
     tamano: (raw.tamano as string) ?? (raw.tamanoEnCm as string) ?? "—",
-    clienteNombre: (raw.clienteNombre as string) ?? (raw.nombre as string) ?? ((raw.cliente as any)?.nombre as string) ?? "Sin nombre",
-    artistaNombre: (raw.artistaNombre as string) ?? ((raw.artista as any)?.nombre as string) ?? "Sin asignar",
+    clienteNombre: (raw.clienteNombre as string) ?? (raw.nombre as string) ?? ((raw.cliente as Record<string, unknown>)?.nombre as string) ?? "Sin nombre",
+    artistaNombre: (raw.artistaNombre as string) ?? ((raw.artista as Record<string, unknown>)?.nombre as string) ?? "Sin asignar",
     estado: (raw.estado as string) ?? (raw.estadoCita as string) ?? "PENDIENTE",
 });
 
@@ -56,9 +56,9 @@ export const CitasAPI = {
     },
 
     // COTIZA UNA SOLICITUD PENDIENTE
-    cotizarSolicitud: async (id: number, precioCotizado: number, horasEstimadas: number): Promise<ApiResponse<any>> => {
+    cotizarSolicitud: async (id: number, precioCotizado: number, horasEstimadas: number): Promise<ApiResponse<Record<string, unknown>>> => {
         return api
-            .patch<ApiResponse<any>>(`/solicitudes/${id}/cotizar`, { precioCotizado, horasEstimadas })
+            .patch<ApiResponse<Record<string, unknown>>>(`/solicitudes/${id}/cotizar`, { precioCotizado, horasEstimadas })
             .then((r) => r.data);
     },
 } as const;

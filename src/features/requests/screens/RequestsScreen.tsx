@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { View, Text, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { Text } from '@/src/components/StyledText';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useRouter } from 'expo-router';
@@ -70,7 +71,8 @@ export default function RequestsScreen() {
                             >
                                 <Text
                                     style={{ includeFontPadding: false, lineHeight: 22 }}
-                                    className={`text-sm font-bold pb-0.5 ${isActive ? 'text-white' : 'text-gray-400'}`}
+                                    className="text-sm font-bold pb-0.5"
+                                    style={{ color: isActive ? COLORS.text.primary : COLORS.text.muted }}
                                 >
                                     {f.label}
                                 </Text>
@@ -79,7 +81,7 @@ export default function RequestsScreen() {
                     }}
                 />
 
-                <Text style={{ includeFontPadding: false, lineHeight: 20 }} className="text-gray-500 text-xs mb-4 pb-1">
+                <Text style={{ includeFontPadding: false, lineHeight: 20, color: COLORS.text.secondary }} className="text-xs mb-4 pb-1">
                     {filtered.length} solicitud{filtered.length !== 1 ? 'es' : ''}
                 </Text>
             </View>

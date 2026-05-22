@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, TextInput, Image, Alert, ActivityIndicator, Modal } from 'react-native';
+import { View, TouchableOpacity, ScrollView, Image, Alert, ActivityIndicator, Modal } from 'react-native';
+import { Text, TextInput } from '@/src/components/StyledText';
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter, useFocusEffect } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
@@ -301,7 +302,7 @@ export default function EndSessionScreen() {
             <Text className="flex-1 text-white text-sm font-medium">
               {selectedCita ? `${selectedCita.cliente?.nombre ?? (selectedCita as any).clienteNombre} - ${new Date(selectedCita.fechaHoraInicio || (selectedCita as any).fecha).toLocaleDateString()}` : 'Seleccionar sesión...'}
             </Text>
-            <Feather name="chevron-down" size={16} color="#666" />
+            <Feather name="chevron-down" size={16} color={COLORS.text.muted} />
           </TouchableOpacity>
           
           {dropdownCitaOpen && (
@@ -324,7 +325,7 @@ export default function EndSessionScreen() {
                 </TouchableOpacity>
               ))}
               {citas.length === 0 && (
-                <Text className="text-gray-500 py-3 px-4 text-sm">No hay citas pendientes.</Text>
+                <Text className="py-3 px-4 text-sm" style={{ color: COLORS.text.muted }}>No hay citas pendientes.</Text>
               )}
             </View>
           )}
@@ -358,11 +359,11 @@ export default function EndSessionScreen() {
         {/* Session Notes */}
         <View className="bg-dark p-5 rounded-xl border border-white/5 mb-4">
           <Text className="text-primary-light text-[10px] font-bold tracking-widest mb-3">NOTAS DE LA SESIÓN</Text>
-          <View className="bg-dark-100 rounded-lg p-4 h-24 border border-transparent focus:border-[#7B3FF5]/50">
+          <View className="bg-dark-100 rounded-lg p-4 h-24 border border-transparent focus:border-gold-light/50">
             <TextInput
               className="flex-1 text-white text-sm"
               placeholder="Detalles sobre la sesión..."
-              placeholderTextColor="#666"
+              placeholderTextColor={COLORS.text.muted}
               multiline
               textAlignVertical="top"
               value={observaciones}
@@ -389,7 +390,7 @@ export default function EndSessionScreen() {
                   className="flex-1 text-white text-sm ml-2"
                   keyboardType="numeric"
                   placeholder="250"
-                  placeholderTextColor="#666"
+                  placeholderTextColor={COLORS.text.muted}
                   value={cobroTatuaje}
                   onChangeText={setCobroTatuaje}
                 />
@@ -408,7 +409,7 @@ export default function EndSessionScreen() {
           <View className="flex-row justify-between items-center mb-4">
             <Text className="text-primary-light text-[10px] font-bold tracking-widest">REGISTRO DE CAPS USADOS</Text>
             <TouchableOpacity onPress={() => setCapsUsadas({})}>
-              <Feather name="trash-2" size={16} color="#666" />
+              <Feather name="trash-2" size={16} color={COLORS.text.muted} />
             </TouchableOpacity>
           </View>
 
@@ -416,13 +417,13 @@ export default function EndSessionScreen() {
             <View key={tinta.id} className={`bg-dark-100 rounded-lg p-4 ${index !== tintas.length -1 ? 'mb-3' : ''}`}>
               <View className="flex-row items-center justify-between mb-4">
                 <View className="flex-row items-center flex-1">
-                  <View className="w-3 h-3 rounded-full mr-2" style={{ backgroundColor: tinta.colorHex || '#FFF', borderWidth: 1, borderColor: '#333' }} />
+                  <View className="w-3 h-3 rounded-full mr-2" style={{ backgroundColor: tinta.colorHex || COLORS.text.primary, borderWidth: 1, borderColor: COLORS.dark[300] }} />
                   <Text className="text-white text-xs font-bold mr-2">{tinta.nombre}</Text>
                   <Text className="text-muted-dark text-[10px]">Stock total: {tinta.stock?.[0]?.cantidadActual || 0} ml</Text>
                 </View>
                 <View className="bg-dark px-2 py-1 rounded flex-row items-center">
                   <Text className="text-muted-dark text-[10px] mr-1">Marca</Text>
-                  <Feather name="chevron-down" size={12} color="#666" />
+                  <Feather name="chevron-down" size={12} color={COLORS.text.muted} />
                 </View>
               </View>
 
@@ -438,11 +439,11 @@ export default function EndSessionScreen() {
                       </Text>
                       <View className="bg-dark rounded-md flex-row items-center">
                         <TouchableOpacity onPress={() => handleCapChange(tinta.id, size, -1)} className="px-3 py-2">
-                          <Feather name="minus" size={12} color="#888" />
+                          <Feather name="minus" size={12} color={COLORS.text.secondary} />
                         </TouchableOpacity>
                         <Text className="text-white font-bold w-4 text-center text-xs">{count}</Text>
                         <TouchableOpacity onPress={() => handleCapChange(tinta.id, size, 1)} className="px-3 py-2">
-                          <Feather name="plus" size={12} color="#FFF" />
+                          <Feather name="plus" size={12} color={COLORS.text.primary} />
                         </TouchableOpacity>
                       </View>
                     </View>
@@ -462,7 +463,7 @@ export default function EndSessionScreen() {
           <View className="flex-row justify-between items-center mb-4">
             <Text className="text-primary-light text-[10px] font-bold tracking-widest">REGISTRO DE AGUJAS USADAS</Text>
             <TouchableOpacity onPress={() => setAgujasUsadasDict({})}>
-              <Feather name="trash-2" size={16} color="#666" />
+              <Feather name="trash-2" size={16} color={COLORS.text.muted} />
             </TouchableOpacity>
           </View>
 
@@ -472,24 +473,24 @@ export default function EndSessionScreen() {
               <View key={aguja.id} className={`bg-dark-100 rounded-lg p-4 ${index !== agujas.length -1 ? 'mb-3' : ''}`}>
                 <View className="flex-row items-center justify-between mb-4">
                   <View className="flex-row items-center flex-1">
-                    <MaterialCommunityIcons name="needle" size={16} color="#FFF" className="mr-2" />
+                    <MaterialCommunityIcons name="needle" size={16} color={COLORS.text.primary} className="mr-2" />
                     <Text className="text-white text-xs font-bold mr-2">{aguja.tipo}</Text>
                     <Text className="text-muted-dark text-[10px]">(Stock: {aguja.cantidadActual} u)</Text>
                   </View>
                   <View className="bg-dark px-2 py-1 rounded flex-row items-center">
                     <Text className="text-muted-dark text-[10px] mr-1">Marca</Text>
-                    <Feather name="chevron-down" size={12} color="#666" />
+                    <Feather name="chevron-down" size={12} color={COLORS.text.muted} />
                   </View>
                 </View>
 
                 <View className="items-center mt-2">
                   <View className="bg-dark rounded-md flex-row items-center px-4 py-1">
                     <TouchableOpacity onPress={() => handleAgujaChange(aguja.id, -1)} className="px-4 py-2">
-                      <Feather name="minus" size={12} color="#888" />
+                      <Feather name="minus" size={12} color={COLORS.text.secondary} />
                     </TouchableOpacity>
                     <Text className="text-white font-bold w-12 text-center text-sm">{count}</Text>
                     <TouchableOpacity onPress={() => handleAgujaChange(aguja.id, 1)} className="px-4 py-2">
-                      <Feather name="plus" size={12} color="#FFF" />
+                      <Feather name="plus" size={12} color={COLORS.text.primary} />
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -499,11 +500,18 @@ export default function EndSessionScreen() {
           {agujas.length === 0 && <Text className="text-muted-dark text-xs">No hay agujas en inventario.</Text>}
 
           {/* Resumen */}
-          <View className="bg-[#2A1D00] rounded-lg p-4 mt-4 flex-row border border-[#7B3FF5]/20">
-            <Feather name="info" size={16} color={COLORS.primary.light} className="mt-0.5" />
+          <View
+            className="rounded-lg p-4 mt-4 flex-row"
+            style={{
+              backgroundColor: COLORS.warning.ghost,
+              borderWidth: 1,
+              borderColor: 'rgba(245, 158, 11, 0.2)',
+            }}
+          >
+            <Feather name="info" size={16} color={COLORS.warning.text} style={{ marginTop: 2 }} />
             <View className="flex-1 ml-3">
-              <Text className="text-[#7B3FF5] text-[10px] font-bold tracking-widest mb-1">RESUMEN DE DESCUENTO</Text>
-              <Text className="text-[#7B3FF5]/80 text-[11px] leading-4">
+              <Text className="text-[10px] font-bold tracking-widest mb-1" style={{ color: COLORS.warning.text }}>RESUMEN DE DESCUENTO</Text>
+              <Text className="text-[11px] leading-4" style={{ color: COLORS.warning.DEFAULT }}>
                 Se descontarán un total de {totalCapsUsadas} caps y {totalAgujasUsadas} aguja/s del inventario general al finalizar esta sesión.
               </Text>
             </View>
@@ -513,16 +521,16 @@ export default function EndSessionScreen() {
         {/* Final Action Button */}
         <TouchableOpacity
           className={`flex-row justify-center items-center py-4 rounded-lg mt-2 ${!selectedCitaId || submitting ? 'opacity-50' : ''}`}
-          style={{ backgroundColor: '#7B3FF5' }}
+          style={{ backgroundColor: COLORS.gold.light }}
           disabled={!selectedCitaId || submitting}
           onPress={handleFinalizar}
         >
           {submitting ? (
-             <ActivityIndicator color="#0E0E0E" />
+             <ActivityIndicator color={COLORS.bg} />
           ) : (
             <>
-              <Feather name="check-circle" size={18} color="#0E0E0E" />
-              <Text className="text-[#0E0E0E] text-[11px] font-black tracking-widest ml-2">FINALIZAR SESIÓN Y DESCONTAR STOCK</Text>
+              <Feather name="check-circle" size={18} color={COLORS.bg} />
+              <Text className="text-bg text-[11px] font-black tracking-widest ml-2">FINALIZAR SESIÓN Y DESCONTAR STOCK</Text>
             </>
           )}
         </TouchableOpacity>

@@ -1,5 +1,7 @@
-import { Modal, View, Text, TouchableOpacity } from 'react-native';
+import { Modal, View, TouchableOpacity } from 'react-native';
+import { Text } from '@/src/components/StyledText';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { COLORS } from '../../../theme/colors';
 
 interface Props {
     visible: boolean;
@@ -13,12 +15,19 @@ export function StockInsuficienteModal({ visible, nombre, cantidad, unidad, onCl
     return (
         <Modal transparent animationType="fade" visible={visible} onRequestClose={onClose}>
             <View className="flex-1 bg-black/60 items-center justify-center px-6">
-                <View className="bg-[#161616] w-full rounded-3xl p-6 border border-white/5">
+                <View className="bg-dark-100 w-full rounded-3xl p-6 border border-white/5">
 
                     {/* Icono */}
                     <View className="items-center mb-5">
-                        <View className="w-16 h-16 rounded-full bg-red-900/30 border border-red-800/40 items-center justify-center">
-                            <MaterialIcons name="remove-shopping-cart" size={30} color="#F87171" />
+                        <View
+                            className="w-16 h-16 rounded-full items-center justify-center"
+                            style={{
+                                backgroundColor: COLORS.danger.bg,
+                                borderWidth: 1,
+                                borderColor: COLORS.danger.border,
+                            }}
+                        >
+                            <MaterialIcons name="remove-shopping-cart" size={30} color={COLORS.danger.text} />
                         </View>
                     </View>
 
@@ -28,17 +37,17 @@ export function StockInsuficienteModal({ visible, nombre, cantidad, unidad, onCl
                     </Text>
 
                     {/* Descripción */}
-                    <Text className="text-gray-400 text-sm text-center mb-6 leading-5">
+                    <Text className="text-sm text-center mb-6 leading-5" style={{ color: COLORS.text.secondary }}>
                         No puedes reducir más el stock de{' '}
                         <Text className="text-white font-semibold">{nombre}</Text>.
                     </Text>
 
                     {/* Stock actual */}
                     <View className="bg-dark-100 rounded-2xl px-4 py-3 flex-row items-center justify-between mb-6 border border-white/5">
-                        <Text className="text-gray-500 text-xs uppercase tracking-widest">Stock actual</Text>
-                        <Text className="text-red-400 font-bold text-base">
+                        <Text className="text-xs uppercase tracking-widest" style={{ color: COLORS.text.muted }}>Stock actual</Text>
+                        <Text className="font-bold text-base" style={{ color: COLORS.danger.text }}>
                             {cantidad}{' '}
-                            <Text className="text-gray-500 text-sm font-normal">{unidad}</Text>
+                            <Text className="text-sm font-normal" style={{ color: COLORS.text.muted }}>{unidad}</Text>
                         </Text>
                     </View>
 
