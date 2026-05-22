@@ -1,11 +1,6 @@
-import React from "react";
-import { Text } from "@/src/components/StyledText";
-import { View } from "react-native";
+import React from 'react';
+import { WhatsAppScreen } from '../../src/features/whatsapp/components/WhatsAppScreen';
 
-export default function ChatScreen() {
-  return (
-    <View className="flex-1 bg-dark items-center justify-center">
-      <Text className="text-white text-xl font-bold text-center">EN DESARROLLO CHAT</Text>
-    </View>
-  );
+export default function ChatPage() {
+  return <WhatsAppScreen />;
 }
