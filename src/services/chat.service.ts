@@ -17,7 +17,7 @@ api.interceptors.request.use(async (config) => {
     // }
     
     // Por ahora dejamos tu boceto limpio, pero dinámico:
-    config.headers.Authorization = `Bearer TU_TOKEN_DE_LOGIN`; 
+    config.headers.Authorization = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJhZG1pbkB0ZXN0LmNvbSIsInJvbCI6IkFETUlOIiwibmVnb2Npb0lkIjoxLCJpYXQiOjE3Nzk2NjI5NDksImV4cCI6MTc4MDI2Nzc0OX0.A9bvfbbtw696uWsUP1CtuKJF1ePcZoacUtjN0O_VO9w`; 
 
     // 2. Inyectar el negocioId para el tenantMiddleware
     config.headers['negocioid'] = '1'; // Es buena práctica usar minúsculas en HTTP headers

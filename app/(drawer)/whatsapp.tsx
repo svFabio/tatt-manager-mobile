@@ -1,8 +1,10 @@
+// app/(drawer)/whatsapp.tsx
 import React, { useState, useEffect } from "react";
 import { 
   ActivityIndicator, Alert, ScrollView, 
-  KeyboardAvoidingView, Platform, View
+  KeyboardAvoidingView, Platform, View, TouchableOpacity, Text, StyleSheet
 } from "react-native";
+import { useRouter } from "expo-router"; // <-- 1. Importamos el enrutador
 import { WhatsAppAPI } from "../../src/api/whatsapp";
 import { useWhatsAppSocket } from "../../src/hooks/useWhatsAppSocket";
 import { WhatsAppConnected } from "../../src/features/whatsapp/components/WhatsAppConnected";
@@ -10,6 +12,7 @@ import { WhatsAppLinker, ConnectionMethod } from "../../src/features/whatsapp/co
 import { COLORS } from "../../src/theme/colors";
 
 export default function WhatsAppScreen() {
+  const router = useRouter(); // <-- 2. Inicializamos el router
   const { wsState, loading, refreshStatus } = useWhatsAppSocket(1); 
   const [phoneNumber, setPhoneNumber] = useState("");
   const [pairingCode, setPairingCode] = useState<string | null>(null);
@@ -91,14 +94,26 @@ export default function WhatsAppScreen() {
     );
   }
 
-  // Si está conectado, renderizamos la UI verde de éxito
+  // Si está conectado, renderizamos la UI verde de éxito + ACCESO AL HISTORIAL (HU-12)
   if (wsState.conectado) {
     return (
-      <WhatsAppConnected 
-        actionLoading={actionLoading}
-        onLogout={handleLogout}
-        onRestart={handleRestart}
-      />
+      <View style={{ flex: 1, backgroundColor: '#121212' }}>
+        <View style={{ flex: 1 }}>
+          <WhatsAppConnected 
+            actionLoading={actionLoading}
+            onLogout={handleLogout}
+            onRestart={handleRestart}
+          />
+        </View>
+
+        {/* BOTÓN AGREGADO PARA ACCEDER AL HISTORIAL DE CONVERSACIONES */}
+        <TouchableOpacity 
+          style={styles.historyButton}
+          onPress={() => router.push('/chat')} // Abre app/(drawer)/whatsapp/index.tsx
+        >
+          <Text style={styles.buttonText}>📂 Ver Historial de Chats</Text>
+        </TouchableOpacity>
+      </View>
     );
   }
 
@@ -122,3 +137,26 @@ export default function WhatsAppScreen() {
     </KeyboardAvoidingView>
   );
 }
+
+// Estilos agregados con colores oscuros/verdes para hacer match con tu app
+const styles = StyleSheet.create({
+  historyButton: {
+    backgroundColor: '#25D366', // Verde oficial de WhatsApp
+    padding: 16,
+    borderRadius: 12,
+    marginHorizontal: 24,
+    marginBottom: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
+  }
+});
