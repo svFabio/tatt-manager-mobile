@@ -4,7 +4,7 @@
  * NUNCA hardcodear hex en componentes — importar desde aquí.
  */
 
-import palette from './palette';
+const palette = require('./palette');
 
 export const COLORS = palette as {
   readonly bg: string;

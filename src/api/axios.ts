@@ -11,8 +11,16 @@ const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
+    // Importación dinámica para evitar ciclos de dependencia si los hubiera
+    const { useAuthStore } = require("../store/useAuthStore");
+    const { useStudioStore } = require("../store/useStudioStore");
+    
+    const studioToken = useStudioStore.getState().studioToken;
     const token = useAuthStore.getState().token;
-    if (token) config.headers.Authorization = `Bearer ${token}`;
+    
+    const activeToken = studioToken || token;
+    
+    if (activeToken) config.headers.Authorization = `Bearer ${activeToken}`;
     return config;
   },
   (error) => Promise.reject(error)
@@ -23,7 +31,7 @@ api.interceptors.response.use(
   (error) => {
     if (error.response) {
       console.error(
-        `[API Error] ${error.response.status}: ${error.response.data?.message || "Error desconocido"}`
+        `[API Error] ${error.response.status}: ${error.response.data?.error || error.response.data?.message || "Error desconocido"}`
       );
     } else if (error.request) {
       console.error("[API Error] No se recibió respuesta del servidor.");

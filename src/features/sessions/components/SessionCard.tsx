@@ -86,17 +86,21 @@ export const SessionCard = ({ session, onPress }: Props) => {
               <MaterialIcons name="schedule" size={11} color={COLORS.text.secondary} />
               <Text className="text-xs" style={{ color: COLORS.text.secondary }}>{formatDuration(session.duracionEnHoras)}</Text>
             </View>
-            {session.cita?.zonaDelCuerpo && (
-              <>
-                <Text className="text-xs" style={{ color: COLORS.text.dimmed }}>|</Text>
-                <View className="flex-row items-center" style={{ gap: 4 }}>
-                  <MaterialIcons name="edit" size={11} color={COLORS.text.secondary} />
-                  <Text className="text-xs" style={{ color: COLORS.text.secondary }} numberOfLines={1}>
-                    {session.cita.zonaDelCuerpo}
-                  </Text>
-                </View>
-              </>
-            )}
+            {(() => {
+              const zona = session.cita?.zonaDelCuerpo || session.cita?.solicitud?.zonaDelCuerpo;
+              if (!zona) return null;
+              return (
+                <>
+                  <Text className="text-xs" style={{ color: COLORS.text.dimmed }}>|</Text>
+                  <View className="flex-row items-center" style={{ gap: 4 }}>
+                    <MaterialIcons name="edit" size={11} color={COLORS.text.secondary} />
+                    <Text className="text-xs" style={{ color: COLORS.text.secondary }} numberOfLines={1}>
+                      {zona}
+                    </Text>
+                  </View>
+                </>
+              );
+            })()}
           </View>
         </View>
       </View>

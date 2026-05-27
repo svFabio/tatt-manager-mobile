@@ -74,8 +74,10 @@ function RootLayoutNav() {
           contentStyle: { backgroundColor: COLORS.dark.DEFAULT },
         }}
       >
+        <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen name="(drawer)" options={{ headerShown: false }} />
         <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+        <Stack.Screen name="(studio)" options={{ headerShown: false }} />
         <Stack.Screen name="+not-found" />
       </Stack>
     </ReactNative.View>

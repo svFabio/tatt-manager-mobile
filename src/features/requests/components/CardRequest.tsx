@@ -11,10 +11,11 @@ interface CardRequestProps {
     artist: string;
     status: EstadoCita;
     recibido: string;
+    zona?: string;
     onPress: () => void;
 }
 
-export const CardRequest = ({ name, artist, status, recibido, onPress }: CardRequestProps) => (
+export const CardRequest = ({ name, artist, status, recibido, zona, onPress }: CardRequestProps) => (
     <View className="bg-dark mb-4 p-5 rounded-[28px] border border-white/5">
         {/* Header */}
         <View className="flex-row justify-between items-start mb-4">
@@ -28,10 +29,18 @@ export const CardRequest = ({ name, artist, status, recibido, onPress }: CardReq
             </View>
         </View>
 
-        {/* Artist row */}
+        {/* Artist & Zone row */}
         <View className="flex-row items-center mb-4">
-            <MaterialIcons name="person-outline" size={14} color={COLORS.text.muted} />
-            <Text className="text-xs ml-1" style={{ color: COLORS.text.muted }}>{artist}</Text>
+            <View className="flex-row items-center mr-4">
+                <MaterialIcons name="person-outline" size={14} color={COLORS.text.muted} />
+                <Text className="text-xs ml-1" style={{ color: COLORS.text.muted }}>{artist}</Text>
+            </View>
+            {zona ? (
+                <View className="flex-row items-center">
+                    <MaterialIcons name="accessibility" size={14} color={COLORS.text.muted} />
+                    <Text className="text-xs ml-1" style={{ color: COLORS.text.muted }}>{zona}</Text>
+                </View>
+            ) : null}
         </View>
 
         {/* Footer action */}

@@ -1,6 +1,7 @@
 import React from "react";
 import { View, type TextInputProps } from "react-native";
 import { Text, TextInput } from "@/src/components/StyledText";
+import { COLORS } from "@/src/theme/colors";
 
 interface InputFieldProps extends TextInputProps {
   /** Etiqueta del campo */
@@ -34,7 +35,7 @@ export const InputField: React.FC<InputFieldProps> = ({
           ${className || ""}
         `}
         placeholderTextColor={COLORS.text.muted}
-        {...rest}
+        {...props}
       />
       {error ? (
         <Text className="text-alert text-xs mt-1">{error}</Text>
