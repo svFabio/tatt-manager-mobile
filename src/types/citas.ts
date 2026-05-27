@@ -11,6 +11,9 @@ export type SolicitudItem = {
         nombre?: string
         numeroWhatsapp?: string
     }
+    artista?: {
+        nombre?: string
+    }
     // Compatibilidad con respuestas planas de /api/citas/*
     fechaHoraInicio?: string | Date | null
     clienteNombre?: string
