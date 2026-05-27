@@ -115,10 +115,20 @@ export function InventarioItemCard({ item, onUpdated, index = 0 }: Props) {
             <View className="flex-row items-start justify-between mb-3">
                 <View className="flex-row items-center flex-1 mr-2">
                     <View
-                        className="w-9 h-9 rounded-xl items-center justify-center mr-3"
-                        style={{ backgroundColor: `${dotColor}20` }}
+                        className="w-10 h-10 rounded-xl items-center justify-center mr-3"
+                        style={{ 
+                            backgroundColor: dotColor === '#000000' || dotColor === '#000' 
+                                ? 'rgba(255,255,255,0.1)' 
+                                : `${dotColor}20`,
+                            borderWidth: dotColor === '#000000' || dotColor === '#000' ? 1 : 0,
+                            borderColor: 'rgba(255,255,255,0.15)'
+                        }}
                     >
-                        <MaterialCommunityIcons name={getCatIcon() as keyof typeof MaterialCommunityIcons.glyphMap} size={20} color={dotColor} />
+                        <MaterialCommunityIcons 
+                            name={getCatIcon() as keyof typeof MaterialCommunityIcons.glyphMap} 
+                            size={22} 
+                            color={dotColor === '#000000' || dotColor === '#000' ? '#FFFFFF' : dotColor} 
+                        />
                     </View>
                     <View className="flex-1">
                         <Text className="text-white font-semibold text-base" numberOfLines={1}>
@@ -148,7 +158,7 @@ export function InventarioItemCard({ item, onUpdated, index = 0 }: Props) {
                             className="p-2 rounded-lg ml-1"
                             style={{ backgroundColor: COLORS.primary.ghost }}
                         >
-                            <MaterialIcons name="edit" size={22} color={COLORS.primary.DEFAULT} />
+                            <MaterialIcons name="edit" size={22} color="#FFFFFF" />
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -161,7 +171,7 @@ export function InventarioItemCard({ item, onUpdated, index = 0 }: Props) {
                     className="flex-1 py-3 items-center"
                     activeOpacity={0.6}
                 >
-                    <Text style={{ color: COLORS.text.secondary }} className="font-bold text-sm">−10</Text>
+                    <Text style={{ color: COLORS.danger.DEFAULT }} className="font-bold text-sm">−10</Text>
                 </TouchableOpacity>
 
                 <View style={{ width: 1, height: 20, backgroundColor: COLORS.dark[300] }} />
@@ -171,7 +181,7 @@ export function InventarioItemCard({ item, onUpdated, index = 0 }: Props) {
                     onChangeText={setInputValue}
                     keyboardType="numeric"
                     className="flex-1 text-center text-white font-bold text-base py-3"
-                    style={{ backgroundColor: COLORS.bg }}
+                    style={{ backgroundColor: 'transparent' }}
                 />
 
                 <View style={{ width: 1, height: 20, backgroundColor: COLORS.dark[300] }} />
@@ -182,7 +192,7 @@ export function InventarioItemCard({ item, onUpdated, index = 0 }: Props) {
                     className="flex-1 py-3 items-center"
                     activeOpacity={0.6}
                 >
-                    <Text className="text-sm font-bold" style={{ color: COLORS.primary.DEFAULT }}>+10</Text>
+                    <Text className="text-sm font-bold" style={{ color: COLORS.success.DEFAULT }}>+10</Text>
                 </TouchableOpacity>
 
                 <View style={{ width: 1, height: 20, backgroundColor: COLORS.dark[300] }} />

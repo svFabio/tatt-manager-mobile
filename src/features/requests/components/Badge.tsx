@@ -28,6 +28,27 @@ const VARIANT_STYLES: Record<EstadoCita, { bg: string; dot: string; text: string
         text: COLORS.status.cancelada.text,
         border: COLORS.status.cancelada.bg,
     },
+    COTIZADA: {
+        bg: COLORS.status.confirmada.bg,
+        dot: COLORS.status.confirmada.text,
+        text: COLORS.status.confirmada.text,
+        border: COLORS.status.confirmada.bg,
+    },
+    RECHAZADA: {
+        bg: COLORS.status.cancelada.bg,
+        dot: COLORS.status.cancelada.text,
+        text: COLORS.status.cancelada.text,
+        border: COLORS.status.cancelada.bg,
+    },
+};
+
+const DISPLAY_LABELS: Record<EstadoCita, string> = {
+    PENDIENTE: 'Nueva',
+    CONFIRMADA: 'Confirmada',
+    FINALIZADA: 'Finalizada',
+    CANCELADA: 'Cancelada',
+    COTIZADA: 'Cotizada',
+    RECHAZADA: 'Rechazada',
 };
 
 interface BadgeProps {
@@ -36,6 +57,7 @@ interface BadgeProps {
 
 export const Badge = ({ variant }: BadgeProps) => {
     const s = VARIANT_STYLES[variant] ?? VARIANT_STYLES.PENDIENTE;
+    const label = DISPLAY_LABELS[variant] ?? variant;
     return (
         <View
             className="flex-row items-center self-start px-3 py-1 rounded-full"
@@ -43,8 +65,9 @@ export const Badge = ({ variant }: BadgeProps) => {
         >
             <View className="w-1.5 h-1.5 rounded-full mr-2" style={{ backgroundColor: s.dot }} />
             <Text className="text-[10px] font-bold uppercase tracking-widest" style={{ color: s.text }}>
-                {variant}
+                {label}
             </Text>
         </View>
     );
 };
+
