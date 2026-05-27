@@ -17,6 +17,7 @@ interface SessionForm {
   fecha: Date;
   horario: string;
   cotizacion: string;
+  artistaId?: number;
 }
 
 interface FieldErrors {
@@ -26,6 +27,7 @@ interface FieldErrors {
   tamano?: boolean;
   horario?: boolean;
   cotizacion?: boolean;
+  artistaId?: boolean;
 }
 
 interface Props {
@@ -52,6 +54,8 @@ const RegistroCitaModal = ({ visible, onClose, onSave, selectedDate }: Props) =>
   const [loadingHorarios, setLoadingHorarios] = useState(false);
   const [saving, setSaving] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const [artistas, setArtistas] = useState<{ id: number, nombre: string }[]>([]);
+  const [loadingArtistas, setLoadingArtistas] = useState(false);
 
   // Shake animations per field
   const shakeAnims = useRef<Record<string, Animated.Value>>({
@@ -61,6 +65,7 @@ const RegistroCitaModal = ({ visible, onClose, onSave, selectedDate }: Props) =>
     tamano: new Animated.Value(0),
     horario: new Animated.Value(0),
     cotizacion: new Animated.Value(0),
+    artistaId: new Animated.Value(0),
   }).current;
 
   const shakeField = (field: string) => {
@@ -74,13 +79,17 @@ const RegistroCitaModal = ({ visible, onClose, onSave, selectedDate }: Props) =>
   };
 
   // Fetch real available schedules from backend
-  const fetchHorarios = useCallback(async (fecha: Date, duracion: number) => {
+  const fetchHorarios = useCallback(async (fecha: Date, duracion: number, artistaId?: number) => {
+    if (!artistaId) {
+      setHorarios([]);
+      return;
+    }
     setLoadingHorarios(true);
     setHorarios([]);
     setForm(prev => ({ ...prev, horario: '' })); // Reset selected
     try {
       const fechaStr = `${fecha.getFullYear()}-${String(fecha.getMonth() + 1).padStart(2, '0')}-${String(fecha.getDate()).padStart(2, '0')}`;
-      const res = await api.get('/citas/horarios-disponibles', { params: { fecha: fechaStr, duracion } });
+      const res = await api.get('/citas/horarios-disponibles', { params: { fecha: fechaStr, duracion, artistaId } });
       const data = res.data?.horarios ?? res.data?.data?.horarios ?? [];
       setHorarios(Array.isArray(data) ? data : []);
     } catch (e) {
@@ -91,12 +100,31 @@ const RegistroCitaModal = ({ visible, onClose, onSave, selectedDate }: Props) =>
     }
   }, []);
 
+  useEffect(() => {
+    const fetchArtistas = async () => {
+      setLoadingArtistas(true);
+      try {
+        const res = await api.get('/citas/artistas');
+        setArtistas(res.data);
+      } catch (e) {
+         console.error('Error fetching artistas', e);
+      } finally {
+         setLoadingArtistas(false);
+      }
+    };
+    if (visible) {
+      fetchArtistas();
+    }
+  }, [visible]);
+
   // Load horarios when modal opens, fecha changes, or horas changes
   useEffect(() => {
-    if (visible) {
-      fetchHorarios(form.fecha, form.horas);
+    if (visible && form.artistaId) {
+      fetchHorarios(form.fecha, form.horas, form.artistaId);
+    } else if (!form.artistaId) {
+      setHorarios([]);
     }
-  }, [visible, form.fecha, form.horas, fetchHorarios]);
+  }, [visible, form.fecha, form.horas, form.artistaId, fetchHorarios]);
 
   const ajustarHoras = (monto: number) => {
     setForm(prev => ({ ...prev, horas: Math.max(1, Math.min(12, prev.horas + monto)), horario: '' }));
@@ -141,6 +169,11 @@ const RegistroCitaModal = ({ visible, onClose, onSave, selectedDate }: Props) =>
       shakeField('horario');
       valid = false;
     }
+    if (!form.artistaId) {
+      newErrors.artistaId = true;
+      shakeField('artistaId');
+      valid = false;
+    }
     const cot = parseFloat(form.cotizacion);
     if (!form.cotizacion || isNaN(cot) || cot <= 0) {
       newErrors.cotizacion = true;
@@ -171,7 +204,7 @@ const RegistroCitaModal = ({ visible, onClose, onSave, selectedDate }: Props) =>
   const resetForm = () => {
     setForm({
       nombre: '', telefono: '', zona: '', tamano: '', horas: 1,
-      fecha: new Date(), horario: '', cotizacion: ''
+      fecha: new Date(), horario: '', cotizacion: '', artistaId: undefined
     });
     setErrors({});
   };
@@ -316,6 +349,34 @@ const RegistroCitaModal = ({ visible, onClose, onSave, selectedDate }: Props) =>
                   onChange={handleDateChange}
                 />
               )}
+
+              {/* Artista */}
+              <Animated.View style={{ transform: [{ translateX: shakeAnims.artistaId }] }} className="mb-4">
+                <Text className="text-[10px] mb-1.5 uppercase font-bold tracking-widest" style={labelStyle('artistaId')}>Tatuador *</Text>
+                {loadingArtistas ? (
+                   <ActivityIndicator color={COLORS.primary.DEFAULT} size="small" className="self-start m-2" />
+                ) : (
+                  <View className="flex-row flex-wrap" style={{ gap: 8 }}>
+                    {artistas.map((a) => {
+                      const selected = form.artistaId === a.id;
+                      return (
+                        <TouchableOpacity
+                          key={a.id}
+                          onPress={() => { setForm({ ...form, artistaId: a.id }); setErrors(e => ({ ...e, artistaId: false })); }}
+                          activeOpacity={0.7}
+                          className={`px-4 py-3 rounded-xl border-[1.5px] ${
+                            selected ? 'bg-primary border-primary' : 'bg-dark-100 border-dark-200'
+                          }`}
+                        >
+                          <Text className={`text-sm ${selected ? 'text-white font-bold' : 'text-text-secondary font-medium'}`}>
+                            {a.nombre}
+                          </Text>
+                        </TouchableOpacity>
+                      );
+                    })}
+                  </View>
+                )}
+              </Animated.View>
 
               {/* Horarios Disponibles */}
               <Animated.View style={{ transform: [{ translateX: shakeAnims.horario }] }}>

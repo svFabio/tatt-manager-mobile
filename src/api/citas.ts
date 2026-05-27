@@ -61,4 +61,8 @@ export const CitasAPI = {
             .patch<ApiResponse<Record<string, unknown>>>(`/solicitudes/${id}/cotizar`, { precioCotizado, horasEstimadas, mensajePersonalizado })
             .then((r) => r.data);
     },
+
+    getArtistasDisponibles: async (): Promise<{ id: number, nombre: string }[]> => {
+        return api.get<{ id: number, nombre: string }[]>(`${BASE}/artistas`).then(r => r.data);
+    },
 } as const;

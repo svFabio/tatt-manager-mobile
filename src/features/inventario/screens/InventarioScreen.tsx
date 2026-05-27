@@ -75,13 +75,10 @@ export default function InventarioScreen() {
                 {/* Stats en fila horizontal */}
                 <View className="flex-row gap-3">
                     <View className="flex-1">
-                        <StatCard label="TOTAL" value={stats.totalItems} />
+                        <StatCard label="STOCK TOTAL" value={stats.totalItems} />
                     </View>
                     <View className="flex-1">
-                        <StatCard label="NORMAL" value={stats.enStockNormal} />
-                    </View>
-                    <View className="flex-1">
-                        <StatCard label="BAJO" value={stats.enStockBajo} variant="bajo" />
+                        <StatCard label="STOCK BAJO" value={stats.enStockBajo} variant="bajo" />
                     </View>
                 </View>
 

@@ -28,6 +28,7 @@ export interface CreateSessionDTO {
   fecha: string;
   horario: string;
   cotizacion: number;
+  artistaId?: number;
 }
 
 export interface UpdateSessionDTO extends CreateSessionDTO {}
@@ -54,7 +55,8 @@ export const sessionService = {
         duracionEnHoras: data.horas,
         fecha: data.fecha,
         horario: data.horario,
-        cotizacion: data.cotizacion
+        cotizacion: data.cotizacion,
+        artistaId: data.artistaId
       });
       return response.data;
     } catch (error: unknown) {

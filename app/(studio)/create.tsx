@@ -6,6 +6,7 @@ import { router } from "expo-router";
 import { CustomButton, InputField } from "@/src/components/ui";
 import api from "@/src/api/axios";
 import { COLORS } from "@/src/theme/colors";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function CreateStudioScreen() {
   const [name, setName] = useState("");
@@ -41,7 +42,7 @@ export default function CreateStudioScreen() {
       >
         <View className="items-center mb-10">
           <View className="w-16 h-16 rounded-2xl bg-dark-200 items-center justify-center mb-6" style={{ borderWidth: 1, borderColor: COLORS.primary.border }}>
-            <Text className="text-3xl">✨</Text>
+            <Ionicons name="add-circle-outline" size={32} color={COLORS.primary.DEFAULT} />
           </View>
           <Text className="text-white text-3xl font-bold text-center mb-4">
             Crear Estudio

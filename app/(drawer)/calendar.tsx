@@ -63,6 +63,7 @@ export default function CalendarScreen() {
       fecha: fechaFormateada,
       horario: nuevaCita.horario,
       cotizacion: cotizacionNum,
+      artistaId: nuevaCita.artistaId,
     });
 
     Alert.alert(

@@ -18,7 +18,7 @@ export function StatCard({ label, value, variant = 'default' }: Props) {
 
     return (
         <View
-            className="rounded-2xl p-4 mb-3 flex-row items-center"
+            className="rounded-2xl p-4 mb-3 flex-row items-center min-h-[72px]"
             style={{
                 backgroundColor: isBajo ? COLORS.danger.bg : COLORS.dark[100],
                 borderWidth: 1,
@@ -38,8 +38,6 @@ export function StatCard({ label, value, variant = 'default' }: Props) {
                     className="text-[10px] font-bold tracking-widest"
                     style={{ color: isBajo ? COLORS.danger.badge : COLORS.text.muted }}
                     numberOfLines={1}
-                    adjustsFontSizeToFit={true}
-                    minimumFontScale={0.7}
                 >
                     {label}
                 </Text>

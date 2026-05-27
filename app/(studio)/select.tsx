@@ -64,8 +64,8 @@ export default function SelectStudioScreen() {
         
         {/* Header Icon */}
         <View className="items-center mt-10 mb-8">
-          <View style={{ width: 120, height: 80, alignItems: "center", justifyContent: "center" }}>
-             <Text className="text-white text-6xl">💉</Text>
+          <View style={{ width: 80, height: 80, borderRadius: 20, alignItems: "center", justifyContent: "center", backgroundColor: COLORS.dark[200], borderWidth: 1, borderColor: COLORS.primary.border }}>
+             <Ionicons name="briefcase-outline" size={36} color={COLORS.primary.DEFAULT} />
           </View>
           <Text className="text-white text-3xl font-bold text-center mt-6">
             Seleccionar espacio{"\n"}de trabajo
