@@ -16,9 +16,10 @@ const formatDate = (value: string | Date | null): string => {
 export const AppointmentCard = ({ item, onPress }: AppointmentCardProps) => (
     <CardRequest
         name={item.cliente?.nombre || item.clienteNombre || 'Sin nombre'}
-        artist={item.artistaNombre || 'Sin asignar'}
+        artist={item.artista?.nombre || item.artistaNombre || 'Sin asignar'}
         status={item.estado}
         recibido={formatDate(item.recibidaEn ?? item.recibido ?? null)}
+        zona={item.zonaDelCuerpo}
         onPress={onPress}
     />
 );

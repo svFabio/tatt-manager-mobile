@@ -1,4 +1,10 @@
 import api from '../api/axios';
+import type { AxiosError } from 'axios';
+
+const axiosMsg = (error: unknown, fallback: string): string => {
+  const e = error as AxiosError<{ error?: string }>;
+  return e?.response?.data?.error ?? fallback;
+};
 
 export interface Session {
   id: number;
@@ -13,20 +19,33 @@ export interface Session {
   estado?: string;
 }
 
+export interface CreateSessionDTO {
+  nombre: string;
+  telefono: string;
+  zona: string;
+  tamano?: string;
+  horas?: number;
+  fecha: string;
+  horario: string;
+  cotizacion: number;
+  artistaId?: number;
+}
+
+export interface UpdateSessionDTO extends CreateSessionDTO {}
+
 export const sessionService = {
   // Obtener todas las sesiones
   getAll: async (): Promise<Session[]> => {
     try {
       const response = await api.get('/sessions');
       return response.data;
-    } catch (error: any) {
-      console.error('Error getAll:', error);
-      throw new Error(error.response?.data?.error || 'Error al obtener sesiones');
+    } catch (error: unknown) {
+      throw new Error(axiosMsg(error, 'Error al obtener sesiones'));
     }
   },
 
   // Crear nueva sesión
-  create: async (data: any): Promise<Session> => {
+  create: async (data: CreateSessionDTO): Promise<Session> => {
     try {
       const response = await api.post('/citas/admin', {
         clienteNombre: data.nombre,
@@ -36,17 +55,17 @@ export const sessionService = {
         duracionEnHoras: data.horas,
         fecha: data.fecha,
         horario: data.horario,
-        cotizacion: data.cotizacion
+        cotizacion: data.cotizacion,
+        artistaId: data.artistaId
       });
       return response.data;
-    } catch (error: any) {
-      console.error('Error create:', error);
-      throw new Error(error.response?.data?.error || 'Error al crear sesión');
+    } catch (error: unknown) {
+      throw new Error(axiosMsg(error, 'Error al crear sesión'));
     }
   },
 
   // Actualizar sesión
-  update: async (id: number, data: any): Promise<Session> => {
+  update: async (id: number, data: UpdateSessionDTO): Promise<Session> => {
     try {
       const response = await api.put(`/sessions/${id}`, {
         nombre: data.nombre,
@@ -59,22 +78,18 @@ export const sessionService = {
         estado: 'CONFIRMADA'
       });
       return response.data.session;
-    } catch (error: any) {
-      console.error('Error update:', error);
-      throw new Error(error.response?.data?.error || 'Error al actualizar sesión');
+    } catch (error: unknown) {
+      throw new Error(axiosMsg(error, 'Error al actualizar sesión'));
     }
   },
 
   // Eliminar sesión
   delete: async (id: number): Promise<void> => {
     try {
-      console.log(`📡 Enviando DELETE a /sessions/${id}`);
       const response = await api.delete(`/sessions/${id}`);
-      console.log('✅ DELETE response:', response.data);
       return response.data;
-    } catch (error: any) {
-      console.error('❌ Error delete:', error);
-      throw new Error(error.response?.data?.error || 'Error al eliminar la sesión');
+    } catch (error: unknown) {
+      throw new Error(axiosMsg(error, 'Error al eliminar la sesión'));
     }
   },
 };

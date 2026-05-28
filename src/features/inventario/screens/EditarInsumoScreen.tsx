@@ -1,10 +1,17 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Alert, KeyboardAvoidingView, Platform, ScrollView, Modal } from 'react-native';
+import { View, TouchableOpacity, Alert, KeyboardAvoidingView, Platform, ScrollView, Modal } from 'react-native';
+import { Text, TextInput } from '@/src/components/StyledText';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { InventarioAPI } from '../../../api/inventario';
 import type { InventarioItem } from '../../../types/inventario';
 import { COLORS } from '../../../theme/colors';
+import type { AxiosError } from 'axios';
+
+const axiosMsg = (error: unknown, fallback: string): string => {
+    const e = error as AxiosError<{ error?: string }>;
+    return e?.response?.data?.error ?? fallback;
+};
 
 export default function EditarInsumoScreen() {
     const router = useRouter();
@@ -77,8 +84,8 @@ export default function EditarInsumoScreen() {
             } else {
                 showMessage('Error', (res as any).error || 'Error al actualizar el ítem');
             }
-        } catch (error: any) {
-            showMessage('Error', error.response?.data?.error || 'Ocurrió un error al guardar');
+        } catch (error: unknown) {
+            showMessage('Error', axiosMsg(error, 'Ocurrió un error al guardar'));
         } finally {
             setLoading(false);
         }
@@ -97,8 +104,8 @@ export default function EditarInsumoScreen() {
             } else {
                 showMessage('Error', (res as any).error || 'No se pudo eliminar el ítem');
             }
-        } catch (error: any) {
-            showMessage('Error', error.response?.data?.error || 'Error de conexión');
+        } catch (error: unknown) {
+            showMessage('Error', axiosMsg(error, 'Error de conexión'));
         } finally {
             setDeleting(false);
         }
@@ -118,7 +125,7 @@ export default function EditarInsumoScreen() {
             </View>
 
             <ScrollView className="flex-1 px-4 py-4" contentContainerStyle={{ paddingBottom: 40 }}>
-                <Text className="text-gray-400 text-sm mb-6">
+                <Text className="text-sm mb-6" style={{ color: COLORS.text.secondary }}>
                     Actualiza los detalles de este ítem del inventario.
                 </Text>
 
@@ -152,9 +159,9 @@ export default function EditarInsumoScreen() {
                             placeholderTextColor={COLORS.text.muted}
                             className="flex-1 text-white text-base"
                         />
-                        <Text className="text-gray-500 text-sm ml-2">{item.unidad}</Text>
+                        <Text className="text-sm ml-2" style={{ color: COLORS.text.muted }}>{item.unidad}</Text>
                     </View>
-                    <Text className="text-gray-500 text-xs mt-2">
+                    <Text className="text-xs mt-2" style={{ color: COLORS.text.muted }}>
                         Se activará una alerta cuando el stock baje de este número.
                     </Text>
                 </View>
@@ -168,12 +175,13 @@ export default function EditarInsumoScreen() {
                 </TouchableOpacity>
 
                 <TouchableOpacity 
-                    className="border border-red-500 rounded-lg py-4 items-center flex-row justify-center"
+                    className="border rounded-lg py-4 items-center flex-row justify-center"
+                    style={{ borderColor: COLORS.danger.DEFAULT }}
                     onPress={() => setShowDeleteModal(true)}
                     disabled={loading || deleting}
                 >
                     <MaterialIcons name="delete-outline" size={20} color={COLORS.danger.DEFAULT} className="mr-2" />
-                    <Text className="text-red-500 font-bold text-base">Eliminar ítem</Text>
+                    <Text className="font-bold text-base" style={{ color: COLORS.danger.text }}>Eliminar ítem</Text>
                 </TouchableOpacity>
             </ScrollView>
 
@@ -187,13 +195,13 @@ export default function EditarInsumoScreen() {
                 <View className="flex-1 bg-black/70 justify-center items-center px-4">
                     <View className="bg-dark-100 w-full max-w-sm rounded-2xl p-6 border border-white/10">
                         <View className="items-center mb-4">
-                            <View className="bg-red-500/20 p-3 rounded-full mb-3">
+                            <View className="p-3 rounded-full mb-3" style={{ backgroundColor: COLORS.danger.ghost }}>
                                 <MaterialIcons name="warning" size={32} color={COLORS.danger.DEFAULT} />
                             </View>
                             <Text className="text-white text-xl font-bold text-center">Eliminar ítem</Text>
                         </View>
                         
-                        <Text className="text-gray-400 text-center mb-6">
+                        <Text className="text-center mb-6" style={{ color: COLORS.text.secondary }}>
                             ¿Estás seguro de que deseas eliminar este ítem del inventario? Esta acción no se puede deshacer y desaparecerá del catálogo.
                         </Text>
 
@@ -204,8 +212,9 @@ export default function EditarInsumoScreen() {
                             >
                                 <Text className="text-white font-semibold">Cancelar</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity 
-                                className="flex-1 bg-red-600 py-3 rounded-lg items-center ml-2"
+                            <TouchableOpacity
+                                className="flex-1 py-3 rounded-lg items-center ml-2"
+                                style={{ backgroundColor: COLORS.danger.DEFAULT }}
                                 onPress={executeDelete}
                             >
                                 <Text className="text-white font-bold">Eliminar</Text>

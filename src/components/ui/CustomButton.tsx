@@ -1,10 +1,7 @@
 import React from "react";
 import {
-  TouchableOpacity,
-  Text,
-  ActivityIndicator,
-  type TouchableOpacityProps,
-} from "react-native";
+  TouchableOpacity, ActivityIndicator, type TouchableOpacityProps, } from 'react-native';
+import { Text } from '@/src/components/StyledText';
 import { COLORS } from "../../theme/colors";
 
 // ─── Tipos ─────────────────────────────────────────────────────────────────

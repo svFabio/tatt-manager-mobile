@@ -1,7 +1,8 @@
 import { Stack } from 'expo-router';
+import { COLORS } from "@/src/theme/colors";
 
 export default function InventoryLayout() {
     return (
-        <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: '#0A0A0A' } }} />
+        <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: COLORS.bg } }} />
     );
 }

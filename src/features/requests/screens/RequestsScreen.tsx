@@ -1,25 +1,27 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { View, Text, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { View, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { Text } from '@/src/components/StyledText';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useRouter } from 'expo-router';
 import { CitasAPI } from '../../../api/citas';
 import { socket } from '../../../api/socket';
 import { RequestCard } from '../components/RequestCard';
-import type { EstadoCita, SolicitudItem } from '../../../types/citas';
+import type { SolicitudItem } from '../../../types/citas';
 import { COLORS } from '../../../theme/colors';
 
-const FILTERS: { label: string; value: EstadoCita | 'ALL' }[] = [
-    { label: 'Todas',       value: 'ALL'        },
-    { label: 'Pendientes',  value: 'PENDIENTE'  },
-    { label: 'Confirmadas', value: 'CONFIRMADA' },
-    { label: 'Finalizadas', value: 'FINALIZADA' },
-    { label: 'Canceladas',  value: 'CANCELADA'  },
+type EstadoSolicitud = 'PENDIENTE' | 'COTIZADA' | 'RECHAZADA';
+
+const FILTERS: { label: string; value: EstadoSolicitud | 'ALL'; icon: keyof typeof MaterialIcons.glyphMap; color: string }[] = [
+    { label: 'Todas',      value: 'ALL',        icon: 'list',           color: COLORS.text.secondary },
+    { label: 'Nuevas',     value: 'PENDIENTE',  icon: 'schedule',       color: COLORS.status.pendiente.text },
+    { label: 'Cotizadas',  value: 'COTIZADA',   icon: 'attach-money',   color: COLORS.status.confirmada.text },
+    { label: 'Rechazadas', value: 'RECHAZADA',  icon: 'block',          color: COLORS.status.cancelada.text },
 ];
 
 export default function RequestsScreen() {
     const router = useRouter();
-    const [activeFilter, setActiveFilter] = useState<EstadoCita | 'ALL'>('ALL');
+    const [activeFilter, setActiveFilter] = useState<EstadoSolicitud | 'ALL'>('ALL');
     const [loading, setLoading]           = useState(true);
     const [requests, setRequests]         = useState<SolicitudItem[]>([]);
 
@@ -46,9 +48,25 @@ export default function RequestsScreen() {
         };
     }, [load]);
 
+    const counts = useMemo(() => ({
+        ALL: requests.length,
+        PENDIENTE: requests.filter(r => r.estado === 'PENDIENTE').length,
+        COTIZADA: requests.filter(r => r.estado === 'COTIZADA').length,
+        RECHAZADA: requests.filter(r => r.estado === 'RECHAZADA').length,
+    }), [requests]);
+
     const filtered = activeFilter === 'ALL'
         ? requests
         : requests.filter((r) => r.estado === activeFilter);
+
+    const emptyMessages: Record<string, { title: string; subtitle: string }> = {
+        ALL:        { title: 'Sin solicitudes',             subtitle: 'Aparecerán aquí cuando lleguen' },
+        PENDIENTE:  { title: 'Sin solicitudes nuevas',      subtitle: 'No hay solicitudes pendientes de cotizar' },
+        COTIZADA:   { title: 'Sin cotizaciones',            subtitle: 'Las solicitudes cotizadas aparecerán aquí' },
+        RECHAZADA:  { title: 'Sin rechazadas',              subtitle: 'No has rechazado ninguna solicitud' },
+    };
+
+    const emptyState = emptyMessages[activeFilter] ?? emptyMessages.ALL;
 
     return (
         <SafeAreaView className="flex-1" style={{ backgroundColor: COLORS.bg }}>
@@ -62,24 +80,61 @@ export default function RequestsScreen() {
                     contentContainerStyle={{ gap: 8, paddingVertical: 10, alignItems: 'center' }}
                     renderItem={({ item: f }) => {
                         const isActive = activeFilter === f.value;
+                        const count = counts[f.value];
                         return (
                             <TouchableOpacity
                                 onPress={() => setActiveFilter(f.value)}
                                 activeOpacity={0.7}
-                                className={`px-5 py-3 rounded-xl justify-center items-center ${isActive ? 'bg-primary' : 'bg-dark-100'}`}
+                                style={{
+                                    flexDirection: 'row',
+                                    alignItems: 'center',
+                                    paddingHorizontal: 14,
+                                    paddingVertical: 10,
+                                    borderRadius: 12,
+                                    backgroundColor: isActive ? COLORS.primary.DEFAULT : COLORS.dark[100],
+                                    gap: 6,
+                                }}
                             >
+                                <MaterialIcons
+                                    name={f.icon}
+                                    size={14}
+                                    color={isActive ? COLORS.text.primary : f.color}
+                                />
                                 <Text
-                                    style={{ includeFontPadding: false, lineHeight: 22 }}
-                                    className={`text-sm font-bold pb-0.5 ${isActive ? 'text-white' : 'text-gray-400'}`}
+                                    style={{
+                                        includeFontPadding: false,
+                                        lineHeight: 18,
+                                        fontSize: 13,
+                                        fontWeight: '600',
+                                        color: isActive ? COLORS.text.primary : COLORS.text.muted,
+                                    }}
                                 >
                                     {f.label}
                                 </Text>
+                                {count > 0 && (
+                                    <View style={{
+                                        backgroundColor: isActive ? 'rgba(255,255,255,0.2)' : COLORS.dark[200],
+                                        borderRadius: 8,
+                                        paddingHorizontal: 6,
+                                        paddingVertical: 1,
+                                        minWidth: 20,
+                                        alignItems: 'center',
+                                    }}>
+                                        <Text style={{
+                                            fontSize: 11,
+                                            fontWeight: '700',
+                                            color: isActive ? COLORS.text.primary : COLORS.text.muted,
+                                        }}>
+                                            {count}
+                                        </Text>
+                                    </View>
+                                )}
                             </TouchableOpacity>
                         );
                     }}
                 />
 
-                <Text style={{ includeFontPadding: false, lineHeight: 20 }} className="text-gray-500 text-xs mb-4 pb-1">
+                <Text style={{ includeFontPadding: false, lineHeight: 20, color: COLORS.text.secondary }} className="text-xs mb-4 pb-1">
                     {filtered.length} solicitud{filtered.length !== 1 ? 'es' : ''}
                 </Text>
             </View>
@@ -95,8 +150,8 @@ export default function RequestsScreen() {
                         >
                             <MaterialIcons name="inbox" size={36} color={COLORS.primary.DEFAULT} />
                         </View>
-                        <Text style={{ color: COLORS.text.secondary }} className="text-base font-semibold">Sin solicitudes</Text>
-                        <Text style={{ color: COLORS.text.muted }} className="text-sm mt-1">Aparecerán aquí cuando lleguen</Text>
+                        <Text style={{ color: COLORS.text.secondary }} className="text-base font-semibold">{emptyState.title}</Text>
+                        <Text style={{ color: COLORS.text.muted }} className="text-sm mt-1">{emptyState.subtitle}</Text>
                     </View>
                 ) : (
                     <FlatList
@@ -116,3 +171,4 @@ export default function RequestsScreen() {
         </SafeAreaView>
     );
 }
+

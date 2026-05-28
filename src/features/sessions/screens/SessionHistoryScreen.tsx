@@ -1,14 +1,18 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { View, Text, TextInput, FlatList, TouchableOpacity, ActivityIndicator, Modal, Pressable } from 'react-native';
+import { View, FlatList, TouchableOpacity, ActivityIndicator, Modal, Pressable } from 'react-native';
+import { Text, TextInput } from '@/src/components/StyledText';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useRouter } from 'expo-router';
 import { SessionsAPI, type SessionListItem, type ArtistaOption } from '../../../api/sessions';
 import { SessionCard } from '../components/SessionCard';
 import { COLORS } from '../../../theme/colors';
+import { useStudioStore } from '@/src/store/useStudioStore';
 
 export default function SessionHistoryScreen() {
   const router = useRouter();
+  const currentStudio = useStudioStore((s) => s.currentStudio);
+  const isAdmin = currentStudio?.rol === 'ADMIN';
 
   const [sessions, setSessions] = useState<SessionListItem[]>([]);
   const [artistas, setArtistas] = useState<ArtistaOption[]>([]);
@@ -27,7 +31,7 @@ export default function SessionHistoryScreen() {
           artistaId: artistaFilter ?? undefined,
           search: searchTerm.trim() || undefined,
         }),
-        SessionsAPI.getArtistas(),
+        isAdmin ? SessionsAPI.getArtistas() : Promise.resolve({ data: [] }),
       ]);
       setSessions(sessRes.data ?? []);
       setArtistas(artRes.data ?? []);
@@ -36,7 +40,7 @@ export default function SessionHistoryScreen() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [isAdmin]);
 
   // Debounced search
   const [debouncedSearch, setDebouncedSearch] = useState('');
@@ -74,22 +78,24 @@ export default function SessionHistoryScreen() {
         </View>
 
         {/* Artista Dropdown Trigger */}
-        <TouchableOpacity
-          activeOpacity={0.8}
-          onPress={() => setDropdownOpen(true)}
-          className="h-[42px] rounded-xl flex-row items-center px-3"
-          style={{
-            backgroundColor: COLORS.dark[100],
-            borderWidth: 1,
-            borderColor: COLORS.dark[200],
-            minWidth: 120,
-          }}
-        >
-          <Text className="text-white text-sm flex-1" numberOfLines={1}>
-            {selectedArtistaName}
-          </Text>
-          <MaterialIcons name="keyboard-arrow-down" size={18} color={COLORS.text.muted} style={{ marginLeft: 4 }} />
-        </TouchableOpacity>
+        {isAdmin && (
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => setDropdownOpen(true)}
+            className="h-[42px] rounded-xl flex-row items-center px-3"
+            style={{
+              backgroundColor: COLORS.dark[100],
+              borderWidth: 1,
+              borderColor: COLORS.dark[200],
+              minWidth: 120,
+            }}
+          >
+            <Text className="text-white text-sm flex-1" numberOfLines={1}>
+              {selectedArtistaName}
+            </Text>
+            <MaterialIcons name="keyboard-arrow-down" size={18} color={COLORS.text.muted} style={{ marginLeft: 4 }} />
+          </TouchableOpacity>
+        )}
       </View>
 
       {/* ─── Sessions List ─── */}

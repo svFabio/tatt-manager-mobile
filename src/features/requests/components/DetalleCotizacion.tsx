@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
+import { View, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
+import { Text, TextInput } from '@/src/components/StyledText';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { CitasAPI } from '../../../api/citas';
 import { useRouter } from 'expo-router';
@@ -9,6 +10,7 @@ export const DetalleCotizacion = ({ solicitudId, estado }: { solicitudId: number
   const router = useRouter();
   const [tiempo, setTiempo] = useState('');
   const [costo, setCosto]   = useState('');
+  const [mensaje, setMensaje] = useState('');
   const [loading, setLoading] = useState(false);
 
   const isCotizada = estado !== 'PENDIENTE';
@@ -16,11 +18,11 @@ export const DetalleCotizacion = ({ solicitudId, estado }: { solicitudId: number
   const enviarCotizacion = async () => {
     try {
       setLoading(true);
-      await CitasAPI.cotizarSolicitud(solicitudId, Number(costo), Number(tiempo));
+      await CitasAPI.cotizarSolicitud(solicitudId, Number(costo), Number(tiempo), mensaje.trim() || undefined);
       Alert.alert('Éxito', 'Cotización enviada al cliente por WhatsApp.', [
         { text: 'OK', onPress: () => router.back() }
       ]);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('[Cotizar]', error);
       Alert.alert('Error', 'Hubo un problema al enviar la cotización.');
     } finally {
@@ -31,6 +33,12 @@ export const DetalleCotizacion = ({ solicitudId, estado }: { solicitudId: number
   const handleCotizar = () => {
     if (!tiempo || !costo) {
       Alert.alert('Error', 'Por favor ingresa el tiempo estimado y el costo.');
+      return;
+    }
+    
+    const numTiempo = Number(tiempo);
+    if (isNaN(numTiempo) || numTiempo < 1 || numTiempo > 7) {
+      Alert.alert('Atención', 'El tiempo estimado debe ser entre 1 y 7 horas. (Si es mayor, usa el mensaje personalizado para agendar manualmente en sesiones).');
       return;
     }
     
@@ -51,40 +59,56 @@ export const DetalleCotizacion = ({ solicitudId, estado }: { solicitudId: number
         <Text className="text-white text-base font-bold ml-2">Cotización</Text>
       </View>
 
-      <Text className="text-gray-500 text-[10px] uppercase tracking-widest mb-2">
-        Tiempo estimado de sesión
+      <Text className="text-[10px] uppercase tracking-widest mb-2" style={{ color: COLORS.text.muted }}>
+        Tiempo estimado de sesión (Max: 7hrs)
       </Text>
       <View className="flex-row items-center bg-dark-100 rounded-xl px-3 py-3 mb-4 border border-white/5">
-        <MaterialIcons name="access-time" size={16} color="#6B7280" />
+        <MaterialIcons name="access-time" size={16} color={COLORS.text.muted} />
         <TextInput
           value={tiempo}
           onChangeText={setTiempo}
           placeholder="ej. 4"
-          placeholderTextColor="#4B5563"
+          placeholderTextColor={COLORS.text.dimmed}
           className="flex-1 text-white text-sm ml-2"
           keyboardType="numeric"
           editable={!isCotizada}
         />
       </View>
 
-      <Text className="text-gray-500 text-[10px] uppercase tracking-widest mb-2">Costo total</Text>
-      <View className="flex-row items-center bg-dark-100 rounded-xl px-3 py-3 mb-6 border border-white/5">
-        <Text className="text-gray-400 text-sm font-bold mr-2">$</Text>
+      <Text className="text-[10px] uppercase tracking-widest mb-2" style={{ color: COLORS.text.muted }}>Costo total</Text>
+      <View className="flex-row items-center bg-dark-100 rounded-xl px-3 py-3 mb-4 border border-white/5">
+        <Text className="text-sm font-bold mr-2" style={{ color: COLORS.text.secondary }}>$</Text>
         <TextInput
           value={costo}
           onChangeText={setCosto}
           placeholder="0.00"
-          placeholderTextColor="#4B5563"
+          placeholderTextColor={COLORS.text.dimmed}
           className="flex-1 text-white text-sm"
           keyboardType="numeric"
           editable={!isCotizada}
         />
       </View>
 
+      <Text className="text-[10px] uppercase tracking-widest mb-2" style={{ color: COLORS.text.muted }}>
+        Mensaje Opcional (Ej. Agendaremos varias sesiones)
+      </Text>
+      <View className="bg-dark-100 rounded-xl px-3 py-3 mb-6 border border-white/5">
+        <TextInput
+          value={mensaje}
+          onChangeText={setMensaje}
+          placeholder="Escribe un mensaje para el cliente..."
+          placeholderTextColor={COLORS.text.dimmed}
+          className="text-white text-sm"
+          multiline
+          numberOfLines={2}
+          editable={!isCotizada}
+        />
+      </View>
+
       {isCotizada ? (
         <View className="bg-dark-200 rounded-2xl py-4 flex-row items-center justify-center">
-          <Text className="text-gray-400 text-sm font-bold mr-2">Cotización ya enviada</Text>
-          <MaterialIcons name="check-circle" size={16} color="#4ADE80" />
+          <Text className="text-sm font-bold mr-2" style={{ color: COLORS.text.secondary }}>Cotización ya enviada</Text>
+          <MaterialIcons name="check-circle" size={16} color={COLORS.success.DEFAULT} />
         </View>
       ) : (
         <TouchableOpacity
@@ -98,7 +122,7 @@ export const DetalleCotizacion = ({ solicitudId, estado }: { solicitudId: number
           ) : (
             <>
               <Text className="text-white text-sm font-bold mr-2">Enviar Cotización</Text>
-              <MaterialIcons name="send" size={16} color="#FFFFFF" />
+              <MaterialIcons name="send" size={16} color={COLORS.text.primary} />
             </>
           )}
         </TouchableOpacity>

@@ -1,8 +1,9 @@
 import React from "react";
-import { View, Text, TouchableOpacity, ActivityIndicator } from "react-native";
+import { View, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { Text } from '@/src/components/StyledText';
 import QRCode from "react-native-qrcode-svg";
 import { Ionicons } from "@expo/vector-icons";
-import { COLORS } from "../../../theme/colors";
+import { COLORS } from "@/src/theme/colors";
 
 interface WhatsAppQRCodeProps {
   qrValor: string | null;
@@ -19,8 +20,8 @@ export const WhatsAppQRCode: React.FC<WhatsAppQRCodeProps> = ({
     <View>
       <View className="bg-dark-100 p-6 rounded-3xl border border-dark-300 items-center mb-6 shadow-xl shadow-black">
         <View className="flex-row items-center mb-6 bg-dark-200 px-4 py-2 rounded-full border border-dark-300">
-          <Ionicons name="qr-code-outline" size={16} color="#9ca3af" />
-          <Text className="text-gray-400 text-xs font-bold tracking-widest ml-2 uppercase">
+          <Ionicons name="qr-code-outline" size={16} color={COLORS.text.muted} />
+          <Text className="text-xs font-bold tracking-widest ml-2 uppercase" style={{ color: COLORS.text.secondary }}>
             Código QR de Vinculación
           </Text>
         </View>
@@ -32,11 +33,11 @@ export const WhatsAppQRCode: React.FC<WhatsAppQRCodeProps> = ({
         ) : (
           <View className="w-[220px] h-[220px] items-center justify-center bg-dark-200 rounded-[1.5rem] mb-6 border border-dark-300 border-dashed">
             <ActivityIndicator size="large" color={COLORS.primary.DEFAULT} />
-            <Text className="text-gray-500 mt-4 font-medium">Generando...</Text>
+            <Text className="mt-4 font-medium" style={{ color: COLORS.text.muted }}>Generando...</Text>
           </View>
         )}
 
-        <Text className="text-gray-400 text-center text-sm leading-6 mb-6">
+        <Text className="text-center text-sm leading-6 mb-6" style={{ color: COLORS.text.secondary }}>
           Escanea este código con WhatsApp en tu teléfono para comenzar la
           vinculación.
         </Text>
@@ -60,22 +61,22 @@ export const WhatsAppQRCode: React.FC<WhatsAppQRCodeProps> = ({
       {/* Steps para QR */}
       <View className="bg-dark-100 p-5 rounded-3xl border border-dark-300 mb-4 flex-row items-center">
         <View className="w-10 h-10 rounded-full bg-dark-200 items-center justify-center mr-4 border border-dark-300">
-          <Text className="text-gray-300 font-bold">1</Text>
+          <Text className="font-bold" style={{ color: COLORS.text.primary }}>1</Text>
         </View>
         <View className="flex-1">
           <Text className="text-white font-bold mb-1">Abre WhatsApp</Text>
-          <Text className="text-gray-500 text-xs">
+          <Text className="text-xs" style={{ color: COLORS.text.muted }}>
             Ve a Configuración {">"} Dispositivos vinculados
           </Text>
         </View>
       </View>
       <View className="bg-dark-100 p-5 rounded-3xl border border-dark-300 flex-row items-center mb-8">
         <View className="w-10 h-10 rounded-full bg-dark-200 items-center justify-center mr-4 border border-dark-300">
-          <Text className="text-gray-300 font-bold">2</Text>
+          <Text className="font-bold" style={{ color: COLORS.text.primary }}>2</Text>
         </View>
         <View className="flex-1">
           <Text className="text-white font-bold mb-1">Escanea</Text>
-          <Text className="text-gray-500 text-xs">
+          <Text className="text-xs" style={{ color: COLORS.text.muted }}>
             Apunta la cámara de tu teléfono a esta pantalla
           </Text>
         </View>

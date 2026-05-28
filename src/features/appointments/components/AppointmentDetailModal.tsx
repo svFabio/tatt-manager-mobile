@@ -1,13 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
-  View,
-  Text,
-  Modal,
-  TouchableOpacity,
-  ActivityIndicator,
-  ScrollView,
-  Image,
-} from "react-native";
+  View, Modal, TouchableOpacity, ActivityIndicator, ScrollView, Image, } from 'react-native';
+import { Text } from '@/src/components/StyledText';
 import { Feather } from "@expo/vector-icons";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
@@ -64,8 +58,8 @@ export const AppointmentDetailModal: React.FC<AppointmentDetailModalProps> = ({
       try {
         const d = await fetchCitaDetalle(cita.id);
         if (!cancelado) setDetalle(d);
-      } catch (e: any) {
-        if (!cancelado) setError(e?.message || "Error al cargar detalle");
+      } catch (e: unknown) {
+        if (!cancelado) setError((e instanceof Error ? e.message : null) ?? 'Error al cargar detalle');
       } finally {
         if (!cancelado) setLoading(false);
       }
@@ -101,7 +95,7 @@ export const AppointmentDetailModal: React.FC<AppointmentDetailModalProps> = ({
               onPress={onClose}
               className="w-8 h-8 rounded-full bg-dark-200 items-center justify-center"
             >
-              <Feather name="x" size={18} color="#D1D5DB" />
+              <Feather name="x" size={18} color={COLORS.text.secondary} />
             </TouchableOpacity>
           </View>
 
@@ -112,7 +106,7 @@ export const AppointmentDetailModal: React.FC<AppointmentDetailModalProps> = ({
             </View>
           ) : error ? (
             <View className="py-10 items-center px-6">
-              <Feather name="alert-circle" size={28} color="#FF3B30" />
+              <Feather name="alert-circle" size={28} color={COLORS.danger.DEFAULT} />
               <Text className="text-white text-sm mt-3 text-center">{error}</Text>
             </View>
           ) : detalle ? (

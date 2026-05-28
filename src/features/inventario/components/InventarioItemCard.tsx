@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, TextInput, Alert, ActivityIndicator, Animated } from 'react-native';
+import { View, TouchableOpacity, Alert, ActivityIndicator, Animated } from 'react-native';
+import { Text, TextInput } from '@/src/components/StyledText';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { InventarioAPI } from '../../../api/inventario';
 import type { InventarioItem } from '../../../types/inventario';
 import { StockInsuficienteModal } from './StockInsuficienteModal';
@@ -58,7 +60,8 @@ export function InventarioItemCard({ item, onUpdated, index = 0 }: Props) {
             } else {
                 Alert.alert('Error', (res as any).error ?? 'No se pudo ajustar el stock');
             }
-        } catch (e: any) {
+        } catch (error: unknown) {
+            const e = error as Record<string, any>;
             const msg = e?.response?.data?.error ?? 'Error al ajustar el stock';
             Alert.alert('Error', msg);
         } finally {
@@ -80,8 +83,10 @@ export function InventarioItemCard({ item, onUpdated, index = 0 }: Props) {
     const dotColor = item.colorHex ?? COLORS.text.muted;
 
     const getCatIcon = () => {
-        if (item.tipo === 'tinta') return 'palette';
-        return 'build';
+        if (item.tipo === 'tinta') return 'water-opacity'; // Gota de tinta
+        if (item.tipo === 'aguja' || item.nombre.toLowerCase().includes('aguja')) return 'needle'; // Aguja
+        if (item.nombre.toLowerCase().includes('cap') || item.tipo === 'cap' as any) return 'cup'; // Cap
+        return 'archive-outline'; // Default
     };
 
     return (
@@ -110,10 +115,20 @@ export function InventarioItemCard({ item, onUpdated, index = 0 }: Props) {
             <View className="flex-row items-start justify-between mb-3">
                 <View className="flex-row items-center flex-1 mr-2">
                     <View
-                        className="w-9 h-9 rounded-xl items-center justify-center mr-3"
-                        style={{ backgroundColor: `${dotColor}20` }}
+                        className="w-10 h-10 rounded-xl items-center justify-center mr-3"
+                        style={{ 
+                            backgroundColor: dotColor === '#000000' || dotColor === '#000' 
+                                ? 'rgba(255,255,255,0.1)' 
+                                : `${dotColor}20`,
+                            borderWidth: dotColor === '#000000' || dotColor === '#000' ? 1 : 0,
+                            borderColor: 'rgba(255,255,255,0.15)'
+                        }}
                     >
-                        <MaterialIcons name={getCatIcon() as any} size={18} color={dotColor} />
+                        <MaterialCommunityIcons 
+                            name={getCatIcon() as keyof typeof MaterialCommunityIcons.glyphMap} 
+                            size={22} 
+                            color={dotColor === '#000000' || dotColor === '#000' ? '#FFFFFF' : dotColor} 
+                        />
                     </View>
                     <View className="flex-1">
                         <Text className="text-white font-semibold text-base" numberOfLines={1}>
@@ -125,11 +140,9 @@ export function InventarioItemCard({ item, onUpdated, index = 0 }: Props) {
 
                 <View className="items-end">
                     {item.esBajo && (
-                        <View className="flex-row items-center rounded-lg px-2.5 py-1 mb-1.5"
-                            style={{ backgroundColor: 'rgba(153, 27, 27, 0.6)' }}
-                        >
+                        <View className="flex-row items-center rounded-lg px-2.5 py-1 mb-1.5" style={{ backgroundColor: COLORS.danger.bg }}>
                             <MaterialIcons name="error-outline" size={12} color={COLORS.danger.text} style={{ marginRight: 4 }} />
-                            <Text style={{ color: COLORS.danger.text, fontSize: 10, fontWeight: 'bold', letterSpacing: 1 }}>BAJO</Text>
+                            <Text className="text-[10px] font-bold tracking-widest" style={{ color: COLORS.danger.text }}>BAJO</Text>
                         </View>
                     )}
                     <View className="flex-row items-center">
@@ -145,7 +158,7 @@ export function InventarioItemCard({ item, onUpdated, index = 0 }: Props) {
                             className="p-2 rounded-lg ml-1"
                             style={{ backgroundColor: COLORS.primary.ghost }}
                         >
-                            <MaterialIcons name="edit" size={22} color={COLORS.primary.DEFAULT} />
+                            <MaterialIcons name="edit" size={22} color="#FFFFFF" />
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -158,7 +171,7 @@ export function InventarioItemCard({ item, onUpdated, index = 0 }: Props) {
                     className="flex-1 py-3 items-center"
                     activeOpacity={0.6}
                 >
-                    <Text style={{ color: COLORS.text.secondary }} className="font-bold text-sm">−10</Text>
+                    <Text style={{ color: COLORS.danger.DEFAULT }} className="font-bold text-sm">−10</Text>
                 </TouchableOpacity>
 
                 <View style={{ width: 1, height: 20, backgroundColor: COLORS.dark[300] }} />
@@ -168,7 +181,7 @@ export function InventarioItemCard({ item, onUpdated, index = 0 }: Props) {
                     onChangeText={setInputValue}
                     keyboardType="numeric"
                     className="flex-1 text-center text-white font-bold text-base py-3"
-                    style={{ backgroundColor: COLORS.bg }}
+                    style={{ backgroundColor: 'transparent' }}
                 />
 
                 <View style={{ width: 1, height: 20, backgroundColor: COLORS.dark[300] }} />
@@ -179,7 +192,7 @@ export function InventarioItemCard({ item, onUpdated, index = 0 }: Props) {
                     className="flex-1 py-3 items-center"
                     activeOpacity={0.6}
                 >
-                    <Text style={{ color: COLORS.primary.DEFAULT, fontWeight: 'bold', fontSize: 14 }}>+10</Text>
+                    <Text className="text-sm font-bold" style={{ color: COLORS.success.DEFAULT }}>+10</Text>
                 </TouchableOpacity>
 
                 <View style={{ width: 1, height: 20, backgroundColor: COLORS.dark[300] }} />

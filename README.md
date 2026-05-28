@@ -21,8 +21,9 @@ Aplicación móvil desarrollada en **React Native (Expo)** para la gestión en t
 
 3. **Arrancar la App:**
    ```bash
-   npx expo start -c
+   npx expo start -c --go
    ```
+   *(para usar la app de la play store para leer el qr)*
 
 ## Tecnologías
 

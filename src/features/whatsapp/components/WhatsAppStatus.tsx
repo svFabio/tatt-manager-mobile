@@ -1,6 +1,8 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { Text } from "@/src/components/StyledText";
+import { View } from "react-native";
 import { Card } from "@/src/components/ui";
+import { COLORS } from "@/src/theme/colors";
 
 interface WhatsAppStatusProps {
   isConnected: boolean;
@@ -19,9 +21,8 @@ export const WhatsAppStatus: React.FC<WhatsAppStatusProps> = ({
       <View className="flex-row items-center">
         {/* Indicador de conexión */}
         <View
-          className={`w-3 h-3 rounded-full mr-3 ${
-            isConnected ? "bg-green-500" : "bg-alert"
-          }`}
+          className={`w-3 h-3 rounded-full mr-3`}
+          style={{ backgroundColor: isConnected ? COLORS.success.DEFAULT : COLORS.danger.DEFAULT }}
         />
         <View className="flex-1">
           <Text className="text-white font-semibold text-sm">

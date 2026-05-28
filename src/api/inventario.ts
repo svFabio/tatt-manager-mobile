@@ -25,7 +25,7 @@ export const InventarioAPI = {
         form.append('stockMinimo', String(body.stockMinimo));
         if (body.capSize) form.append('capSize', body.capSize);
         if (body.capMl) form.append('capMl', body.capMl);
-        if (body.foto) form.append('foto', body.foto as any);
+        if (body.foto) form.append('foto', body.foto as unknown as Blob);
         return api
             .post<ApiResponse<InventarioItem[]>>('/inventario', form, {
                 headers: { 'Content-Type': 'multipart/form-data' },

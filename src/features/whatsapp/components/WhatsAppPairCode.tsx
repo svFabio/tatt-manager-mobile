@@ -1,7 +1,8 @@
 import React from "react";
-import { View, Text, TouchableOpacity, TextInput, ActivityIndicator } from "react-native";
+import { View, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { Text, TextInput } from '@/src/components/StyledText';
 import { Ionicons } from "@expo/vector-icons";
-import { COLORS } from "../../../theme/colors";
+import { COLORS } from "@/src/theme/colors";
 
 interface WhatsAppPairCodeProps {
   pairingCode: string | null;
@@ -27,7 +28,7 @@ export const WhatsAppPairCode: React.FC<WhatsAppPairCodeProps> = ({
           <View className="absolute top-0 right-0 p-4 opacity-5">
             <Ionicons name="keypad" size={100} color={COLORS.primary.DEFAULT} />
           </View>
-          <Text className="text-gray-400 font-medium mb-6 text-center text-sm">
+          <Text className="font-medium mb-6 text-center text-sm" style={{ color: COLORS.text.secondary }}>
             Tu código se ha generado correctamente.
           </Text>
           <View className="bg-dark-200 px-8 py-5 rounded-2xl border border-dark-300">
@@ -46,21 +47,21 @@ export const WhatsAppPairCode: React.FC<WhatsAppPairCodeProps> = ({
         </View>
       ) : (
         <View>
-          <Text className="text-gray-400 text-xs uppercase tracking-widest font-bold mb-3 pl-1">
+          <Text className="text-xs uppercase tracking-widest font-bold mb-3 pl-1" style={{ color: COLORS.text.secondary }}>
             Número de teléfono (con código de país)
           </Text>
           <View className="bg-dark-100 rounded-2xl border border-dark-300 px-4 py-1 mb-2">
             <TextInput
               className="text-white text-lg py-3 font-medium"
               placeholder="Ej: 59171234567"
-              placeholderTextColor="#4b5563"
+              placeholderTextColor={COLORS.text.dimmed}
               keyboardType="phone-pad"
               value={phoneNumber}
               onChangeText={setPhoneNumber}
               editable={!actionLoading}
             />
           </View>
-          <Text className="text-gray-600 text-xs italic mb-6 pl-1 pr-1">
+          <Text className="text-xs italic mb-6 pl-1 pr-1" style={{ color: COLORS.text.dimmed }}>
             Sin + ni espacios. Bolivia: 591 + número. Argentina: 54 + area +
             numero
           </Text>
@@ -75,7 +76,7 @@ export const WhatsAppPairCode: React.FC<WhatsAppPairCodeProps> = ({
             }`}
           >
             {actionLoading ? (
-              <ActivityIndicator color="#ffffff" />
+              <ActivityIndicator color={COLORS.text.primary} />
             ) : (
               <Text className="text-white font-bold text-lg">Obtener codigo</Text>
             )}
@@ -103,7 +104,7 @@ export const WhatsAppPairCode: React.FC<WhatsAppPairCodeProps> = ({
               <View className="w-8 h-8 rounded-full bg-dark-200 items-center justify-center mr-4 border border-dark-400">
                 <Text className="text-primary font-bold text-xs">{index + 1}</Text>
               </View>
-              <Text className="text-gray-300 font-medium flex-1 text-sm">
+              <Text className="font-medium flex-1 text-sm" style={{ color: COLORS.text.primary }}>
                 {paso}
               </Text>
             </View>

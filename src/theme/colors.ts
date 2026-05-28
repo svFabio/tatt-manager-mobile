@@ -1,76 +1,72 @@
 /**
  * Tema global de la aplicación.
- * Fuente única de verdad para colores, sombras y estilos reutilizables.
+ * Fuente única para colores, sombras y estilos reutilizables.
  * NUNCA hardcodear hex en componentes — importar desde aquí.
  */
 
-export const COLORS = {
-  // ── Fondos ──
-  bg: '#0A0A0A',
-  
-  // ── Escala de grises (dark) ──
-  dark: {
-    DEFAULT: '#121212',
-    100: '#1E1E1E',
-    200: '#2A2A2A',
-    300: '#3A3A3A',
-    400: '#4A4A4A',
-  },
+const palette = require('./palette');
 
-  // ── Primario ──
-  primary: {
-    DEFAULT: '#4338CA',
-    light: '#6366F1',
-    dark: '#312E81',
-    /** Fondo translúcido para badges / contenedores suaves */
-    ghost: 'rgba(67, 56, 202, 0.12)',
-    /** Borde sutil */
-    border: 'rgba(67, 56, 202, 0.1)',
-  },
-
-  // ── Alerta / Stock bajo ──
-  danger: {
-    DEFAULT: '#EF4444',
-    text: '#F87171',
-    bg: 'rgba(239, 68, 68, 0.1)',
-    badge: '#F472B6',
-    ghost: 'rgba(244, 114, 182, 0.15)',
-    border: 'rgba(239, 68, 68, 0.2)',
-  },
-
-  // ── Éxito ──
-  success: {
-    DEFAULT: '#22C55E',
-  },
-
-  // ── Textos ──
-  text: {
-    primary: '#FFFFFF',
-    secondary: '#9CA3AF',
-    muted: '#6B7280',
-    dimmed: '#4B5563',
-  },
-
-  // ── Bordes genéricos ──
-  border: {
-    subtle: 'rgba(255,255,255,0.04)',
-  },
-
-  // ── Warning ──
-  warning: {
-    DEFAULT: '#F59E0B',
-    text: '#FBBF24',
-    ghost: 'rgba(245, 158, 11, 0.12)',
-  },
-
-  // ── Estados de cita ──
-  status: {
-    confirmada: { text: '#34D399', bg: 'rgba(52, 211, 153, 0.12)' },
-    pendiente:  { text: '#FBBF24', bg: 'rgba(251, 191, 36, 0.12)' },
-    finalizada: { text: '#60A5FA', bg: 'rgba(96, 165, 250, 0.12)' },
-    cancelada:  { text: '#F87171', bg: 'rgba(248, 113, 113, 0.12)' },
-  },
-} as const;
+export const COLORS = palette as {
+  readonly bg: string;
+  readonly dark: {
+    readonly DEFAULT: string;
+    readonly 100: string;
+    readonly 200: string;
+    readonly 300: string;
+    readonly 400: string;
+  };
+  readonly gold: {
+    readonly [key: string]: string;
+  };
+  readonly primary: {
+    readonly DEFAULT: string;
+    readonly light: string;
+    readonly dark: string;
+    readonly ghost: string;
+    readonly border: string;
+  };
+  readonly danger: {
+    readonly DEFAULT: string;
+    readonly text: string;
+    readonly bg: string;
+    readonly badge: string;
+    readonly ghost: string;
+    readonly border: string;
+  };
+  readonly success: {
+    readonly DEFAULT: string;
+  };
+  readonly text: {
+    readonly primary: string;
+    readonly secondary: string;
+    readonly muted: string;
+    readonly dimmed: string;
+  };
+  readonly border: {
+    readonly subtle: string;
+  };
+  readonly warning: {
+    readonly DEFAULT: string;
+    readonly text: string;
+    readonly ghost: string;
+  };
+  readonly status: {
+    readonly confirmada: { readonly text: string; readonly bg: string };
+    readonly pendiente: { readonly text: string; readonly bg: string };
+    readonly finalizada: { readonly text: string; readonly bg: string };
+    readonly cancelada: { readonly text: string; readonly bg: string };
+  };
+  readonly alert: {
+    readonly DEFAULT: string;
+    readonly light: string;
+    readonly dark: string;
+  };
+  readonly muted: {
+    readonly DEFAULT: string;
+    readonly light: string;
+    readonly dark: string;
+  };
+};
 
 /** Sombra reutilizable con glow del color primario */
 export const PRIMARY_SHADOW = {

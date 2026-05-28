@@ -29,8 +29,8 @@ export function useCalendar() {
       const hasta = endOfMonth(mes);
       const data = await fetchCitasEnRango(desde, hasta);
       setCitas(data);
-    } catch (e: any) {
-      setError(e?.message || "Error al cargar citas");
+    } catch (e: unknown) {
+      setError((e instanceof Error ? e.message : null) ?? 'Error al cargar citas');
       setCitas([]);
     } finally {
       setLoading(false);

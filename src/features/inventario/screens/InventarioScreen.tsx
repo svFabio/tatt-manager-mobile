@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { View, Text, FlatList, TextInput, ActivityIndicator, TouchableOpacity, Animated } from 'react-native';
+import { View, FlatList, ActivityIndicator, TouchableOpacity, Animated } from 'react-native';
+import { Text, TextInput } from '@/src/components/StyledText';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useFocusEffect, useRouter } from 'expo-router';
@@ -74,13 +75,10 @@ export default function InventarioScreen() {
                 {/* Stats en fila horizontal */}
                 <View className="flex-row gap-3">
                     <View className="flex-1">
-                        <StatCard label="TOTAL" value={stats.totalItems} />
+                        <StatCard label="STOCK TOTAL" value={stats.totalItems} />
                     </View>
                     <View className="flex-1">
-                        <StatCard label="NORMAL" value={stats.enStockNormal} />
-                    </View>
-                    <View className="flex-1">
-                        <StatCard label="BAJO" value={stats.enStockBajo} variant="bajo" />
+                        <StatCard label="STOCK BAJO" value={stats.enStockBajo} variant="bajo" />
                     </View>
                 </View>
 

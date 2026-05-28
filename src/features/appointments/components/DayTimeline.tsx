@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, ScrollView } from "react-native";
+import { View, ScrollView } from 'react-native';
+import { Text } from '@/src/components/StyledText';
 import { format, isSameDay } from "date-fns";
 import { es } from "date-fns/locale";
 import { EventCard } from "./EventCard";

@@ -1,9 +1,8 @@
 import React, { useState, useRef } from 'react';
 import {
-    View, Text, TextInput, TouchableOpacity,
-    ScrollView, Alert, ActivityIndicator, Image,
-    Animated
+    View, TouchableOpacity, ScrollView, Alert, ActivityIndicator, Image, Animated
 } from 'react-native';
+import { Text, TextInput } from '@/src/components/StyledText';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import * as ImagePicker from 'expo-image-picker';
@@ -136,7 +135,8 @@ export default function AgregarInsumoScreen() {
             } else {
                 Alert.alert('Error', (res as any).error ?? 'No se pudo guardar el ítem');
             }
-        } catch (e: any) {
+        } catch (error: unknown) {
+            const e = error as any;
             Alert.alert('Error', e?.response?.data?.error ?? 'Error al guardar el ítem');
         } finally {
             setLoading(false);
@@ -149,21 +149,16 @@ export default function AgregarInsumoScreen() {
         value: string, 
         onChangeText: (text: string) => void, 
         placeholder: string, 
-        keyboardType: any = "default",
+        keyboardType: React.ComponentProps<typeof TextInput>['keyboardType'] = "default",
         info?: boolean
     ) => (
         <Animated.View style={{ transform: [{ translateX: getShakeAnim(field) }] }} className="mb-4">
             <View className="flex-row items-center mb-2">
-                <Text style={{ color: COLORS.text.secondary }} className="text-xs font-semibold tracking-widest mr-1">{label}</Text>
+                <Text className="text-text-secondary text-xs font-semibold tracking-widest mr-1">{label}</Text>
                 {info && <MaterialIcons name="info-outline" size={13} color={COLORS.text.muted} />}
             </View>
             <View
-                className="rounded-xl px-4 py-3"
-                style={{
-                    backgroundColor: COLORS.dark[100],
-                    borderWidth: 1,
-                    borderColor: errors[field] ? COLORS.danger.DEFAULT : 'transparent',
-                }}
+                className={`rounded-xl px-4 py-3 bg-dark-100 border ${errors[field] ? 'border-danger' : 'border-transparent'}`}
             >
                 <TextInput
                     value={value}
@@ -178,13 +173,13 @@ export default function AgregarInsumoScreen() {
                 />
             </View>
             {errors[field] && (
-                <Text className="text-red-500 text-xs mt-1 ml-1 font-medium">{errors[field]}</Text>
+                <Text className="text-xs mt-1 ml-1 font-medium" style={{ color: COLORS.danger.text }}>{errors[field]}</Text>
             )}
         </Animated.View>
     );
 
     return (
-        <SafeAreaView className="flex-1" style={{ backgroundColor: COLORS.bg }}>
+        <SafeAreaView className="flex-1 bg-bg">
             {/* Header */}
             <View className="flex-row items-center px-4 py-3 -mt-6">
                 <TouchableOpacity onPress={() => router.back()} className="mr-3">
@@ -198,19 +193,18 @@ export default function AgregarInsumoScreen() {
                 {renderInput('nombre', 'NOMBRE DEL ITEM', nombre, setNombre, 'Ej: Tinta Verde Intenso')}
 
                 {/* Categoría */}
-                <Text style={{ color: COLORS.text.secondary }} className="text-xs font-semibold tracking-widest mb-2">CATEGORÍA</Text>
-                <View className="flex-row rounded-xl p-1 mb-4" style={{ backgroundColor: COLORS.dark[100] }}>
+                <Text className="text-text-secondary text-xs font-semibold tracking-widest mb-2">CATEGORÍA</Text>
+                <View className="flex-row rounded-xl p-1 mb-4 bg-dark-100">
                     {CATEGORIAS.map((c) => {
                         const active = categoria === c.value;
                         return (
                             <TouchableOpacity
                                 key={c.value}
                                 onPress={() => setCategoria(c.value)}
-                                className="flex-1 py-2.5 rounded-lg items-center"
-                                style={{ backgroundColor: active ? COLORS.primary.DEFAULT : 'transparent' }}
+                                className={`flex-1 py-2.5 rounded-lg items-center ${active ? 'bg-primary' : 'bg-transparent'}`}
                                 activeOpacity={0.7}
                             >
-                                <Text style={{ color: active ? COLORS.text.primary : COLORS.text.muted, fontWeight: active ? '700' : '400', fontSize: 14 }}>
+                                <Text className={`text-sm ${active ? 'text-text-primary font-bold' : 'text-text-muted font-normal'}`}>
                                     {c.label}
                                 </Text>
                             </TouchableOpacity>
@@ -232,19 +226,18 @@ export default function AgregarInsumoScreen() {
 
                 {categoria === 'CAP' && (
                     <>
-                        <Text style={{ color: COLORS.text.secondary }} className="text-xs font-semibold tracking-widest mb-2">TAMAÑO DEL CAP</Text>
-                        <View className="flex-row rounded-xl p-1 mb-4" style={{ backgroundColor: COLORS.dark[100] }}>
+                        <Text className="text-text-secondary text-xs font-semibold tracking-widest mb-2">TAMAÑO DEL CAP</Text>
+                        <View className="flex-row rounded-xl p-1 mb-4 bg-dark-100">
                             {['CHICA', 'MEDIANA', 'GRANDE'].map((size) => {
                                 const active = capSize === size;
                                 return (
                                     <TouchableOpacity
                                         key={size}
                                         onPress={() => setCapSize(size)}
-                                        className="flex-1 py-2.5 rounded-lg items-center"
-                                        style={{ backgroundColor: active ? COLORS.primary.DEFAULT : 'transparent' }}
+                                        className={`flex-1 py-2.5 rounded-lg items-center ${active ? 'bg-primary' : 'bg-transparent'}`}
                                         activeOpacity={0.7}
                                     >
-                                        <Text style={{ color: active ? COLORS.text.primary : COLORS.text.muted, fontWeight: active ? '700' : '400', fontSize: 14 }}>
+                                        <Text className={`text-sm ${active ? 'text-text-primary font-bold' : 'text-text-muted font-normal'}`}>
                                             {size}
                                         </Text>
                                     </TouchableOpacity>
@@ -258,18 +251,17 @@ export default function AgregarInsumoScreen() {
 
                 {/* Unidad */}
                 <View className="flex-row items-center justify-between mb-6">
-                    <Text style={{ color: COLORS.text.secondary }} className="text-sm">Tipo de Unidad Asignada:</Text>
-                    <View className="rounded-full px-4 py-1.5" style={{ backgroundColor: COLORS.primary.DEFAULT }}>
+                    <Text className="text-text-secondary text-sm">Tipo de Unidad Asignada:</Text>
+                    <View className="rounded-full px-4 py-1.5 bg-primary">
                         <Text className="text-white text-sm font-semibold">{unidadLabel(categoria)}</Text>
                     </View>
                 </View>
 
                 {/* Foto */}
-                <Text style={{ color: COLORS.text.secondary }} className="text-xs font-semibold tracking-widest mb-2">FOTO DEL PRODUCTO (OPCIONAL)</Text>
+                <Text className="text-text-secondary text-xs font-semibold tracking-widest mb-2">FOTO DEL PRODUCTO (OPCIONAL)</Text>
                 <TouchableOpacity
                     onPress={pickImage}
-                    className="rounded-xl overflow-hidden mb-4 items-center justify-center"
-                    style={{ backgroundColor: COLORS.primary.dark, height: 160 }}
+                    className="rounded-xl overflow-hidden mb-4 items-center justify-center h-40 bg-primary-dark"
                 >
                     {fotoPreview ? (
                         <Image source={{ uri: fotoPreview }} style={{ width: '100%', height: '100%' }} resizeMode="cover" />
@@ -284,24 +276,19 @@ export default function AgregarInsumoScreen() {
             </ScrollView>
 
             {/* Botón guardar */}
-            <View className="px-4 pb-6 pt-2 absolute bottom-0 left-0 right-0" style={{ backgroundColor: COLORS.bg }}>
-                <TouchableOpacity
-                    onPress={handleGuardar}
+            <View className="px-4 pb-6 pt-2 absolute bottom-0 left-0 right-0 bg-bg">
+                <TouchableOpacity 
+                    className={`flex-row justify-center items-center py-4 rounded-xl mt-4 ${loading ? 'opacity-50' : ''}`}
+                    style={{ backgroundColor: COLORS.primary.DEFAULT, ...PRIMARY_SHADOW }}
                     disabled={loading}
-                    className="rounded-2xl py-4 items-center flex-row justify-center"
-                    style={{
-                        backgroundColor: COLORS.primary.DEFAULT,
-                        ...PRIMARY_SHADOW,
-                        elevation: 6,
-                    }}
-                    activeOpacity={0.85}
+                    onPress={handleGuardar}
                 >
                     {loading ? (
-                        <ActivityIndicator color="#fff" size="small" />
+                        <ActivityIndicator color={COLORS.text.primary} size="small" />
                     ) : (
                         <>
-                            <MaterialIcons name="save" size={20} color="#FFFFFF" style={{ marginRight: 8 }} />
-                            <Text className="text-white font-bold text-base">Guardar ítem</Text>
+                            <MaterialIcons name="save" size={20} color={COLORS.text.primary} style={{ marginRight: 8 }} />
+                            <Text className="text-white text-sm font-bold">GUARDAR INSUMO</Text>
                         </>
                     )}
                 </TouchableOpacity>
