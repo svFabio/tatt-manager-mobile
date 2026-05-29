@@ -123,6 +123,11 @@ function CustomDrawerContent(props: any) {
                 <View className="w-8 items-center justify-center"><MaterialIcons name="history" size={22} color={getIconColor("sessions")} /></View>
                 <Text className="font-semibold ml-3 text-base" style={{ color: getTextColor("sessions") }}>Historial de sesiones</Text>
               </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => router.push("/(drawer)/settings" as any)} className={getBtnStyle("settings")} activeOpacity={0.7}>
+                <View className="w-8 items-center justify-center"><Feather name="settings" size={20} color={getIconColor("settings")} /></View>
+                <Text className="font-semibold ml-3 text-base" style={{ color: getTextColor("settings") }}>Configuración</Text>
+              </TouchableOpacity>
             </View>
           </>
         )}
