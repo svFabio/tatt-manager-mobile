@@ -19,8 +19,13 @@ function CustomDrawerContent(props: any) {
   const currentStudio = useStudioStore((state) => state.currentStudio);
   const clearStudio = useStudioStore((state) => state.clearStudio);
 
+  // 🛡️ DECLARACIÓN ÚNICA Y LIMPIA:
   const currentRouteName = state ? state.routes[state.index].name : "";
-  const isRouteActive = (name: string) => currentRouteName === name;
+  
+  const isRouteActive = (name: string) => {
+    if (name === "estadisticas" && currentRouteName === "estadisticas/index") return true;
+    return currentRouteName === name;
+  };
 
   const getBtnStyle = (name: string) => `flex-row items-center px-3 py-3 rounded-xl ${isRouteActive(name) ? "bg-dark-100" : ""}`;
   const getTextColor = (name: string) => isRouteActive(name) ? COLORS.text.primary : COLORS.text.secondary;
@@ -37,7 +42,7 @@ function CustomDrawerContent(props: any) {
           style: "destructive",
           onPress: () => {
             clearStudio();
-            router.replace("/(studio)/select");
+            router.replace("/(studio)/select" as any);
           }
         }
       ]
@@ -69,6 +74,11 @@ function CustomDrawerContent(props: any) {
           <TouchableOpacity onPress={() => router.push("/(drawer)" as any)} className={getBtnStyle("index")} activeOpacity={0.7}>
             <View className="w-8 items-center justify-center"><Ionicons name="home" size={20} color={getIconColor("index")} /></View>
             <Text className="font-semibold ml-3 text-base" style={{ color: getTextColor("index") }}>Inicio</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={() => router.push("/(drawer)/perfil" as any)} className={getBtnStyle("perfil")} activeOpacity={0.7}>
+            <View className="w-8 items-center justify-center"><Feather name="user" size={20} color={getIconColor("perfil")} /></View>
+            <Text className="font-semibold ml-3 text-base" style={{ color: getTextColor("perfil") }}>Mi Perfil</Text>
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => router.push("/(drawer)/calendar" as any)} className={getBtnStyle("calendar")} activeOpacity={0.7}>
@@ -111,7 +121,12 @@ function CustomDrawerContent(props: any) {
 
               <TouchableOpacity onPress={() => router.push("/(drawer)/stats" as any)} className={getBtnStyle("stats")} activeOpacity={0.7}>
                 <View className="w-8 items-center justify-center"><Feather name="activity" size={20} color={getIconColor("stats")} /></View>
-                <Text className="font-semibold ml-3 text-base" style={{ color: getTextColor("stats") }}>Estadisticas</Text>
+                <Text className="font-semibold ml-3 text-base" style={{ color: getTextColor("stats") }}>Estadisticas (Old)</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => router.push("/(drawer)/estadisticas" as any)} className={getBtnStyle("estadisticas")} activeOpacity={0.7}>
+                <View className="w-8 items-center justify-center"><Feather name="activity" size={20} color={getIconColor("estadisticas")} /></View>
+                <Text className="font-semibold ml-3 text-base" style={{ color: getTextColor("estadisticas") }}>Estadisticas</Text>
               </TouchableOpacity>
 
               <TouchableOpacity onPress={() => router.push("/(drawer)/inventory" as any)} className={getBtnStyle("inventory")} activeOpacity={0.7}>
@@ -135,7 +150,7 @@ function CustomDrawerContent(props: any) {
         <View className="px-3 mt-10 mb-6">
            <TouchableOpacity onPress={handleExitStudio} className="flex-row items-center px-3 py-3 rounded-xl" activeOpacity={0.7}>
              <View className="w-8 items-center justify-center"><Feather name="arrow-left-circle" size={20} color={COLORS.danger.text} /></View>
-             <Text className="font-semibold ml-3 text-base" style={{ color: COLORS.danger.text }}>Salir del estudio</Text>
+             <View><Text className="font-semibold ml-3 text-base" style={{ color: COLORS.danger.text }}>Salir del estudio</Text></View>
            </TouchableOpacity>
         </View>
 
@@ -157,19 +172,16 @@ export default function DrawerLayout() {
         }}
       >
         <Drawer.Screen name="index" options={{ title: "Inicio", headerShown: true }} />
+        <Drawer.Screen name="perfil" options={{ title: "Editar Perfil", headerShown: true }} />
         <Drawer.Screen name="calendar" options={{ title: "Calendario", headerShown: true }} />
         <Drawer.Screen name="requests" options={{ title: "Solicitudes", headerShown: true }} />
         <Drawer.Screen name="chat" options={{ title: "Chat WhatsApp", headerShown: true }} />
         <Drawer.Screen name="end-session" options={{ title: "Terminar Sesión", headerShown: true }} />
-        
-        {/* Placeholder routes added silently */}
         <Drawer.Screen name="whatsapp" options={{ title: "Vincular WhatsApp", headerShown: true }} />
         <Drawer.Screen name="users" options={{ title: "Usuarios", headerShown: true }} />
-        <Drawer.Screen name="stats" options={{ title: "Estadisticas", headerShown: true }} />
+        <Drawer.Screen name="estadisticas/index" options={{ title: "Estadísticas del Estudio", headerShown: true }} />
         <Drawer.Screen name="inventory" options={{ title: "Inventario", headerShown: true }} />
         <Drawer.Screen name="sessions" options={{ title: "Historial de Sesiones", headerShown: true }} />
-        
-        {/* Futuras u ocultas */}
         <Drawer.Screen name="agenda" options={{ title: "Agenda", headerShown: true }} />
         <Drawer.Screen name="reports" options={{ title: "Reportes", headerShown: true }} />
         <Drawer.Screen name="settings" options={{ title: "Configuración", headerShown: true }} />
