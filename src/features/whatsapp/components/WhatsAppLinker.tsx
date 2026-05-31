@@ -38,7 +38,7 @@ export const WhatsAppLinker: React.FC<WhatsAppLinkerProps> = ({
   return (
     <View>
       <View className="mb-8 mt-2">
-        <Text className="text-base" style={{ color: COLORS.text.secondary }}>
+        <Text className="text-base text-text-secondary">
           Elige como conectar tu numero al bot
         </Text>
       </View>
@@ -53,8 +53,7 @@ export const WhatsAppLinker: React.FC<WhatsAppLinkerProps> = ({
             }`}
           >
             <Text
-              className="font-bold"
-              style={{ color: method === "qr" ? COLORS.text.primary : COLORS.text.muted }}
+              className={`font-bold ${method === "qr" ? "text-text-primary" : "text-text-muted"}`}
             >
               Codigo QR
             </Text>
@@ -66,8 +65,7 @@ export const WhatsAppLinker: React.FC<WhatsAppLinkerProps> = ({
             }`}
           >
             <Text
-              className="font-bold"
-              style={{ color: method === "pair" ? COLORS.text.primary : COLORS.text.muted }}
+              className={`font-bold ${method === "pair" ? "text-text-primary" : "text-text-muted"}`}
             >
               Codigo de texto
             </Text>

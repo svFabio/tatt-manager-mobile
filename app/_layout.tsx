@@ -6,6 +6,9 @@ import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
 import * as ReactNative from "react-native";
+import { Platform } from "react-native";
+import * as SystemUI from "expo-system-ui";
+import * as NavigationBar from "expo-navigation-bar";
 import { useWebSocket } from "@/src/hooks/useWebSocket";
 import { COLORS } from "@/src/theme/colors";
 import {
@@ -62,6 +65,17 @@ export default function RootLayout() {
 function RootLayoutNav() {
   // ── Inicializar conexión WebSocket global ──
   useWebSocket();
+
+  useEffect(() => {
+    // Forzar el fondo del sistema base para evitar destellos blancos
+    SystemUI.setBackgroundColorAsync(COLORS.dark.DEFAULT);
+    
+    // Forzar la barra de navegación (Android) a ser negra con botones claros
+    if (Platform.OS === "android") {
+      NavigationBar.setBackgroundColorAsync(COLORS.dark.DEFAULT);
+      NavigationBar.setButtonStyleAsync("light");
+    }
+  }, []);
 
   return (
     <ReactNative.View className="flex-1 bg-dark">

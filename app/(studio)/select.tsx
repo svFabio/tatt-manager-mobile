@@ -59,16 +59,22 @@ export default function SelectStudioScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-dark">
-      <ScrollView contentContainerStyle={{ flexGrow: 1, padding: 24, paddingBottom: 40 }}>
+    <SafeAreaView className="flex-1 bg-bg relative">
+      {/* ── Background Glow ── */}
+      <View className="absolute top-[-5%] left-[-10%] w-72 h-72 bg-primary rounded-full opacity-10" />
+      
+      <ScrollView contentContainerStyle={{ flexGrow: 1, padding: 24, paddingBottom: 40 }} showsVerticalScrollIndicator={false}>
         
         {/* Header Icon */}
-        <View className="items-center mt-10 mb-8">
-          <View style={{ width: 80, height: 80, borderRadius: 20, alignItems: "center", justifyContent: "center", backgroundColor: COLORS.dark[200], borderWidth: 1, borderColor: COLORS.primary.border }}>
-             <Ionicons name="briefcase-outline" size={36} color={COLORS.primary.DEFAULT} />
+        <View className="items-center mt-12 mb-10">
+          <View className="w-20 h-20 rounded-3xl items-center justify-center bg-primary-ghost border border-primary-border">
+             <Ionicons name="business" size={32} color={COLORS.primary.DEFAULT} />
           </View>
-          <Text className="text-white text-3xl font-bold text-center mt-6">
-            Seleccionar espacio{"\n"}de trabajo
+          <Text className="text-text-primary text-3xl font-bold text-center mt-6">
+            Selecciona tu espacio
+          </Text>
+          <Text className="text-text-muted text-sm text-center mt-2 px-4">
+            Elige a qué estudio de tatuajes deseas entrar para gestionar tus citas
           </Text>
         </View>
 
@@ -88,24 +94,28 @@ export default function SelectStudioScreen() {
                 key={studio.negocioId}
                 onPress={() => handleSelectStudio(studio)}
                 activeOpacity={0.7}
-                className="bg-dark-100 rounded-2xl p-5 flex-row items-center justify-between"
-                style={{ borderWidth: 1, borderColor: COLORS.border.subtle }}
+                className="bg-dark-100 rounded-3xl p-5 flex-row items-center justify-between border border-border-subtle"
               >
                 <View className="flex-1">
-                  <Text className="text-white text-xl font-bold mb-1">{studio.nombre}</Text>
+                  <Text className="text-text-primary text-xl font-bold mb-1.5">{studio.nombre}</Text>
                   <View className="flex-row items-center">
-                    <Text className="text-muted text-sm">{studio.rol === 'ADMIN' ? 'Administrador' : 'Tatuador'}</Text>
+                    <View className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: studio.rol === 'ADMIN' ? COLORS.primary.DEFAULT : COLORS.success.DEFAULT }} />
+                    <Text className="text-text-secondary text-xs uppercase tracking-widest font-bold">
+                      {studio.rol === 'ADMIN' ? 'Administrador' : 'Tatuador'}
+                    </Text>
                     {studio.rol === 'ADMIN' && (
-                      <FontAwesome5 name="crown" size={12} color={COLORS.primary.DEFAULT} style={{ marginLeft: 6 }} />
+                      <FontAwesome5 name="crown" size={10} color={COLORS.primary.DEFAULT} style={{ marginLeft: 6 }} />
                     )}
                   </View>
                 </View>
-                <Ionicons name="chevron-forward" size={24} color={COLORS.text.muted} />
+                <View className="w-10 h-10 rounded-full bg-dark-200 items-center justify-center">
+                  <Ionicons name="chevron-forward" size={18} color={COLORS.text.muted} />
+                </View>
               </TouchableOpacity>
             ))}
             
             {studios.length === 0 && !loading && (
-              <Text className="text-muted text-center py-6">No perteneces a ningún estudio aún.</Text>
+              <Text className="text-text-muted text-center py-6 text-sm">No perteneces a ningún estudio aún.</Text>
             )}
           </View>
         )}
@@ -127,8 +137,9 @@ export default function SelectStudioScreen() {
             onPress={() => router.push("/(studio)/create")}
           />
           
-          <TouchableOpacity onPress={handleLogout} className="mt-6 items-center p-2">
-            <Text className="text-alert font-medium text-base">Cerrar sesión</Text>
+          <TouchableOpacity onPress={handleLogout} className="mt-8 mb-4 items-center p-2 flex-row justify-center">
+            <Ionicons name="log-out-outline" size={18} color={COLORS.danger.text} />
+            <Text className="text-danger-text font-bold text-sm ml-2 uppercase tracking-widest">Cerrar sesión</Text>
           </TouchableOpacity>
         </View>
 

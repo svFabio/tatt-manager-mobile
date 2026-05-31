@@ -14,8 +14,9 @@ export function useAppointments() {
   /** Carga las citas desde el backend. */
   const fetchAppointments = useCallback(async () => {
     try {
-      const response = await api.get("/appointments");
-      setAppointments(response.data);
+      const response = await api.get("/citas");
+      const citasArray = response.data.data || response.data;
+      setAppointments(Array.isArray(citasArray) ? citasArray : []);
     } catch (error) {
       console.error("[useAppointments] Error al cargar citas:", error);
     }
@@ -25,8 +26,9 @@ export function useAppointments() {
   const createAppointment = useCallback(
     async (data: Omit<Appointment, "id" | "createdAt">) => {
       try {
-        const response = await api.post("/appointments", data);
-        addManualAppointment(response.data);
+        const response = await api.post("/citas", data);
+        const newCita = response.data.data || response.data;
+        addManualAppointment(newCita);
       } catch (error) {
         console.error("[useAppointments] Error al crear cita:", error);
         throw error;
@@ -39,7 +41,7 @@ export function useAppointments() {
   const changeStatus = useCallback(
     async (appointmentId: string, status: Appointment["status"]) => {
       try {
-        await api.patch(`/appointments/${appointmentId}`, { status });
+        await api.patch(`/citas/${appointmentId}`, { status });
         updateAppointment(appointmentId, { status });
       } catch (error) {
         console.error("[useAppointments] Error al actualizar cita:", error);
@@ -51,13 +53,13 @@ export function useAppointments() {
 
   // Citas de hoy
   const today = new Date().toISOString().split("T")[0];
-  const todayAppointments = appointments.filter(
-    (a) => a.date.startsWith(today)
+  const todayAppointments = (appointments || []).filter(
+    (a) => a.date && a.date.startsWith(today)
   );
 
   // Próximas citas
-  const upcomingAppointments = appointments.filter(
-    (a) => new Date(a.date) >= new Date() && a.status === "scheduled"
+  const upcomingAppointments = (appointments || []).filter(
+    (a) => a.date && new Date(a.date) >= new Date() && a.status === "scheduled"
   );
 
   return {
