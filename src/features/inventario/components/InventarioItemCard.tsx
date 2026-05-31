@@ -105,12 +105,7 @@ export function InventarioItemCard({ item, onUpdated, index = 0 }: Props) {
             }}
         >
         <View
-            className="rounded-2xl p-4 mb-3"
-            style={{
-                backgroundColor: COLORS.dark[100],
-                borderWidth: 1,
-                borderColor: item.esBajo ? COLORS.danger.border : COLORS.border.subtle,
-            }}
+            className={`rounded-2xl p-4 mb-3 bg-dark-100 border ${item.esBajo ? 'border-danger-border' : 'border-border-subtle'}`}
         >
             <View className="flex-row items-start justify-between mb-3">
                 <View className="flex-row items-center flex-1 mr-2">
@@ -134,57 +129,55 @@ export function InventarioItemCard({ item, onUpdated, index = 0 }: Props) {
                         <Text className="text-white font-semibold text-base" numberOfLines={1}>
                             {item.nombre}
                         </Text>
-                        <Text style={{ color: COLORS.text.muted }} className="text-xs mt-0.5">{item.marca}</Text>
+                        <Text className="text-text-muted text-xs mt-0.5">{item.marca}</Text>
                     </View>
                 </View>
 
                 <View className="items-end">
                     {item.esBajo && (
-                        <View className="flex-row items-center rounded-lg px-2.5 py-1 mb-1.5" style={{ backgroundColor: COLORS.danger.bg }}>
-                            <MaterialIcons name="error-outline" size={12} color={COLORS.danger.text} style={{ marginRight: 4 }} />
-                            <Text className="text-[10px] font-bold tracking-widest" style={{ color: COLORS.danger.text }}>BAJO</Text>
+                        <View className="flex-row items-center rounded-lg px-2.5 py-1 mb-1.5 bg-danger-bg">
+                            <MaterialIcons name="error-outline" size={12} color={COLORS.danger.text} className="mr-1" />
+                            <Text className="text-[10px] font-bold tracking-widest text-danger-text">BAJO</Text>
                         </View>
                     )}
                     <View className="flex-row items-center">
                         <Text className="text-white font-bold text-lg mr-3">
                             {item.cantidadActual}{' '}
-                            <Text style={{ color: COLORS.text.muted }} className="text-sm font-normal">{item.unidad}</Text>
+                            <Text className="text-text-muted text-sm font-normal">{item.unidad}</Text>
                         </Text>
                         <TouchableOpacity
                             onPress={() => {
                                 // @ts-ignore
                                 router.push({ pathname: '/(drawer)/inventory/edit', params: { item: JSON.stringify(item) } });
                             }}
-                            className="p-2 rounded-lg ml-1"
-                            style={{ backgroundColor: COLORS.primary.ghost }}
+                            className="p-2 rounded-lg ml-1 bg-primary-ghost"
                         >
-                            <MaterialIcons name="edit" size={22} color="#FFFFFF" />
+                            <MaterialIcons name="edit" size={22} color={COLORS.text.primary} />
                         </TouchableOpacity>
                     </View>
                 </View>
             </View>
 
-            <View className="flex-row items-center rounded-xl overflow-hidden" style={{ backgroundColor: COLORS.dark[200] }}>
+            <View className="flex-row items-center rounded-xl overflow-hidden bg-dark-200">
                 <TouchableOpacity
                     onPress={() => applyDelta(-10)}
                     disabled={loading}
                     className="flex-1 py-3 items-center"
                     activeOpacity={0.6}
                 >
-                    <Text style={{ color: COLORS.danger.DEFAULT }} className="font-bold text-sm">−10</Text>
+                    <Text className="text-danger font-bold text-sm">−10</Text>
                 </TouchableOpacity>
 
-                <View style={{ width: 1, height: 20, backgroundColor: COLORS.dark[300] }} />
+                <View className="w-[1px] h-5 bg-dark-300" />
 
                 <TextInput
                     value={inputValue}
                     onChangeText={setInputValue}
                     keyboardType="numeric"
-                    className="flex-1 text-center text-white font-bold text-base py-3"
-                    style={{ backgroundColor: 'transparent' }}
+                    className="flex-1 text-center text-white font-bold text-base py-3 bg-transparent"
                 />
 
-                <View style={{ width: 1, height: 20, backgroundColor: COLORS.dark[300] }} />
+                <View className="w-[1px] h-5 bg-dark-300" />
 
                 <TouchableOpacity
                     onPress={() => applyDelta(10)}
@@ -192,10 +185,10 @@ export function InventarioItemCard({ item, onUpdated, index = 0 }: Props) {
                     className="flex-1 py-3 items-center"
                     activeOpacity={0.6}
                 >
-                    <Text className="text-sm font-bold" style={{ color: COLORS.success.DEFAULT }}>+10</Text>
+                    <Text className="text-sm font-bold text-success">+10</Text>
                 </TouchableOpacity>
 
-                <View style={{ width: 1, height: 20, backgroundColor: COLORS.dark[300] }} />
+                <View className="w-[1px] h-5 bg-dark-300" />
 
                 <TouchableOpacity
                     onPress={handleConfirm}

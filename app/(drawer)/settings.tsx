@@ -11,6 +11,7 @@ import {
     View,
 } from 'react-native';
 import { Text } from '@/src/components/StyledText';
+import { BaseModal } from '@/src/components/BaseModal';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Feather, MaterialIcons } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
@@ -50,7 +51,7 @@ const Toast = ({ message, visible, type = 'success' }: ToastProps) => {
 
     if (!visible) return null;
 
-    const bg = type === 'error' ? COLORS.danger.DEFAULT : type === 'warning' ? COLORS.warning.DEFAULT : '#1E293B';
+    const bg = type === 'error' ? COLORS.danger.DEFAULT : type === 'warning' ? COLORS.warning.DEFAULT : COLORS.dark[200];
 
     return (
         <Animated.View
@@ -66,7 +67,7 @@ const Toast = ({ message, visible, type = 'success' }: ToastProps) => {
                 padding: 14,
             }}
         >
-            <Text style={{ color: '#fff', textAlign: 'center', fontWeight: '600', fontSize: 13 }}>
+            <Text className="text-text-primary text-center font-semibold text-sm">
                 {message}
             </Text>
         </Animated.View>
@@ -81,24 +82,12 @@ interface ConflictModalProps {
     onClose: () => void;
 }
 const ConflictModal = ({ visible, mensaje, citas, onClose }: ConflictModalProps) => (
-    <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
-        <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.7)', justifyContent: 'center', alignItems: 'center', padding: 24 }}>
-            <View
-                style={{
-                    backgroundColor: COLORS.dark[100],
-                    borderRadius: 24,
-                    borderWidth: 1,
-                    borderColor: COLORS.warning.DEFAULT,
-                    padding: 24,
-                    width: '100%',
-                    maxWidth: 360,
-                }}
-            >
+    <BaseModal visible={visible} onClose={onClose} maxWidth={360} containerStyle={{ borderColor: COLORS.warning.DEFAULT }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 12 }}>
                     <View style={{ backgroundColor: COLORS.warning.ghost, width: 40, height: 40, borderRadius: 20, alignItems: 'center', justifyContent: 'center' }}>
                         <Feather name="alert-triangle" size={20} color={COLORS.warning.text} />
                     </View>
-                    <Text style={{ color: COLORS.text.primary, fontWeight: '700', fontSize: 16, flex: 1 }}>
+                    <Text className="text-text-primary font-bold text-base" style={{ flex: 1 }}>
                         Advertencia
                     </Text>
                 </View>
@@ -122,7 +111,7 @@ const ConflictModal = ({ visible, mensaje, citas, onClose }: ConflictModalProps)
                                 borderLeftColor: COLORS.warning.DEFAULT,
                             }}
                         >
-                            <Text style={{ color: COLORS.text.primary, fontWeight: '600', fontSize: 13 }}>
+                            <Text className="text-text-primary font-semibold text-sm">
                                 {c.cliente}
                             </Text>
                             <Text style={{ color: COLORS.text.muted, fontSize: 11, marginTop: 2 }}>
@@ -147,11 +136,9 @@ const ConflictModal = ({ visible, mensaje, citas, onClose }: ConflictModalProps)
                         alignItems: 'center',
                     }}
                 >
-                    <Text style={{ color: '#fff', fontWeight: '700', fontSize: 14 }}>Entendido</Text>
+                    <Text className="text-text-primary font-bold text-sm">Entendido</Text>
                 </TouchableOpacity>
-            </View>
-        </View>
-    </Modal>
+    </BaseModal>
 );
 
 
@@ -200,7 +187,7 @@ const HourPickerModal = ({ visible, label, value, onConfirm, onClose }: HourPick
                     borderColor: COLORS.border.subtle,
                 }}
             >
-                <Text style={{ color: active ? '#fff' : COLORS.text.primary, fontWeight: '700', fontSize: 18 }}>
+                <Text className="text-text-primary font-bold text-lg">
                     {h12.toString().padStart(2, '0')}
                 </Text>
                 <Text style={{ color: active ? 'rgba(255,255,255,0.7)' : COLORS.text.muted, fontSize: 10, marginTop: 2 }}>
@@ -230,7 +217,7 @@ const HourPickerModal = ({ visible, label, value, onConfirm, onClose }: HourPick
                     <Text style={{ color: COLORS.text.muted, fontSize: 11, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 4 }}>
                         Seleccionar hora
                     </Text>
-                    <Text style={{ color: COLORS.text.primary, fontWeight: '700', fontSize: 18, marginBottom: 20 }}>
+                    <Text className="text-text-primary font-bold text-lg mb-20">
                         {label}
                     </Text>
 
@@ -267,8 +254,8 @@ const HourPickerModal = ({ visible, label, value, onConfirm, onClose }: HourPick
                             gap: 8,
                         }}
                     >
-                        <Feather name="check" size={17} color="#fff" />
-                        <Text style={{ color: '#fff', fontWeight: '700', fontSize: 15 }}>
+                        <Feather name="check" size={17} color={COLORS.text.primary} />
+                        <Text style={{ color: COLORS.text.primary, fontWeight: '700', fontSize: 15 }}>
                             Confirmar · {toLabel(selected).h12.toString().padStart(2, '0')}:00 {toLabel(selected).ampm}
                         </Text>
                     </TouchableOpacity>
@@ -416,7 +403,7 @@ export default function SettingsScreen() {
     }
 
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.bg }} edges={['bottom']}>
+        <SafeAreaView className="flex-1 bg-bg" edges={['bottom']}>
             <Toast message={toastMsg} visible={toastVisible} type={toastType} />
 
             <ScrollView
@@ -450,7 +437,7 @@ export default function SettingsScreen() {
                         <Feather name="settings" size={24} color={COLORS.primary.light} />
                     </View>
                     <View>
-                        <Text style={{ color: COLORS.text.primary, fontWeight: '700', fontSize: 20 }}>
+                        <Text className="text-text-primary font-bold text-xl">
                             Configurar Estudio
                         </Text>
                         <Text style={{ color: COLORS.text.muted, fontSize: 12, marginTop: 2 }}>
@@ -705,13 +692,13 @@ export default function SettingsScreen() {
                     }}
                 >
                     {saving ? (
-                        <ActivityIndicator color="#fff" />
+                        <ActivityIndicator color={COLORS.text.primary} />
                     ) : (
                         <>
-                            <Text style={{ color: '#fff', fontWeight: '700', fontSize: 16 }}>
+                            <Text className="text-text-primary font-bold text-base">
                                 Guardar Cambios
                             </Text>
-                            <Feather name="check" size={18} color="#fff" />
+                            <Feather name="check" size={18} color={COLORS.text.primary} />
                         </>
                     )}
                 </TouchableOpacity>

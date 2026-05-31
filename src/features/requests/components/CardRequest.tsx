@@ -16,7 +16,7 @@ interface CardRequestProps {
 }
 
 export const CardRequest = ({ name, artist, status, recibido, zona, onPress }: CardRequestProps) => (
-    <View className="bg-dark mb-4 p-5 rounded-[28px] border border-white/5">
+    <View className="bg-dark-100 mb-4 p-5 rounded-[28px]">
         {/* Header */}
         <View className="flex-row justify-between items-start mb-4">
             <View className="flex-1 mr-3">
@@ -47,7 +47,7 @@ export const CardRequest = ({ name, artist, status, recibido, zona, onPress }: C
         <TouchableOpacity
             onPress={onPress}
             activeOpacity={0.7}
-            className="flex-row items-center justify-end pt-3 border-t border-white/5"
+            className="flex-row items-center justify-end pt-3 border-t border-dark-300"
         >
             <Text className="text-[11px] font-bold uppercase tracking-widest mr-1" style={{ color: COLORS.text.secondary }}>Ver Detalles</Text>
             <MaterialIcons name="chevron-right" size={16} color={COLORS.text.secondary} />

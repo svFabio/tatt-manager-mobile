@@ -25,19 +25,19 @@ interface CustomButtonProps extends TouchableOpacityProps {
 // ─── Mapas de estilos NativeWind ───────────────────────────────────────────
 
 const variantContainerStyles: Record<ButtonVariant, string> = {
-  primary: "bg-gold active:bg-gold-dark",
+  primary: "bg-primary active:bg-primary-dark",
   secondary: "bg-dark-200 active:bg-dark-300",
-  outline: "bg-transparent border-2 border-gold active:bg-gold/10",
+  outline: "bg-transparent border border-white/20 active:bg-white/10",
   danger: "bg-alert active:bg-alert-dark",
   ghost: "bg-transparent active:bg-dark-200",
 };
 
 const variantTextStyles: Record<ButtonVariant, string> = {
-  primary: "text-dark font-bold",
-  secondary: "text-white font-semibold",
-  outline: "text-gold font-semibold",
-  danger: "text-white font-bold",
-  ghost: "text-gold font-medium",
+  primary: "text-text-primary font-bold",
+  secondary: "text-text-primary font-semibold",
+  outline: "text-white font-semibold tracking-wide",
+  danger: "text-text-primary font-bold",
+  ghost: "text-primary font-medium",
 };
 
 const sizeContainerStyles: Record<ButtonSize, string> = {

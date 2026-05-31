@@ -46,15 +46,13 @@ export const SessionCard = ({ session, onPress }: Props) => {
     <TouchableOpacity
       activeOpacity={0.7}
       onPress={onPress}
-      className="px-4 py-5"
-      style={{ borderBottomWidth: 1, borderBottomColor: COLORS.border.subtle }}
+      className="px-4 py-5 border-b border-border-subtle"
     >
       {/* ─── Top row: avatar + info ─── */}
       <View className="flex-row items-center">
         {/* Avatar */}
         <View
-          className="w-10 h-10 rounded-xl items-center justify-center"
-          style={{ backgroundColor: COLORS.dark[200], borderWidth: 1, borderColor: COLORS.border.subtle }}
+        className="w-10 h-10 rounded-xl items-center justify-center bg-dark-200 border border-border-subtle"
         >
           <Text className="text-sm font-bold" style={{ color: avatarColor }}>
             {getInitials(session.artista.nombre)}
@@ -64,11 +62,10 @@ export const SessionCard = ({ session, onPress }: Props) => {
         {/* Name + Badge + Meta */}
         <View className="ml-4 flex-1">
           <View className="flex-row items-center gap-2">
-            <Text style={{ color: COLORS.text.primary }} className="text-base font-bold">{session.artista.nombre}</Text>
-            <View className="px-1.5 py-0.5 rounded-sm" style={{ backgroundColor: COLORS.success.DEFAULT + '20' }}>
+            <Text className="text-text-primary text-base font-bold">{session.artista.nombre}</Text>
+            <View className="px-1.5 py-0.5 rounded-sm bg-success/20">
               <Text
-                className="text-[9px] font-bold tracking-[0.45px] uppercase"
-                style={{ color: COLORS.success.DEFAULT }}
+                className="text-[9px] font-bold tracking-[0.45px] uppercase text-success"
               >
                 COMPLETADA
               </Text>
@@ -76,25 +73,25 @@ export const SessionCard = ({ session, onPress }: Props) => {
           </View>
 
           {/* Date · Duration · Zone */}
-          <View className="flex-row items-center mt-1" style={{ gap: 6 }}>
-            <View className="flex-row items-center" style={{ gap: 4 }}>
+          <View className="flex-row items-center mt-1 gap-1.5">
+            <View className="flex-row items-center gap-1">
               <MaterialIcons name="event" size={11} color={COLORS.text.secondary} />
-              <Text className="text-xs" style={{ color: COLORS.text.secondary }}>{formatDate(session.cerradaEn)}</Text>
+              <Text className="text-xs text-text-secondary">{formatDate(session.cerradaEn)}</Text>
             </View>
-            <Text className="text-xs" style={{ color: COLORS.text.dimmed }}>|</Text>
-            <View className="flex-row items-center" style={{ gap: 4 }}>
+            <Text className="text-xs text-text-dimmed">|</Text>
+            <View className="flex-row items-center gap-1">
               <MaterialIcons name="schedule" size={11} color={COLORS.text.secondary} />
-              <Text className="text-xs" style={{ color: COLORS.text.secondary }}>{formatDuration(session.duracionEnHoras)}</Text>
+              <Text className="text-xs text-text-secondary">{formatDuration(session.duracionEnHoras)}</Text>
             </View>
             {(() => {
               const zona = session.cita?.zonaDelCuerpo || session.cita?.solicitud?.zonaDelCuerpo;
               if (!zona) return null;
               return (
                 <>
-                  <Text className="text-xs" style={{ color: COLORS.text.dimmed }}>|</Text>
-                  <View className="flex-row items-center" style={{ gap: 4 }}>
+                  <Text className="text-xs text-text-dimmed">|</Text>
+                  <View className="flex-row items-center gap-1">
                     <MaterialIcons name="edit" size={11} color={COLORS.text.secondary} />
-                    <Text className="text-xs" style={{ color: COLORS.text.secondary }} numberOfLines={1}>
+                    <Text className="text-xs text-text-secondary" numberOfLines={1}>
                       {zona}
                     </Text>
                   </View>
@@ -108,24 +105,22 @@ export const SessionCard = ({ session, onPress }: Props) => {
       {/* ─── Material summary row ─── */}
       {hasMaterials && (
         <View
-          className="flex-row items-center justify-between mt-4 pt-3"
-          style={{ borderTopWidth: 1, borderTopColor: COLORS.border.subtle }}
+          className="flex-row items-center justify-between mt-4 pt-3 border-t border-border-subtle"
         >
           <View>
             <Text
-              className="text-[10px] font-bold tracking-widest uppercase mb-1"
-              style={{ color: COLORS.text.muted }}
+              className="text-[10px] font-bold tracking-widest uppercase mb-1 text-text-muted"
             >
               MATERIAL CONSUMIDO
             </Text>
-            <View className="flex-row items-center" style={{ gap: 16 }}>
-              <View className="flex-row items-center" style={{ gap: 8 }}>
-                <Text className="text-xs" style={{ color: COLORS.text.secondary }}>Caps:</Text>
-                <Text className="text-sm font-black" style={{ color: COLORS.text.primary }}>{totalCaps}</Text>
+            <View className="flex-row items-center gap-4">
+              <View className="flex-row items-center gap-2">
+                <Text className="text-xs text-text-secondary">Caps:</Text>
+                <Text className="text-sm font-black text-text-primary">{totalCaps}</Text>
               </View>
-              <View className="flex-row items-center" style={{ gap: 8 }}>
-                <Text className="text-xs" style={{ color: COLORS.text.secondary }}>Agujas:</Text>
-                <Text className="text-sm font-black" style={{ color: COLORS.primary.light }}>{totalAgujas}</Text>
+              <View className="flex-row items-center gap-2">
+                <Text className="text-xs text-text-secondary">Agujas:</Text>
+                <Text className="text-sm font-black text-primary-light">{totalAgujas}</Text>
               </View>
             </View>
           </View>

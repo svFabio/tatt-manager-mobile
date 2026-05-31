@@ -3,6 +3,7 @@ import {
     Alert, FlatList, Modal, Share, TouchableOpacity, View, ActivityIndicator, Animated, Clipboard
 } from 'react-native';
 import { Text } from '@/src/components/StyledText';
+import { BaseModal } from '@/src/components/BaseModal';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Feather, MaterialIcons } from '@expo/vector-icons';
 import { COLORS } from '@/src/theme/colors';
@@ -43,7 +44,7 @@ const RolBadge = ({ rol }: RolBadgeProps) => {
                 paddingVertical: 2,
             }}
         >
-            <Text style={{ color: isAdmin ? COLORS.primary.light : '#A78BFA', fontSize: 11, fontWeight: '700' }}>
+            <Text style={{ color: isAdmin ? COLORS.primary.light : COLORS.primary.DEFAULT, fontSize: 11, fontWeight: '700' }}>
                 {isAdmin ? 'Admin' : 'Artista'}
             </Text>
         </View>
@@ -78,7 +79,7 @@ const UserRow = ({ item, isMe, onMenuPress }: UserRowProps) => (
                 marginRight: 12,
             }}
         >
-            <Text style={{ color: '#fff', fontWeight: '700', fontSize: 14 }}>
+            <Text className="text-text-primary font-bold text-sm">
                 {getInitials(item.nombre)}
             </Text>
         </View>
@@ -86,12 +87,12 @@ const UserRow = ({ item, isMe, onMenuPress }: UserRowProps) => (
         {/* Info */}
         <View style={{ flex: 1 }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 2 }}>
-                <Text style={{ color: COLORS.text.primary, fontWeight: '700', fontSize: 14 }}>
+                <Text className="text-text-primary font-bold text-sm">
                     {item.nombre}
                 </Text>
                 <RolBadge rol={item.rol} />
             </View>
-            <Text style={{ color: COLORS.text.muted, fontSize: 12 }}>{item.email}</Text>
+            <Text className="text-text-muted text-xs">{item.email}</Text>
         </View>
 
         {/* Three-dot menu */}
@@ -133,12 +134,12 @@ const Toast = ({ message, visible }: ToastProps) => {
                 right: 20,
                 zIndex: 999,
                 opacity,
-                backgroundColor: '#1E293B',
+                backgroundColor: COLORS.dark[200],
                 borderRadius: 12,
                 padding: 14,
             }}
         >
-            <Text style={{ color: '#fff', textAlign: 'center', fontWeight: '600', fontSize: 13 }}>
+            <Text className="text-text-primary text-center font-semibold text-sm">
                 {message}
             </Text>
         </Animated.View>
@@ -306,7 +307,7 @@ export default function UsersScreen() {
                     marginBottom: 28,
                 }}
             >
-                <Text style={{ color: COLORS.text.primary, fontWeight: '700', fontSize: 16, marginBottom: 4 }}>
+                <Text className="text-text-primary font-bold text-base mb-4">
                     Código de Invitación del Estudio
                 </Text>
                 <Text style={{ color: COLORS.text.muted, fontSize: 12, marginBottom: 16 }}>
@@ -355,8 +356,8 @@ export default function UsersScreen() {
                         marginBottom: 10,
                     }}
                 >
-                    <Feather name="copy" size={16} color="#fff" />
-                    <Text style={{ color: '#fff', fontWeight: '700', fontSize: 14 }}>Copiar Código</Text>
+                    <Feather name="copy" size={16} color={COLORS.text.primary} />
+                    <Text className="text-text-primary font-bold text-sm">Copiar Código</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
@@ -379,24 +380,24 @@ export default function UsersScreen() {
                     ) : (
                         <Feather name="refresh-cw" size={16} color={COLORS.primary.DEFAULT} />
                     )}
-                    <Text style={{ color: COLORS.primary.DEFAULT, fontWeight: '700', fontSize: 14 }}>
+                    <Text className="text-primary font-bold text-sm">
                         Regenerar
                     </Text>
                 </TouchableOpacity>
             </View>
 
             {/* List header */}
-            <Text style={{ color: COLORS.text.primary, fontWeight: '700', fontSize: 18, marginBottom: 2 }}>
+            <Text className="text-text-primary font-bold text-lg mb-2">
                 Usuarios
             </Text>
-            <Text style={{ color: COLORS.text.muted, fontSize: 13, marginBottom: 12 }}>
+            <Text className="text-text-muted text-sm mb-12">
                 Gestiona los usuarios del sistema
             </Text>
         </View>
     );
 
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.bg }} edges={['bottom']}>
+        <SafeAreaView className="flex-1 bg-bg" edges={['bottom']}>
             <Toast message={toastMsg} visible={toastVisible} />
 
             {loading ? (
@@ -427,27 +428,13 @@ export default function UsersScreen() {
             )}
 
             {/* ─── Modal Elegante de Regeneración ─────────────────────────────────── */}
-            <Modal
+            <BaseModal
                 visible={showRegenerateModal}
-                transparent
-                animationType="fade"
-                onRequestClose={() => setShowRegenerateModal(false)}
+                onClose={() => setShowRegenerateModal(false)}
+                maxWidth={340}
             >
-                <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.7)', justifyContent: 'center', alignItems: 'center', padding: 24 }}>
-                    <View
-                        style={{
-                            backgroundColor: COLORS.dark[100],
-                            borderRadius: 24,
-                            borderWidth: 1,
-                            borderColor: COLORS.border.subtle,
-                            padding: 24,
-                            width: '100%',
-                            maxWidth: 340,
-                            alignItems: 'center'
-                        }}
-                    >
                         <View style={{ backgroundColor: 'rgba(239, 68, 68, 0.1)', width: 56, height: 56, borderRadius: 28, alignItems: 'center', justifyContent: 'center', marginBottom: 16 }}>
-                            <Feather name="alert-triangle" size={28} color={COLORS.danger.text || '#EF4444'} />
+                            <Feather name="alert-triangle" size={28} color={COLORS.danger.text} />
                         </View>
 
                         <Text style={{ color: COLORS.text.primary, fontWeight: '700', fontSize: 18, textAlign: 'center', marginBottom: 10 }}>
@@ -479,20 +466,18 @@ export default function UsersScreen() {
                                 activeOpacity={0.8}
                                 style={{
                                     flex: 1,
-                                    backgroundColor: COLORS.danger.DEFAULT || '#EF4444',
+                                    backgroundColor: COLORS.danger.DEFAULT,
                                     paddingVertical: 12,
                                     borderRadius: 12,
                                     alignItems: 'center'
                                 }}
                             >
-                                <Text style={{ color: '#fff', fontWeight: '700', fontSize: 14 }}>
-                                    Continuar
+                                <Text style={{ color: COLORS.text.primary, fontWeight: '600', fontSize: 14 }}>
+                                    Sí, regenerar
                                 </Text>
                             </TouchableOpacity>
                         </View>
-                    </View>
-                </View>
-            </Modal>
+            </BaseModal>
 
             {/* Context bottom sheet */}
             <Modal
@@ -531,7 +516,7 @@ export default function UsersScreen() {
                         <Text style={{ color: COLORS.text.muted, fontSize: 11, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1.2, marginBottom: 4 }}>
                             Opciones de Usuario
                         </Text>
-                        <Text style={{ color: COLORS.text.primary, fontWeight: '700', fontSize: 18, marginBottom: 20 }}>
+                        <Text className="text-text-primary font-bold text-lg mb-20">
                             {selectedUser?.nombre}
                         </Text>
 
