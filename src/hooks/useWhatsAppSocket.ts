@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { socket } from "../api/socket";
+import { socket, joinNegocioRoom } from "../api/socket";
 import { WhatsAppAPI } from "../api/whatsapp";
 
 type WhatsAppState = {
@@ -35,6 +35,8 @@ export const useWhatsAppSocket = (negocioId: number = 1) => {
   };
 
   useEffect(() => {
+    // ✅ Fix 2: Unirse al room del negocio para recibir solo sus eventos
+    joinNegocioRoom(negocioId);
     refreshStatus();
 
     const eventName = `whatsapp-status-${negocioId}`;
