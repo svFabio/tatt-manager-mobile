@@ -64,8 +64,8 @@ function CustomDrawerContent(props: any) {
   const isAdmin = currentStudio?.rol === "ADMIN";
 
   return (
-    <BlurView intensity={80} tint="dark" experimentalBlurMethod="dimezisBlurView" style={{ flex: 1, borderTopRightRadius: 32, borderBottomRightRadius: 32, overflow: 'hidden' }}>
-      <SafeAreaView style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.2)' }} edges={["top", "bottom"]}>
+    <BlurView intensity={45} tint="dark" experimentalBlurMethod="dimezisBlurView" style={{ flex: 1, borderTopRightRadius: 32, borderBottomRightRadius: 32, borderRightWidth: 1, borderColor: 'rgba(255, 255, 255, 0.05)', overflow: 'hidden' }}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.15)' }} edges={["top", "bottom"]}>
         <DrawerContentScrollView {...props} contentContainerStyle={{ paddingVertical: 24 }}>
         
         {/* Cabecera del Usuario */}
@@ -189,6 +189,7 @@ export default function DrawerLayout() {
           },
           drawerType: 'slide',
           overlayColor: 'rgba(0,0,0,0.15)',
+          sceneContainerStyle: { backgroundColor: COLORS.dark.DEFAULT },
         }}
       >
         <Drawer.Screen name="index" options={{ title: "Inicio", headerShown: true }} />
