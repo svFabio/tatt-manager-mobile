@@ -24,6 +24,7 @@ export default function SessionHistoryScreen() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const load = useCallback(async (searchTerm: string, artistaFilter: number | null) => {
+    if (!currentStudio) return;
     try {
       setLoading(true);
       const [sessRes, artRes] = await Promise.all([
@@ -40,7 +41,7 @@ export default function SessionHistoryScreen() {
     } finally {
       setLoading(false);
     }
-  }, [isAdmin]);
+  }, [isAdmin, currentStudio]);
 
   // Debounced search
   const [debouncedSearch, setDebouncedSearch] = useState('');
