@@ -28,7 +28,7 @@ export const WhatsAppPairCode: React.FC<WhatsAppPairCodeProps> = ({
           <View className="absolute top-0 right-0 p-4 opacity-5">
             <Ionicons name="keypad" size={100} color={COLORS.primary.DEFAULT} />
           </View>
-          <Text className="font-medium mb-6 text-center text-sm" style={{ color: COLORS.text.secondary }}>
+          <Text className="font-medium mb-6 text-center text-sm text-text-secondary">
             Tu código se ha generado correctamente.
           </Text>
           <View className="bg-dark-200 px-8 py-5 rounded-2xl border border-dark-300">
@@ -47,7 +47,7 @@ export const WhatsAppPairCode: React.FC<WhatsAppPairCodeProps> = ({
         </View>
       ) : (
         <View>
-          <Text className="text-xs uppercase tracking-widest font-bold mb-3 pl-1" style={{ color: COLORS.text.secondary }}>
+          <Text className="text-xs uppercase tracking-widest font-bold mb-3 pl-1 text-text-secondary">
             Número de teléfono (con código de país)
           </Text>
           <View className="bg-dark-100 rounded-2xl border border-dark-300 px-4 py-1 mb-2">
@@ -61,7 +61,7 @@ export const WhatsAppPairCode: React.FC<WhatsAppPairCodeProps> = ({
               editable={!actionLoading}
             />
           </View>
-          <Text className="text-xs italic mb-6 pl-1 pr-1" style={{ color: COLORS.text.dimmed }}>
+          <Text className="text-xs italic mb-6 pl-1 pr-1 text-text-dimmed">
             Sin + ni espacios. Bolivia: 591 + número. Argentina: 54 + area +
             numero
           </Text>
@@ -104,7 +104,7 @@ export const WhatsAppPairCode: React.FC<WhatsAppPairCodeProps> = ({
               <View className="w-8 h-8 rounded-full bg-dark-200 items-center justify-center mr-4 border border-dark-400">
                 <Text className="text-primary font-bold text-xs">{index + 1}</Text>
               </View>
-              <Text className="font-medium flex-1 text-sm" style={{ color: COLORS.text.primary }}>
+              <Text className="font-medium flex-1 text-sm text-text-primary">
                 {paso}
               </Text>
             </View>

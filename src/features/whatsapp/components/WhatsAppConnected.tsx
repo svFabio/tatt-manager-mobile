@@ -26,7 +26,7 @@ export const WhatsAppConnected: React.FC<WhatsAppConnectedProps> = ({
       <Text className="text-xl font-bold text-white mt-6 mb-2">
         Bot operativo
       </Text>
-      <Text className="text-center mb-8" style={{ color: COLORS.text.secondary }}>
+      <Text className="text-center mb-8 text-text-secondary">
         El sistema está escuchando mensajes de WhatsApp correctamente.
       </Text>
 
@@ -39,17 +39,16 @@ export const WhatsAppConnected: React.FC<WhatsAppConnectedProps> = ({
         {actionLoading ? (
           <ActivityIndicator color={COLORS.danger.text} />
         ) : (
-          <Text className="font-bold" style={{ color: COLORS.danger.text }}>Desvincular WhatsApp</Text>
+          <Text className="font-bold text-danger-text">Desvincular WhatsApp</Text>
         )}
       </TouchableOpacity>
 
       <TouchableOpacity
         onPress={onRestart}
         disabled={actionLoading}
-        className="py-3 px-8 rounded-xl flex-row items-center justify-center w-full mt-4"
-        style={{ backgroundColor: COLORS.dark[200] }}
+        className="py-3 px-8 rounded-xl flex-row items-center justify-center w-full mt-4 bg-dark-200"
       >
-        <Text className="font-bold" style={{ color: COLORS.text.secondary }}>Forzar Reinicio del Bot</Text>
+        <Text className="font-bold text-text-secondary">Forzar Reinicio del Bot</Text>
       </TouchableOpacity>
     </View>
   );

@@ -21,6 +21,15 @@ function formatDuracion(horas: number | string | null | undefined): string {
   return `${h.toFixed(1)} HRS`;
 }
 
+const CARD_COLORS = [
+  { main: '#7b61ff', light: '#b19dff', ghost: 'rgba(123, 97, 255, 0.15)' }, // Purple (default)
+  { main: '#34d399', light: '#6ee7b7', ghost: 'rgba(52, 211, 153, 0.15)' }, // Emerald
+  { main: '#fbbf24', light: '#fcd34d', ghost: 'rgba(251, 191, 36, 0.15)' }, // Amber
+  { main: '#f43f5e', light: '#fb7185', ghost: 'rgba(244, 63, 94, 0.15)' },  // Rose
+  { main: '#38bdf8', light: '#7dd3fc', ghost: 'rgba(56, 189, 248, 0.15)' }, // Sky Blue
+  { main: '#f472b6', light: '#f9a8d4', ghost: 'rgba(244, 114, 182, 0.15)' },// Pink
+];
+
 export const EventCard: React.FC<EventCardProps> = ({ cita, onPress, style }) => {
   const inicio = cita.fechaHoraInicio ? new Date(cita.fechaHoraInicio) : null;
   const fin = cita.fechaHoraFin ? new Date(cita.fechaHoraFin) : null;
@@ -30,6 +39,10 @@ export const EventCard: React.FC<EventCardProps> = ({ cita, onPress, style }) =>
   const tipo = (cita.tipoCita || "").toUpperCase();
   const duracion = formatDuracion(cita.duracionEnHoras);
 
+  // Pick color based on client id (or cita id as fallback) so it's consistent
+  const colorIndex = (cita.clienteId || cita.id || 0) % CARD_COLORS.length;
+  const themeColor = CARD_COLORS[colorIndex];
+
   return (
     <TouchableOpacity
       onPress={onPress}
@@ -37,7 +50,7 @@ export const EventCard: React.FC<EventCardProps> = ({ cita, onPress, style }) =>
       style={style}
       className="flex-row rounded-2xl overflow-hidden bg-dark-100 border border-dark-200"
     >
-      <View className="w-1.5 bg-primary" />
+      <View style={{ width: 6, backgroundColor: themeColor.main }} />
       <View className="flex-1 p-3">
         <Text className="text-text-primary font-bold text-base mb-1" numberOfLines={1}>
           {cita.cliente?.nombre ?? cita.clienteNombre ?? "Sin cliente"}
@@ -50,8 +63,8 @@ export const EventCard: React.FC<EventCardProps> = ({ cita, onPress, style }) =>
         </View>
         <View className="flex-row gap-2 flex-wrap">
           {tipo ? (
-            <View className="bg-primary-ghost px-2.5 py-1 rounded-full">
-              <Text className="text-primary-light text-[10px] font-bold tracking-wider">
+            <View style={{ backgroundColor: themeColor.ghost }} className="px-2.5 py-1 rounded-full">
+              <Text style={{ color: themeColor.light }} className="text-[10px] font-bold tracking-wider">
                 {tipo}
               </Text>
             </View>

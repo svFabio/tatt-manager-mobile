@@ -14,8 +14,9 @@ export function useRequests() {
   /** Carga las solicitudes iniciales desde el backend. */
   const fetchRequests = useCallback(async () => {
     try {
-      const response = await api.get("/requests");
-      setRequests(response.data);
+      const response = await api.get("/solicitudes");
+      const solicitudesArray = response.data.data || response.data;
+      setRequests(Array.isArray(solicitudesArray) ? solicitudesArray : []);
     } catch (error) {
       console.error("[useRequests] Error al cargar solicitudes:", error);
     }
@@ -25,7 +26,7 @@ export function useRequests() {
   const sendQuote = useCallback(
     async (requestId: string, price: number) => {
       try {
-        await api.patch(`/requests/${requestId}/quote`, { price });
+        await api.patch(`/solicitudes/${requestId}/cotizar`, { price });
         quoteRequest(requestId, price);
       } catch (error) {
         console.error("[useRequests] Error al cotizar:", error);
@@ -36,8 +37,8 @@ export function useRequests() {
   );
 
   // Filtros por estado
-  const pendingRequests = requests.filter((r) => r.status === "pending");
-  const quotedRequests = requests.filter((r) => r.status === "quoted");
+  const pendingRequests = (requests || []).filter((r) => r.status === "PENDIENTE" || r.status === "pending");
+  const quotedRequests = (requests || []).filter((r) => r.status === "COTIZADA" || r.status === "quoted");
 
   return {
     requests,

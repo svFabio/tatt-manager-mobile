@@ -8,15 +8,15 @@
 
 module.exports = {
   // ── Fondos ──
-  bg: '#0A0A0A',
+  bg: '#000000',
   
   // ── Escala de grises (dark) ──
   dark: {
-    DEFAULT: '#121212',
-    100: '#1E1E1E',
-    200: '#2A2A2A',
-    300: '#3A3A3A',
-    400: '#4A4A4A',
+    DEFAULT: '#000000',
+    100: '#121212',
+    200: '#1C1C1E',
+    300: '#2C2C2E',
+    400: '#3A3A3C',
   },
 
   // ── Dorado ──
@@ -50,8 +50,8 @@ module.exports = {
     DEFAULT: '#EF4444',
     text: '#F87171',
     bg: 'rgba(239, 68, 68, 0.1)',
-    badge: '#F472B6',
-    ghost: 'rgba(244, 114, 182, 0.15)',
+    badge: '#EF4444',
+    ghost: 'rgba(239, 68, 68, 0.15)',
     border: 'rgba(239, 68, 68, 0.2)',
   },
 

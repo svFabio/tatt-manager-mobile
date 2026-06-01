@@ -69,9 +69,9 @@ export default function InventarioScreen() {
     };
 
     return (
-        <SafeAreaView className="flex-1" style={{ backgroundColor: COLORS.bg }}>
+        <SafeAreaView className="flex-1 bg-bg" edges={['bottom']}>
             {/* Header fijo */}
-            <View className="px-4 -mt-6">
+            <View className="px-4 pt-4">
                 {/* Stats en fila horizontal */}
                 <View className="flex-row gap-3">
                     <View className="flex-1">
@@ -84,12 +84,7 @@ export default function InventarioScreen() {
 
                 {/* Barra de búsqueda */}
                 <View
-                    className="flex-row items-center rounded-xl px-3 mb-4 mt-1"
-                    style={{
-                        backgroundColor: COLORS.dark[100],
-                        borderWidth: 1.5,
-                        borderColor: searchFocused ? COLORS.primary.DEFAULT : COLORS.border.subtle,
-                    }}
+                    className={`flex-row items-center rounded-xl px-3 mb-4 mt-1 bg-dark-100 border-[1.5px] ${searchFocused ? 'border-primary' : 'border-border-subtle'}`}
                 >
                     <MaterialIcons name="search" size={20} color={searchFocused ? COLORS.primary.DEFAULT : COLORS.text.muted} />
                     <TextInput
@@ -114,18 +109,17 @@ export default function InventarioScreen() {
                 {loading ? (
                     <View className="flex-1 items-center justify-center">
                         <ActivityIndicator color={COLORS.primary.DEFAULT} size="large" />
-                        <Text style={{ color: COLORS.text.muted }} className="text-xs mt-3">Cargando inventario...</Text>
+                        <Text className="text-text-muted text-xs mt-3">Cargando inventario...</Text>
                     </View>
                 ) : items.length === 0 ? (
                     <View className="flex-1 items-center justify-center">
                         <View
-                            className="w-20 h-20 rounded-3xl items-center justify-center mb-4"
-                            style={{ backgroundColor: COLORS.primary.ghost }}
+                            className="w-20 h-20 rounded-3xl items-center justify-center mb-4 bg-primary-ghost"
                         >
                             <MaterialIcons name="inventory" size={36} color={COLORS.primary.DEFAULT} />
                         </View>
-                        <Text style={{ color: COLORS.text.secondary }} className="text-base font-semibold">Sin items en inventario</Text>
-                        <Text style={{ color: COLORS.text.muted }} className="text-sm mt-1">Toca + para agregar tu primer ítem</Text>
+                        <Text className="text-text-secondary text-base font-semibold">Sin items en inventario</Text>
+                        <Text className="text-text-muted text-sm mt-1">Toca + para agregar tu primer ítem</Text>
                     </View>
                 ) : (
                     <FlatList
@@ -151,9 +145,8 @@ export default function InventarioScreen() {
             >
                 <TouchableOpacity
                     onPress={() => router.push('/(drawer)/inventory/agregar')}
-                    className="w-16 h-16 rounded-2xl items-center justify-center"
+                    className="w-16 h-16 rounded-2xl items-center justify-center bg-primary"
                     style={{
-                        backgroundColor: COLORS.primary.DEFAULT,
                         ...PRIMARY_SHADOW,
                     }}
                     activeOpacity={0.85}

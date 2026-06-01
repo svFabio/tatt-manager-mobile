@@ -18,32 +18,22 @@ export function StatCard({ label, value, variant = 'default' }: Props) {
 
     return (
         <View
-            className="rounded-2xl p-4 mb-3 flex-row items-center min-h-[72px]"
-            style={{
-                backgroundColor: isBajo ? COLORS.danger.bg : COLORS.dark[100],
-                borderWidth: 1,
-                borderColor: isBajo ? COLORS.danger.ghost : COLORS.primary.border,
-            }}
+            className={`rounded-2xl p-4 mb-3 flex-row items-center min-h-[72px] border ${isBajo ? 'bg-danger-bg border-danger-ghost' : 'bg-dark-100 border-primary-border'}`}
         >
             <View
-                className="w-10 h-10 rounded-xl items-center justify-center mr-3"
-                style={{
-                    backgroundColor: isBajo ? COLORS.danger.ghost : COLORS.primary.ghost,
-                }}
+                className={`w-10 h-10 rounded-xl items-center justify-center mr-3 ${isBajo ? 'bg-danger-ghost' : 'bg-primary-ghost'}`}
             >
                 <MaterialIcons name={icon as any} size={20} color={iconColor} />
             </View>
             <View className="flex-1">
                 <Text
-                    className="text-[10px] font-bold tracking-widest"
-                    style={{ color: isBajo ? COLORS.danger.badge : COLORS.text.muted }}
+                    className={`text-[10px] font-bold tracking-widest ${isBajo ? 'text-danger-badge' : 'text-text-muted'}`}
                     numberOfLines={1}
                 >
                     {label}
                 </Text>
                 <Text
-                    className="text-xl font-bold mt-0.5"
-                    style={{ color: isBajo ? COLORS.danger.badge : COLORS.text.primary }}
+                    className={`text-xl font-bold mt-0.5 ${isBajo ? 'text-danger-badge' : 'text-text-primary'}`}
                 >
                     {value}
                 </Text>
