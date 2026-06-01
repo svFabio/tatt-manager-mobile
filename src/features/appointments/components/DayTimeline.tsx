@@ -79,43 +79,57 @@ export const DayTimeline: React.FC<DayTimelineProps> = ({ dia, citas, onSelectCi
           ))}
 
 
-          {/* Event cards */}
-          {citas.map((cita) => {
-            if (!cita.fechaHoraInicio) return null;
-            const inicio = new Date(cita.fechaHoraInicio);
-            const fin = cita.fechaHoraFin
-              ? new Date(cita.fechaHoraFin)
-              : new Date(inicio.getTime() + 60 * 60 * 1000);
+          {/* Contenedor de Citas con Swimlanes (Columnas paralelas) */}
+          <View style={{ position: 'absolute', top: 0, bottom: 0, left: 56, right: 4 }}>
+            {(() => {
+              // Extraer IDs únicos de artistas que tienen citas este día
+              const artistIds = Array.from(
+                new Set(citas.map((c) => c.artistaId ?? c.artista?.id).filter((id) => id != null))
+              );
+              const numColumns = Math.max(1, artistIds.length);
+              const colWidth = 100 / numColumns;
 
-            const top = (minutosDesdeInicio(inicio) / 60) * ALTO_HORA;
-            const duracionMin = Math.max(
-              30,
-              (fin.getTime() - inicio.getTime()) / 60000
-            );
-            const alto = (duracionMin / 60) * ALTO_HORA - 6;
+              return citas.map((cita) => {
+                if (!cita.fechaHoraInicio) return null;
+                const inicio = new Date(cita.fechaHoraInicio);
+                const fin = cita.fechaHoraFin
+                  ? new Date(cita.fechaHoraFin)
+                  : new Date(inicio.getTime() + 60 * 60 * 1000);
 
-            if (top < 0 || top > altoTotal) return null;
+                const top = (minutosDesdeInicio(inicio) / 60) * ALTO_HORA;
+                const duracionMin = Math.max(30, (fin.getTime() - inicio.getTime()) / 60000);
+                const alto = (duracionMin / 60) * ALTO_HORA - 6;
 
-            return (
-              <View
-                key={cita.id}
-                style={{
-                  position: "absolute",
-                  top,
-                  left: 56,
-                  right: 4,
-                  height: alto,
-                  zIndex: 1,
-                }}
-              >
-                <EventCard
-                  cita={cita}
-                  onPress={() => onSelectCita(cita)}
-                  style={{ flex: 1 }}
-                />
-              </View>
-            );
-          })}
+                if (top < 0 || top > altoTotal) return null;
+
+                // Determinar en qué columna va esta cita
+                const artistaId = cita.artistaId ?? cita.artista?.id;
+                let colIndex = artistIds.indexOf(artistaId);
+                if (colIndex === -1) colIndex = 0; // Fallback
+
+                return (
+                  <View
+                    key={cita.id}
+                    style={{
+                      position: "absolute",
+                      top,
+                      left: `${colIndex * colWidth}%`,
+                      width: `${colWidth}%`,
+                      height: alto,
+                      zIndex: 1,
+                      paddingHorizontal: 2, // Pequeño espacio entre columnas
+                    }}
+                  >
+                    <EventCard
+                      cita={cita}
+                      onPress={() => onSelectCita(cita)}
+                      style={{ flex: 1 }}
+                    />
+                  </View>
+                );
+              });
+            })()}
+          </View>
 
           {/* Current time indicator — rendered LAST so it's visually on top */}
           {offsetAhora != null ? (
