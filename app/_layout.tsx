@@ -1,4 +1,5 @@
 import "../global.css";
+import { ThemeProvider, DarkTheme } from '@react-navigation/native';
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
@@ -68,33 +69,43 @@ function RootLayoutNav() {
 
   useEffect(() => {
     // Forzar el fondo del sistema base para evitar destellos blancos
-    SystemUI.setBackgroundColorAsync(COLORS.dark.DEFAULT);
+    SystemUI.setBackgroundColorAsync(COLORS.dark.DEFAULT).catch(() => {});
     
     // Forzar la barra de navegación (Android) a ser negra con botones claros
     if (Platform.OS === "android") {
-      NavigationBar.setBackgroundColorAsync(COLORS.dark.DEFAULT);
-      NavigationBar.setButtonStyleAsync("light");
+      NavigationBar.setBackgroundColorAsync(COLORS.dark.DEFAULT).catch(() => {});
+      NavigationBar.setButtonStyleAsync("light").catch(() => {});
     }
   }, []);
 
+  const customDarkTheme = {
+    ...DarkTheme,
+    colors: {
+      ...DarkTheme.colors,
+      background: COLORS.dark.DEFAULT,
+    },
+  };
+
   return (
-    <ReactNative.View className="flex-1 bg-dark">
-      <StatusBar style="light" />
-      <Stack
-        screenOptions={{
-          headerStyle: { backgroundColor: COLORS.dark.DEFAULT },
-          headerTintColor: COLORS.primary.DEFAULT,
-          headerTitleStyle: { fontFamily: "Montserrat_700Bold" },
-          contentStyle: { backgroundColor: COLORS.dark.DEFAULT },
-        }}
-      >
-        <Stack.Screen name="index" options={{ headerShown: false }} />
-        <Stack.Screen name="(drawer)" options={{ headerShown: false }} />
-        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-        <Stack.Screen name="(studio)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-    </ReactNative.View>
+    <ThemeProvider value={customDarkTheme}>
+      <ReactNative.View className="flex-1 bg-dark">
+        <StatusBar style="light" />
+        <Stack
+          screenOptions={{
+            headerStyle: { backgroundColor: COLORS.dark.DEFAULT },
+            headerTintColor: COLORS.primary.DEFAULT,
+            headerTitleStyle: { fontFamily: "Montserrat_700Bold" },
+            contentStyle: { backgroundColor: COLORS.dark.DEFAULT },
+          }}
+        >
+          <Stack.Screen name="index" options={{ headerShown: false }} />
+          <Stack.Screen name="(drawer)" options={{ headerShown: false }} />
+          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+          <Stack.Screen name="(studio)" options={{ headerShown: false }} />
+          <Stack.Screen name="+not-found" />
+        </Stack>
+      </ReactNative.View>
+    </ThemeProvider>
   );
 }
 
