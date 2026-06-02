@@ -150,6 +150,11 @@ function CustomDrawerContent(props: any) {
                 <View className="w-8 items-center justify-center"><Feather name="settings" size={20} color={getIconColor("settings")} /></View>
                 <Text className={`font-semibold ml-3 text-base ${getTextColor("settings")}`}>Configuración</Text>
               </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => handleNavigation("/(drawer)/validar-pagos" as any)} className={getBtnStyle("validar-pagos")} activeOpacity={0.7}>
+                <View className="w-8 items-center justify-center"><MaterialIcons name="receipt-long" size={22} color={getIconColor("validar-pagos")} /></View>
+                <Text className={`font-semibold ml-3 text-base ${getTextColor("validar-pagos")}`}>Validar Pagos</Text>
+              </TouchableOpacity>
             </View>
           </>
         )}
@@ -206,6 +211,7 @@ export default function DrawerLayout() {
         <Drawer.Screen name="agenda" options={{ title: "Agenda", headerShown: true }} />
         <Drawer.Screen name="reports" options={{ title: "Reportes", headerShown: true }} />
         <Drawer.Screen name="settings" options={{ title: "Configuración", headerShown: true }} />
+        <Drawer.Screen name="validar-pagos" options={{ title: "Validar Pagos", headerShown: true }} />
       </Drawer>
     </GestureHandlerRootView>
   );
