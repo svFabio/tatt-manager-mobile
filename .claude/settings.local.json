@@ -2,7 +2,10 @@
   "permissions": {
     "allow": [
       "Bash(Select-String -Path \"d:\\\\PROGRA MOVIL\\\\tatt-manager-backend\\\\node_modules\\\\.prisma\\\\client\\\\index.d.ts\" -Pattern \"codigoInvitacion\")",
-      "Bash(Select-Object -First 3)"
+      "Bash(Select-Object -First 3)",
+      "Bash(npx tsc *)",
+      "Bash(echo \"EXIT=$?\")",
+      "Bash(npm run *)"
     ]
   }
 }
