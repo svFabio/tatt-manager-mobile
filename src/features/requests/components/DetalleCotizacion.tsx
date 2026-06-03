@@ -77,10 +77,16 @@ export const DetalleCotizacion = ({ solicitudId, estado }: { solicitudId: number
 
       <Text className="text-[10px] uppercase tracking-widest mb-2" style={{ color: COLORS.text.muted }}>Costo total</Text>
       <View className="flex-row items-center bg-dark-100 rounded-xl px-3 py-3 mb-4 border border-white/5">
-        <Text className="text-sm font-bold mr-2" style={{ color: COLORS.text.secondary }}>$</Text>
+        <Text className="text-sm font-bold mr-2" style={{ color: COLORS.text.secondary }}>Bs.</Text>
         <TextInput
           value={costo}
-          onChangeText={setCosto}
+          onChangeText={(text) => {
+          // Esto asegura que solo sean números y máximo 10 dígitos
+          const numericText = text.replace(/[^0-9]/g, '');
+          if (numericText.length <= 10) {
+          setCosto(numericText);
+          }
+          }}
           placeholder="0.00"
           placeholderTextColor={COLORS.text.dimmed}
           className="flex-1 text-white text-sm"
