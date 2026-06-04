@@ -59,19 +59,24 @@ export default function HomeScreen() {
         </View>
 
         {upcomingAppointments && upcomingAppointments.length > 0 ? (
-          upcomingAppointments.map((cita) => (
+          upcomingAppointments.map((cita: any) => {
+            const fecha = cita.fechaHoraInicio || cita.date;
+            const clienteNombre = cita.cliente?.nombre || cita.clientName || "Cliente";
+            const descripcion = cita.tipoCita || cita.description || "Sesión de Tatuaje";
+
+            return (
             <View key={cita.id} className="bg-dark-100 rounded-3xl p-5 border border-border-subtle mb-4">
               <View className="flex-row justify-between items-center mb-3">
                 <View>
-                  <Text className="text-text-primary font-bold text-lg">{cita.clienteId || "Cliente"}</Text>
-                  <Text className="text-text-muted text-xs mt-1">{cita.title || "Sesión de Tatuaje"}</Text>
+                  <Text className="text-text-primary font-bold text-lg">{clienteNombre}</Text>
+                  <Text className="text-text-muted text-xs mt-1">{descripcion}</Text>
                 </View>
                 <View className="items-end">
                   <Text className="text-primary font-bold text-sm">
-                    {new Date(cita.date).toLocaleDateString()}
+                    {fecha ? new Date(fecha).toLocaleDateString() : ""}
                   </Text>
                   <Text className="text-text-muted text-xs mt-1">
-                    {new Date(cita.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    {fecha ? new Date(fecha).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : ""}
                   </Text>
                 </View>
               </View>
@@ -83,13 +88,22 @@ export default function HomeScreen() {
                 </View>
                 <TouchableOpacity 
                   className="bg-dark-200 px-4 py-2 rounded-full"
-                  onPress={() => router.push("/(drawer)/calendar")}
+                  onPress={() => {
+                    const params: any = {};
+                    if (fecha) params.date = new Date(fecha).toISOString();
+                    if (cita.id) params.citaId = cita.id;
+                    router.push({
+                      pathname: "/(drawer)/calendar",
+                      params
+                    });
+                  }}
                 >
                   <Text className="text-text-primary text-xs font-bold">Ver en calendario</Text>
                 </TouchableOpacity>
               </View>
             </View>
-          ))
+            );
+          })
         ) : (
           <View className="bg-dark-100 rounded-3xl p-5 border border-border-subtle mb-4 items-center">
             <Text className="text-text-muted text-sm">No hay sesiones programadas próximamente</Text>
