@@ -1,5 +1,5 @@
 export interface InventarioItem {
-    tipo: 'tinta' | 'aguja';
+    tipo: 'tinta' | 'aguja' | 'cap';
     refId: number;
     nombre: string;
     marca: string;

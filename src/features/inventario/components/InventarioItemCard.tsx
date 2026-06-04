@@ -83,10 +83,10 @@ export function InventarioItemCard({ item, onUpdated, index = 0 }: Props) {
     const dotColor = item.colorHex ?? COLORS.text.muted;
 
     const getCatIcon = () => {
-        if (item.tipo === 'tinta') return 'water-opacity'; // Gota de tinta
-        if (item.tipo === 'aguja' || item.nombre.toLowerCase().includes('aguja')) return 'needle'; // Aguja
-        if (item.nombre.toLowerCase().includes('cap') || item.tipo === 'cap' as any) return 'cup'; // Cap
-        return 'archive-outline'; // Default
+        if (item.tipo === 'tinta') return 'water-opacity';
+        if (item.tipo === 'cap' as any) return 'palette';
+        if (item.tipo === 'aguja') return 'needle';
+        return 'archive-outline';
     };
 
     return (
