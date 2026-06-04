@@ -403,7 +403,7 @@ export default function EndSessionScreen() {
             {/* Total Sesión Card */}
             <View className="rounded-xl px-4 py-4 bg-dark-100 border border-transparent flex-row justify-between items-center mb-6">
               <Text className="text-text-secondary text-xs font-semibold tracking-widest">TOTAL DE SESIÓN</Text>
-              <Text className="text-primary-light text-2xl font-black">${totalSesion.toFixed(2)}</Text>
+              <Text className="text-primary-light text-2xl font-black">Bs. {totalSesion.toFixed(2)}</Text>
             </View>
 
             {/* Caps Management */}
