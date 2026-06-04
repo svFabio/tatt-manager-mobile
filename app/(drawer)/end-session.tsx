@@ -272,8 +272,8 @@ export default function EndSessionScreen() {
         }
       ]);
     } catch (error: any) {
-      console.error('Error cerrando sesión:', error.response?.data || error);
-      Alert.alert('Error', error.response?.data?.error || 'Hubo un error al cerrar la sesión.');
+      console.warn('Error cerrando sesión:', error.response?.data || error);
+      Alert.alert('No se pudo finalizar', error.response?.data?.error || 'Hubo un error al cerrar la sesión. Revisa tu conexión.');
     } finally {
       setSubmitting(false);
     }

@@ -1,5 +1,5 @@
-import api from '../api/axios';
-import type { AxiosError } from 'axios';
+import api from "../api/axios";
+import type { AxiosError } from "axios";
 
 const axiosMsg = (error: unknown, fallback: string): string => {
   const e = error as AxiosError<{ error?: string }>;
@@ -29,6 +29,7 @@ export interface CreateSessionDTO {
   horario: string;
   cotizacion: number;
   artistaId?: number;
+  foto?: { uri: string; type: string; name: string };
 }
 
 export interface UpdateSessionDTO extends CreateSessionDTO {}
@@ -37,30 +38,38 @@ export const sessionService = {
   // Obtener todas las sesiones
   getAll: async (): Promise<Session[]> => {
     try {
-      const response = await api.get('/sessions');
+      const response = await api.get("/sessions");
       return response.data;
     } catch (error: unknown) {
-      throw new Error(axiosMsg(error, 'Error al obtener sesiones'));
+      throw new Error(axiosMsg(error, "Error al obtener sesiones"));
     }
   },
 
   // Crear nueva sesión
   create: async (data: CreateSessionDTO): Promise<Session> => {
     try {
-      const response = await api.post('/citas/admin', {
-        clienteNombre: data.nombre,
-        clienteTelefono: data.telefono,
-        zonaDelCuerpo: data.zona,
-        tamanoEnCm: data.tamano,
-        duracionEnHoras: data.horas,
-        fecha: data.fecha,
-        horario: data.horario,
-        cotizacion: data.cotizacion,
-        artistaId: data.artistaId
+      const formData = new FormData();
+      formData.append("clienteNombre", data.nombre);
+      formData.append("clienteTelefono", data.telefono);
+      formData.append("zonaDelCuerpo", data.zona);
+      formData.append("fecha", data.fecha);
+      formData.append("horario", data.horario);
+      formData.append("cotizacion", String(data.cotizacion));
+
+      if (data.tamano) formData.append("tamanoEnCm", data.tamano);
+      if (data.horas) formData.append("duracionEnHoras", String(data.horas));
+      if (data.artistaId) formData.append("artistaId", String(data.artistaId));
+
+      if (data.foto) {
+        formData.append("foto", data.foto as unknown as Blob);
+      }
+
+      const response = await api.post("/citas/admin", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
       });
       return response.data;
     } catch (error: unknown) {
-      throw new Error(axiosMsg(error, 'Error al crear sesión'));
+      throw new Error(axiosMsg(error, "Error al crear sesión"));
     }
   },
 
@@ -75,11 +84,11 @@ export const sessionService = {
         fecha: data.fecha,
         horario: data.horario,
         cotizacion: data.cotizacion,
-        estado: 'CONFIRMADA'
+        estado: "CONFIRMADA",
       });
       return response.data.session;
     } catch (error: unknown) {
-      throw new Error(axiosMsg(error, 'Error al actualizar sesión'));
+      throw new Error(axiosMsg(error, "Error al actualizar sesión"));
     }
   },
 
@@ -89,7 +98,7 @@ export const sessionService = {
       const response = await api.delete(`/sessions/${id}`);
       return response.data;
     } catch (error: unknown) {
-      throw new Error(axiosMsg(error, 'Error al eliminar la sesión'));
+      throw new Error(axiosMsg(error, "Error al eliminar la sesión"));
     }
   },
 };

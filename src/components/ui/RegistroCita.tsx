@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import {
-  View, Modal, TouchableOpacity, ScrollView, Alert, KeyboardAvoidingView, Platform, ActivityIndicator, Animated
+  View, Modal, TouchableOpacity, ScrollView, Alert, KeyboardAvoidingView, Platform, ActivityIndicator, Animated, Image
 } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
 import { Text, TextInput } from '@/src/components/StyledText';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
@@ -18,6 +19,7 @@ interface SessionForm {
   horario: string;
   cotizacion: string;
   artistaId?: number;
+  foto?: any;
 }
 
 interface FieldErrors {
@@ -46,7 +48,8 @@ const RegistroCitaModal = ({ visible, onClose, onSave, selectedDate }: Props) =>
     horas: 1,
     fecha: new Date(),
     horario: '',
-    cotizacion: ''
+    cotizacion: '',
+    foto: undefined
   });
 
   const [errors, setErrors] = useState<FieldErrors>({});
@@ -204,9 +207,46 @@ const RegistroCitaModal = ({ visible, onClose, onSave, selectedDate }: Props) =>
   const resetForm = () => {
     setForm({
       nombre: '', telefono: '', zona: '', tamano: '', horas: 1,
-      fecha: new Date(), horario: '', cotizacion: '', artistaId: undefined
+      fecha: new Date(), horario: '', cotizacion: '', artistaId: undefined, foto: undefined
     });
     setErrors({});
+  };
+
+  const pickImage = async (useCamera: boolean = false) => {
+    try {
+      let result;
+      if (useCamera) {
+        const permission = await ImagePicker.requestCameraPermissionsAsync();
+        if (!permission.granted) {
+          Alert.alert('Permiso denegado', 'Se requiere acceso a la cámara para tomar fotos.');
+          return;
+        }
+        result = await ImagePicker.launchCameraAsync({
+          mediaTypes: ['images'],
+          quality: 0.8,
+        });
+      } else {
+        const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (!permission.granted) {
+          Alert.alert('Permiso denegado', 'Se requiere acceso a la galería para seleccionar fotos.');
+          return;
+        }
+        result = await ImagePicker.launchImageLibraryAsync({
+          mediaTypes: ['images'],
+          quality: 0.8,
+        });
+      }
+
+      if (!result.canceled && result.assets && result.assets.length > 0) {
+        const asset = result.assets[0];
+        const fileName = asset.fileName || asset.uri.split('/').pop() || 'referencia.jpg';
+        const type = asset.mimeType || 'image/jpeg';
+        setForm({ ...form, foto: { uri: asset.uri, type, name: fileName } });
+      }
+    } catch (error) {
+      console.error('[RegistroCita] Error al seleccionar imagen:', error);
+      Alert.alert('Error', 'No se pudo cargar la imagen.');
+    }
   };
 
   const handleClose = () => {
@@ -445,6 +485,43 @@ const RegistroCitaModal = ({ visible, onClose, onSave, selectedDate }: Props) =>
                   />
                 </View>
               </Animated.View>
+
+              {/* Referencia (Foto) */}
+              <View className="mb-6">
+                <Text className="text-[10px] mb-1.5 uppercase font-bold tracking-widest" style={{ color: COLORS.text.muted }}>Referencia (Opcional)</Text>
+                {form.foto ? (
+                  <View className="relative mb-3 rounded-xl overflow-hidden" style={{ borderWidth: 1, borderColor: COLORS.dark[200], height: 150 }}>
+                    <Image source={{ uri: form.foto.uri }} style={{ width: '100%', height: '100%' }} resizeMode="cover" />
+                    <TouchableOpacity 
+                      onPress={() => setForm({ ...form, foto: undefined })}
+                      className="absolute top-2 right-2 w-8 h-8 rounded-full items-center justify-center bg-black/60"
+                    >
+                      <MaterialIcons name="close" size={18} color="white" />
+                    </TouchableOpacity>
+                  </View>
+                ) : (
+                  <View className="flex-row gap-3">
+                    <TouchableOpacity
+                      onPress={() => pickImage(true)}
+                      activeOpacity={0.7}
+                      className="flex-1 p-4 rounded-xl items-center flex-row justify-center"
+                      style={{ backgroundColor: COLORS.dark[100], borderWidth: 1.5, borderColor: COLORS.dark[200] }}
+                    >
+                      <MaterialIcons name="camera-alt" size={20} color={COLORS.text.secondary} style={{ marginRight: 6 }} />
+                      <Text style={{ color: COLORS.text.secondary }} className="font-bold text-sm">Cámara</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => pickImage(false)}
+                      activeOpacity={0.7}
+                      className="flex-1 p-4 rounded-xl items-center flex-row justify-center"
+                      style={{ backgroundColor: COLORS.dark[100], borderWidth: 1.5, borderColor: COLORS.dark[200] }}
+                    >
+                      <MaterialIcons name="photo-library" size={20} color={COLORS.text.secondary} style={{ marginRight: 6 }} />
+                      <Text style={{ color: COLORS.text.secondary }} className="font-bold text-sm">Galería</Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
+              </View>
 
               {/* Buttons */}
               <View className="flex-row gap-3 mb-10">

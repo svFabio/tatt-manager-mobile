@@ -53,14 +53,18 @@ export function useAppointments() {
 
   // Citas de hoy
   const today = new Date().toISOString().split("T")[0];
-  const todayAppointments = (appointments || []).filter(
-    (a) => a.date && a.date.startsWith(today)
-  );
+  const todayAppointments = (appointments || []).filter((a: any) => {
+    const fechaStr = a.fechaHoraInicio || a.date;
+    return fechaStr && fechaStr.startsWith(today);
+  });
 
   // Próximas citas
-  const upcomingAppointments = (appointments || []).filter(
-    (a) => a.date && new Date(a.date) >= new Date() && a.status === "scheduled"
-  );
+  const upcomingAppointments = (appointments || []).filter((a: any) => {
+    const fechaStr = a.fechaHoraInicio || a.date;
+    const isFuture = fechaStr && new Date(fechaStr) >= new Date();
+    const isScheduled = a.estadoCita === "CONFIRMADA" || a.estadoCita === "PENDIENTE" || a.status === "scheduled";
+    return isFuture && isScheduled;
+  });
 
   return {
     appointments,
