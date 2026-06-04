@@ -104,7 +104,7 @@ export const DayTimeline: React.FC<DayTimelineProps> = ({ dia, citas, onSelectCi
 
                 // Determinar en qué columna va esta cita
                 const artistaId = cita.artistaId ?? cita.artista?.id;
-                let colIndex = artistIds.indexOf(artistaId);
+                let colIndex = artistaId != null ? artistIds.indexOf(artistaId) : -1;
                 if (colIndex === -1) colIndex = 0; // Fallback
 
                 return (
