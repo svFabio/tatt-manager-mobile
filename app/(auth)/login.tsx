@@ -50,24 +50,30 @@ export default function LoginScreen() {
     try {
       const sessionId = Math.random().toString(36).substring(2, 15);
       const authUrl = `${process.env.EXPO_PUBLIC_API_URL}/auth/google-mobile?session=${sessionId}`;
-      // 1. Iniciamos el polling ANTES de abrir el navegador
-      const pollInterval = setInterval(async () => {
+      const checkToken = async () => {
         try {
           const res = await api.get(`/auth/mobile-token?session=${sessionId}`);
           if (res.data.status === 'ready') {
-            clearInterval(pollInterval);
-            WebBrowser.dismissBrowser();
-            
             setAuth(res.data.token, res.data.usuario);
             clearStudio();
             router.replace("/(studio)/select");
+            return true;
           } else if (res.data.status === 'expired') {
-            clearInterval(pollInterval);
-            WebBrowser.dismissBrowser();
             Alert.alert("Error", "El tiempo de inicio de sesión ha expirado");
+            return true;
           }
         } catch (pollErr) {
-          // Si da error silencioso ignoramos, para no llenar la consola
+          // Si da error silencioso ignoramos
+        }
+        return false;
+      };
+
+      // 1. Iniciamos el polling ANTES de abrir el navegador
+      const pollInterval = setInterval(async () => {
+        const done = await checkToken();
+        if (done) {
+          clearInterval(pollInterval);
+          WebBrowser.dismissBrowser();
         }
       }, 2000);
 
@@ -77,9 +83,13 @@ export default function LoginScreen() {
       // 3. Abrir el navegador. El código se detiene aquí hasta que se cierre (manualmente o por dismiss)
       await WebBrowser.openBrowserAsync(authUrl);
 
-      // 4. Si el navegador se cerró (el usuario lo cerró a mano o se hizo dismiss), asegurarnos de limpiar el polling.
+      // 4. Si el navegador se cerró (el usuario lo cerró a mano o se hizo dismiss)
       clearInterval(pollInterval);
       clearTimeout(timeoutId); 
+
+      // 5. Último intento. En Android las tareas en segundo plano (setInterval) pueden pausarse 
+      // cuando el navegador está abierto. Si eso pasó, hacemos un check inmediato ahora que regresó.
+      await checkToken();
     } catch (e) {
       console.error(e);
       Alert.alert("Error", "No se pudo iniciar sesión con Google");
