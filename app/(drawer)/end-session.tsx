@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { View, TouchableOpacity, ScrollView, Image, Alert, ActivityIndicator, Modal } from 'react-native';
+import { View, TouchableOpacity, ScrollView, Image, Alert, ActivityIndicator, Modal, KeyboardAvoidingView, Platform } from 'react-native';
 import { Text, TextInput } from '@/src/components/StyledText';
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import { useRouter, useFocusEffect } from 'expo-router';
@@ -288,9 +288,16 @@ export default function EndSessionScreen() {
   }
 
   return (
-    <View className="flex-1 bg-bg">
-      <ScrollView className="flex-1 px-4" showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingVertical: 20, paddingBottom: 80 }}>
-        
+    <KeyboardAvoidingView 
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'} 
+      style={{ flex: 1 }}
+    >
+      <View className="flex-1 bg-bg">
+        <ScrollView 
+          className="flex-1 px-4" 
+          showsVerticalScrollIndicator={false} 
+          contentContainerStyle={{ paddingVertical: 20, paddingBottom: 100 }}
+        >
         {/* Selector Sesión */}
         <View className="mb-5">
           <Text className="text-text-secondary text-xs font-semibold tracking-widest mb-2">SELECCIONAR SESIÓN</Text>
@@ -548,5 +555,6 @@ export default function EndSessionScreen() {
         
       </ScrollView>
     </View>
+  </KeyboardAvoidingView>
   );
 }
