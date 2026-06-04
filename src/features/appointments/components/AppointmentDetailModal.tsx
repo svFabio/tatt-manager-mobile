@@ -47,6 +47,7 @@ export const AppointmentDetailModal: React.FC<AppointmentDetailModalProps> = ({
   const [detalle, setDetalle] = useState<CitaDetalle | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [imageExpanded, setImageExpanded] = useState(false);
 
   useEffect(() => {
     let cancelado = false;
@@ -70,6 +71,11 @@ export const AppointmentDetailModal: React.FC<AppointmentDetailModalProps> = ({
     };
   }, [cita, visible]);
 
+  const handleClose = () => {
+    setImageExpanded(false);
+    onClose();
+  };
+
   const fechaFormateada =
     detalle?.fechaHoraInicio &&
     format(new Date(detalle.fechaHoraInicio), "EEEE d 'de' MMMM yyyy", {
@@ -84,7 +90,7 @@ export const AppointmentDetailModal: React.FC<AppointmentDetailModalProps> = ({
       visible={visible}
       transparent
       animationType="fade"
-      onRequestClose={onClose}
+      onRequestClose={handleClose}
     >
       <View className="flex-1 bg-black/70 justify-center px-5">
         <View className="bg-dark-100 rounded-3xl border border-dark-200 overflow-hidden max-h-[85%]">
@@ -92,7 +98,7 @@ export const AppointmentDetailModal: React.FC<AppointmentDetailModalProps> = ({
           <View className="flex-row items-center justify-between px-5 py-4 border-b border-dark-200">
             <Text className="text-white text-lg font-bold">Detalle de cita</Text>
             <TouchableOpacity
-              onPress={onClose}
+              onPress={handleClose}
               className="w-8 h-8 rounded-full bg-dark-200 items-center justify-center"
             >
               <Feather name="x" size={18} color={COLORS.text.secondary} />
@@ -147,22 +153,53 @@ export const AppointmentDetailModal: React.FC<AppointmentDetailModalProps> = ({
                 value={cita?.estadoCita ?? "—"}
               />
 
-              {detalle.referencia && detalle.referencia !== "No especificada" ? (
+              {detalle.referencia ? (
                 <View className="mt-4">
                   <Text className="text-muted-dark text-[11px] font-semibold tracking-wider uppercase mb-2">
                     Referencia
                   </Text>
-                  <Image
-                    source={{ uri: detalle.referencia }}
-                    style={{ width: "100%", height: 180, borderRadius: 12 }}
-                    resizeMode="cover"
-                  />
+                  <TouchableOpacity activeOpacity={0.8} onPress={() => setImageExpanded(true)}>
+                    <Image
+                      source={{ uri: detalle.referencia }}
+                      style={{ width: "100%", height: 180, borderRadius: 12 }}
+                      resizeMode="cover"
+                    />
+                    <View className="absolute bottom-2 right-2 bg-black/50 rounded-lg px-2 py-1 flex-row items-center">
+                      <Feather name="maximize" size={12} color="white" />
+                      <Text className="text-white text-[10px] ml-1 font-semibold">Ampliar</Text>
+                    </View>
+                  </TouchableOpacity>
                 </View>
               ) : null}
             </ScrollView>
           ) : null}
         </View>
       </View>
+
+      {/* Fullscreen image modal */}
+      <Modal
+        visible={imageExpanded}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setImageExpanded(false)}
+      >
+        <View className="flex-1 bg-black/95 justify-center items-center">
+          <TouchableOpacity
+            onPress={() => setImageExpanded(false)}
+            className="absolute top-14 right-5 z-10 w-10 h-10 rounded-full items-center justify-center"
+            style={{ backgroundColor: 'rgba(255,255,255,0.15)' }}
+          >
+            <Feather name="x" size={22} color="white" />
+          </TouchableOpacity>
+          {detalle?.referencia ? (
+            <Image
+              source={{ uri: detalle.referencia }}
+              style={{ width: "95%", height: "70%" }}
+              resizeMode="contain"
+            />
+          ) : null}
+        </View>
+      </Modal>
     </Modal>
   );
 };
