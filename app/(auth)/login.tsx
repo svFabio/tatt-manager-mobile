@@ -50,10 +50,7 @@ export default function LoginScreen() {
     try {
       const sessionId = Math.random().toString(36).substring(2, 15);
       const authUrl = `${process.env.EXPO_PUBLIC_API_URL}/auth/google-mobile?session=${sessionId}`;
-      
-      await WebBrowser.openBrowserAsync(authUrl);
-
-      // Iniciar el polling
+      // 1. Iniciamos el polling ANTES de abrir el navegador
       const pollInterval = setInterval(async () => {
         try {
           const res = await api.get(`/auth/mobile-token?session=${sessionId}`);
@@ -70,12 +67,19 @@ export default function LoginScreen() {
             Alert.alert("Error", "El tiempo de inicio de sesión ha expirado");
           }
         } catch (pollErr) {
-          console.error("Poll error", pollErr);
+          // Si da error silencioso ignoramos, para no llenar la consola
         }
       }, 2000);
 
-      // Detener el polling si el usuario cierra el navegador manualmente (opcional, dejamos timeout de seguridad)
-      setTimeout(() => clearInterval(pollInterval), 5 * 60 * 1000); 
+      // 2. Detener el polling por seguridad a los 5 minutos
+      const timeoutId = setTimeout(() => clearInterval(pollInterval), 5 * 60 * 1000); 
+
+      // 3. Abrir el navegador. El código se detiene aquí hasta que se cierre (manualmente o por dismiss)
+      await WebBrowser.openBrowserAsync(authUrl);
+
+      // 4. Si el navegador se cerró (el usuario lo cerró a mano o se hizo dismiss), asegurarnos de limpiar el polling.
+      clearInterval(pollInterval);
+      clearTimeout(timeoutId); 
     } catch (e) {
       console.error(e);
       Alert.alert("Error", "No se pudo iniciar sesión con Google");
@@ -113,10 +117,17 @@ export default function LoginScreen() {
           <InputField
             label="Contraseña"
             placeholder="••••••••"
-            secureTextEntry
+            isPassword
             value={password}
             onChangeText={setPassword}
           />
+
+          {/* ── ¿Olvidaste tu contraseña? ── */}
+          <View className="items-end mb-2">
+            <TouchableOpacity onPress={() => router.push("/(auth)/recover")}>
+              <Text className="text-primary text-xs font-bold">¿Olvidaste tu contraseña?</Text>
+            </TouchableOpacity>
+          </View>
 
           <View className="mt-4">
             {error ? <Text className="text-xs text-center mb-3" style={{ color: COLORS.danger.text }}>{error}</Text> : null}
