@@ -10,13 +10,12 @@ import { RequestCard } from '../components/RequestCard';
 import type { SolicitudItem } from '../../../types/citas';
 import { COLORS } from '../../../theme/colors';
 
-type EstadoSolicitud = 'PENDIENTE' | 'COTIZADA' | 'RECHAZADA';
+type EstadoSolicitud = 'PENDIENTE' | 'COTIZADA';
 
-const FILTERS: { label: string; value: EstadoSolicitud | 'ALL'; icon: keyof typeof MaterialIcons.glyphMap; color: string }[] = [
-    { label: 'Todas',      value: 'ALL',        icon: 'list',           color: COLORS.text.secondary },
-    { label: 'Nuevas',     value: 'PENDIENTE',  icon: 'schedule',       color: COLORS.status.pendiente.text },
-    { label: 'Cotizadas',  value: 'COTIZADA',   icon: 'attach-money',   color: COLORS.status.confirmada.text },
-    { label: 'Rechazadas', value: 'RECHAZADA',  icon: 'block',          color: COLORS.status.cancelada.text },
+const FILTERS: { label: string; value: EstadoSolicitud | 'ALL'; icon: keyof typeof MaterialIcons.glyphMap; activeColor: string }[] = [
+    { label: 'Todas',      value: 'ALL',        icon: 'list',           activeColor: COLORS.primary.DEFAULT },
+    { label: 'Nuevas',     value: 'PENDIENTE',  icon: 'schedule',       activeColor: COLORS.status.pendiente.text },
+    { label: 'Cotizadas',  value: 'COTIZADA',   icon: 'attach-money',   activeColor: COLORS.status.confirmada.text },
 ];
 
 export default function RequestsScreen() {
@@ -52,7 +51,6 @@ export default function RequestsScreen() {
         ALL: requests.length,
         PENDIENTE: requests.filter(r => r.estado === 'PENDIENTE').length,
         COTIZADA: requests.filter(r => r.estado === 'COTIZADA').length,
-        RECHAZADA: requests.filter(r => r.estado === 'RECHAZADA').length,
     }), [requests]);
 
     const filtered = activeFilter === 'ALL'
@@ -63,7 +61,6 @@ export default function RequestsScreen() {
         ALL:        { title: 'Sin solicitudes',             subtitle: 'Aparecerán aquí cuando lleguen' },
         PENDIENTE:  { title: 'Sin solicitudes nuevas',      subtitle: 'No hay solicitudes pendientes de cotizar' },
         COTIZADA:   { title: 'Sin cotizaciones',            subtitle: 'Las solicitudes cotizadas aparecerán aquí' },
-        RECHAZADA:  { title: 'Sin rechazadas',              subtitle: 'No has rechazado ninguna solicitud' },
     };
 
     const emptyState = emptyMessages[activeFilter] ?? emptyMessages.ALL;
@@ -91,14 +88,16 @@ export default function RequestsScreen() {
                                     paddingHorizontal: 14,
                                     paddingVertical: 10,
                                     borderRadius: 12,
-                                    backgroundColor: isActive ? COLORS.primary.DEFAULT : COLORS.dark[100],
+                                    backgroundColor: COLORS.dark[100],
+                                    borderWidth: 1,
+                                    borderColor: isActive ? f.activeColor : 'transparent',
                                     gap: 6,
                                 }}
                             >
                                 <MaterialIcons
                                     name={f.icon}
                                     size={14}
-                                    color={isActive ? COLORS.text.primary : f.color}
+                                    color={COLORS.text.primary} // Iconos blancos
                                 />
                                 <Text
                                     style={{
@@ -106,14 +105,14 @@ export default function RequestsScreen() {
                                         lineHeight: 18,
                                         fontSize: 13,
                                         fontWeight: '600',
-                                        color: isActive ? COLORS.text.primary : COLORS.text.muted,
+                                        color: isActive ? f.activeColor : COLORS.text.primary,
                                     }}
                                 >
                                     {f.label}
                                 </Text>
                                 {count > 0 && (
                                     <View style={{
-                                        backgroundColor: isActive ? 'rgba(255,255,255,0.2)' : COLORS.dark[200],
+                                        backgroundColor: isActive ? `${f.activeColor}20` : COLORS.dark[200],
                                         borderRadius: 8,
                                         paddingHorizontal: 6,
                                         paddingVertical: 1,
@@ -123,7 +122,7 @@ export default function RequestsScreen() {
                                         <Text style={{
                                             fontSize: 11,
                                             fontWeight: '700',
-                                            color: isActive ? COLORS.text.primary : COLORS.text.muted,
+                                            color: isActive ? f.activeColor : COLORS.text.muted,
                                         }}>
                                             {count}
                                         </Text>

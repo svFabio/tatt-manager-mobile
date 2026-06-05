@@ -60,7 +60,7 @@ export const SessionsAPI = {
   /** GET /users — artistas para el filtro */
   getArtistas: async (): Promise<ApiResponse<ArtistaOption[]>> => {
     return api
-      .get<ApiResponse<ArtistaOption[]>>("/users")
-      .then((r) => r.data);
+      .get<ArtistaOption[]>("/users")
+      .then((r) => ({ data: r.data, error: null }));
   },
 };

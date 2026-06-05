@@ -67,7 +67,7 @@ export default function SessionDetailScreen({ sessionId }: Props) {
       <View
         className="flex-row items-center px-4 h-16 bg-bg border-b-0"
       >
-        <TouchableOpacity onPress={() => router.back()} className="mr-4 p-2 rounded-xl">
+        <TouchableOpacity onPress={() => router.setParams({ detail: '' })} className="mr-4 p-2 rounded-xl">
           <MaterialIcons name="arrow-back" size={20} color={COLORS.primary.light} />
         </TouchableOpacity>
         <Text className="text-white text-lg font-bold tracking-tight">

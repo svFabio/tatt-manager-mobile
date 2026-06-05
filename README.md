@@ -1,59 +1,39 @@
-# Tatt Manager - Mobile App 📱
+# Tatt Manager - App Móvil
 
-Aplicación móvil desarrollada en **React Native (Expo)** para la gestión en tiempo real de tu estudio de tatuajes. Integrada nativamente con WebSockets para recibir actualizaciones del Bot de WhatsApp y renderizar solicitudes gráficas, citas y la matriz temporal de artistas.
+Aplicación móvil construida en React Native y Expo para gestionar el estudio de tatuajes en tiempo real.
 
-## Setup Local (Quick Start)
+## Requisitos Previos
+* Node.js
+* Tener la app de **Expo Go** instalada en tu teléfono celular (disponible en Android e iOS), o un emulador.
 
-1. **Instalación:**
-   ```bash
-   git clone <repository-url>
-   cd tatt-manager-mobile
-   npm install
-   ```
+## Guía de Instalación Rápida
 
-2. **Variables de Entorno Cruciales:**
-   Crea un archivo `.env` en la raíz de la carpeta móvil. Es obligatorio para que el teléfono encuentre al backend.
-   ```env
-   EXPO_PUBLIC_API_URL=http://<IP-DE-TU-PC>:3000/api
-   EXPO_PUBLIC_SOCKET_URL=http://<IP-DE-TU-PC>:3000
-   ```
-   *(Asegúrate de cambiar la IP por tu dirección IPv4 local mientras desarrollas, ej: `192.168.1.5`)*
-
-3. **Arrancar la App:**
-   ```bash
-   npx expo start -c --go
-   ```
-   *(para usar la app de la play store para leer el qr)*
-
-## Tecnologías
-
-- **Framework**: Expo + React Native.
-- **Navegación**: Expo Router (Enrutamiento mediante sistema de archivos en `app/`).
-- **Arquitectura**: Feature-Sliced Design (`src/features/`).
-- **Estados & Red**: Zustand (Client State) + Axios (REST) + Socket.IO (Realtime Socket).
-- **Estilos**: NativeWind v4 (Tailwind CSS puro para compilación óptima).
-
-## Arquitectura de Rutas y Features
-
-El desarrollo está segmentado por dominios de negocio puristas para alta cohesión:
-
-```text
-tatt-manager-mobile/
-├── app/                      
-│   ├── (auth)/               # Pantalla inicial de Login
-│   └── (drawer)/             # Menú lateral base
-│       ├── agenda.tsx        # Render de citas actuales
-│       ├── calendar.tsx      # Matriz mensual
-│       └── whatsapp.tsx      # Consola del bot inteligente
-├── src/                      
-│   ├── api/                  # Axios (.env interceptors) + Sockets
-│   ├── features/             # Piezas de Lego del sistema
-│   │   ├── appointments/     # UI de tarjetas de citas
-│   │   └── whatsapp/         # UI modular del Pair Code y status
-│   └── store/                # Zustand global state
+### 1. Instalar dependencias
+Abre tu terminal en la carpeta `tatt-manager-mobile` y ejecuta:
+```bash
+npm install
 ```
 
-## CI / CD
-Configurado con **GitHub Actions** para:
-- Revisar que la validación TypeScript (`npx tsc`) es exitosa.
-- Emitir builds nativos automáticos `.apk` o `.aab` a través de EAS.
+### 2. Configurar Variables de Entorno (.env)
+Crea un archivo llamado `.env` en la raíz de la carpeta `tatt-manager-mobile`. 
+
+**MUY IMPORTANTE:** El celular necesita encontrar tu PC en la red WiFi. No puedes usar `localhost` para tu IP local. Debes averiguar la dirección IPv4 de tu computadora (por ejemplo, `192.168.1.5`) y usarla en las URLs, a menos que estés probando con URLs de producción.
+
+Plantilla base del `.env`:
+```env
+# Conexión al Backend (Usa tu IPv4 local si desarrollas en red, o la URL de producción)
+EXPO_PUBLIC_API_URL=http://<TU_IP_LOCAL>:3000/api
+EXPO_PUBLIC_SOCKET_URL=http://<TU_IP_LOCAL>:3000
+
+# Google Auth (Obligatorio para el inicio de sesión)
+EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID="tu_google_web_client_id.apps.googleusercontent.com"
+```
+
+### 3. Levantar la App
+Inicia el servidor de Expo (limpiando caché para evitar errores):
+```bash
+npx expo start -c --go
+```
+
+**Para ver la app:** 
+Abre la app **Expo Go** en tu dispositivo Android y escanea el código QR que aparece en la terminal. Si usas un dispositivo iOS, escanea el código con la aplicación de Cámara nativa.

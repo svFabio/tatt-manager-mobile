@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Drawer } from "expo-router/drawer";
 import { BlurView } from "expo-blur";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -11,6 +11,9 @@ import { useRouter } from "expo-router";
 import { COLORS } from "@/src/theme/colors";
 import { useAuthStore } from "@/src/store/useAuthStore";
 import { useStudioStore } from "@/src/store/useStudioStore";
+import { useRequests } from "@/src/features/requests/hooks/useRequests";
+import { usePagosStore } from "@/src/store/usePagosStore";
+import { InventarioAPI } from "@/src/api/inventario";
 
 function CustomDrawerContent(props: any) {
   const { state } = props;
@@ -63,6 +66,37 @@ function CustomDrawerContent(props: any) {
 
   const isAdmin = currentStudio?.rol === "ADMIN";
 
+  const { requests, fetchRequests } = useRequests();
+  const pendientesPagos = usePagosStore((state) => state.pendientes);
+  const fetchPendientesPagos = usePagosStore((state) => state.fetchPendientes);
+  const [inventoryBadgeCount, setInventoryBadgeCount] = useState(0);
+
+  useEffect(() => {
+    if (!currentStudio) return;
+    fetchRequests();
+    if (isAdmin) {
+      fetchPendientesPagos();
+      InventarioAPI.getInventario().then((res) => {
+        if (res.ok) setInventoryBadgeCount(res.data.stats.enStockBajo);
+      }).catch(console.error);
+    }
+  }, [isAdmin, currentStudio]); // currentStudio added as dependency in case studio switches
+
+  const requestsBadgeCount = (requests || []).filter(r => r.estado === "PENDIENTE").length;
+  const pagosBadgeCount = pendientesPagos?.length || 0;
+
+  const renderBadge = (count: number) => {
+    if (count === 0) return null;
+    return (
+      <View 
+        className="ml-auto w-5 h-5 rounded-full items-center justify-center" 
+        style={{ backgroundColor: COLORS.danger.DEFAULT }}
+      >
+        <Text className="text-white text-[10px] font-bold">{count > 99 ? '99+' : count}</Text>
+      </View>
+    );
+  };
+
   return (
     <BlurView intensity={45} tint="dark" experimentalBlurMethod="dimezisBlurView" style={{ flex: 1, borderTopRightRadius: 32, borderBottomRightRadius: 32, borderRightWidth: 1, borderColor: 'rgba(255, 255, 255, 0.05)', overflow: 'hidden' }}>
       <SafeAreaView style={{ flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.15)' }} edges={["top", "bottom"]}>
@@ -101,11 +135,12 @@ function CustomDrawerContent(props: any) {
           <TouchableOpacity onPress={() => handleNavigation("/(drawer)/requests" as any)} className={getBtnStyle("requests")} activeOpacity={0.7}>
             <View className="w-8 items-center justify-center"><Feather name="user-plus" size={20} color={getIconColor("requests")} /></View>
             <Text className={`font-semibold ml-3 text-base ${getTextColor("requests")}`}>Solicitudes</Text>
+            {renderBadge(requestsBadgeCount)}
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => handleNavigation("/(drawer)/end-session" as any)} className={getBtnStyle("end-session")} activeOpacity={0.7}>
             <View className="w-8 items-center justify-center"><Feather name="log-out" size={20} color={getIconColor("end-session")} /></View>
-            <Text className={`font-semibold ml-3 text-base ${getTextColor("end-session")}`}>Finalizar sesión</Text>
+            <Text className={`font-semibold ml-3 text-base ${getTextColor("end-session")}`}>Terminar sesión</Text>
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => handleNavigation("/(drawer)/chat" as any)} className={getBtnStyle("chat")} activeOpacity={0.7}>
@@ -139,6 +174,7 @@ function CustomDrawerContent(props: any) {
               <TouchableOpacity onPress={() => handleNavigation("/(drawer)/inventory" as any)} className={getBtnStyle("inventory")} activeOpacity={0.7}>
                 <View className="w-8 items-center justify-center"><Feather name="archive" size={20} color={getIconColor("inventory")} /></View>
                 <Text className={`font-semibold ml-3 text-base ${getTextColor("inventory")}`}>Inventario</Text>
+                {renderBadge(inventoryBadgeCount)}
               </TouchableOpacity>
 
               <TouchableOpacity onPress={() => handleNavigation("/(drawer)/sessions" as any)} className={getBtnStyle("sessions")} activeOpacity={0.7}>
@@ -149,6 +185,12 @@ function CustomDrawerContent(props: any) {
               <TouchableOpacity onPress={() => handleNavigation("/(drawer)/settings" as any)} className={getBtnStyle("settings")} activeOpacity={0.7}>
                 <View className="w-8 items-center justify-center"><Feather name="settings" size={20} color={getIconColor("settings")} /></View>
                 <Text className={`font-semibold ml-3 text-base ${getTextColor("settings")}`}>Configuración</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => handleNavigation("/(drawer)/validar-pagos" as any)} className={getBtnStyle("validar-pagos")} activeOpacity={0.7}>
+                <View className="w-8 items-center justify-center"><MaterialIcons name="receipt-long" size={22} color={getIconColor("validar-pagos")} /></View>
+                <Text className={`font-semibold ml-3 text-base ${getTextColor("validar-pagos")}`}>Validar Pagos</Text>
+                {renderBadge(pagosBadgeCount)}
               </TouchableOpacity>
             </View>
           </>
@@ -206,6 +248,7 @@ export default function DrawerLayout() {
         <Drawer.Screen name="agenda" options={{ title: "Agenda", headerShown: true }} />
         <Drawer.Screen name="reports" options={{ title: "Reportes", headerShown: true }} />
         <Drawer.Screen name="settings" options={{ title: "Configuración", headerShown: true }} />
+        <Drawer.Screen name="validar-pagos" options={{ title: "Validar Pagos", headerShown: true }} />
       </Drawer>
     </GestureHandlerRootView>
   );

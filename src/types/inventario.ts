@@ -1,5 +1,5 @@
 export interface InventarioItem {
-    tipo: 'tinta' | 'aguja';
+    tipo: 'tinta' | 'aguja' | 'cap';
     refId: number;
     nombre: string;
     marca: string;
@@ -22,7 +22,7 @@ export interface InventarioResponse {
 }
 
 export interface AjusteRapidoBody {
-    tipo: 'tinta' | 'aguja';
+    tipo: 'tinta' | 'aguja' | 'cap';
     refId: number;
     delta: number;
 }

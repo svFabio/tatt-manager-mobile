@@ -4,7 +4,70 @@ import { Text } from '@/src/components/StyledText';
 import { format, isSameDay } from "date-fns";
 import { es } from "date-fns/locale";
 import { EventCard } from "./EventCard";
+import { COLORS } from "@/src/theme/colors";
 import type { Cita } from "../types";
+
+const LIMITE_HORAS = 8;
+
+interface CargaArtista {
+  artistaId: number;
+  nombre: string;
+  horas: number;
+}
+
+function calcularCargaPorArtista(citas: Cita[]): CargaArtista[] {
+  const mapa = new Map<number, CargaArtista>();
+  for (const cita of citas) {
+    const id = cita.artistaId ?? cita.artista?.id;
+    if (id == null) continue;
+    const nombre = cita.artista?.nombre ?? cita.artistaNombre ?? `Artista ${id}`;
+    const horas = Number(cita.duracionEnHoras ?? 0);
+    if (mapa.has(id)) {
+      mapa.get(id)!.horas += horas;
+    } else {
+      mapa.set(id, { artistaId: id, nombre, horas });
+    }
+  }
+  return Array.from(mapa.values());
+}
+
+function WorkloadBar({ artista }: { artista: CargaArtista }) {
+  const porcentaje = Math.min(1, artista.horas / LIMITE_HORAS);
+  const excedido = artista.horas > LIMITE_HORAS;
+  const barColor = excedido
+    ? COLORS.danger.DEFAULT
+    : artista.horas >= LIMITE_HORAS * 0.75
+    ? COLORS.warning.DEFAULT
+    : COLORS.primary.DEFAULT;
+
+  return (
+    <View style={{ width: "100%" }}>
+      <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 3 }}>
+        <Text style={{ color: COLORS.text.muted, fontSize: 10, fontWeight: "700" }} numberOfLines={1}>
+          {artista.nombre}
+        </Text>
+        <Text style={{ color: excedido ? COLORS.danger.text : COLORS.text.dimmed, fontSize: 10, fontWeight: "700" }}>
+          {artista.horas}h / {LIMITE_HORAS}h
+        </Text>
+      </View>
+      <View style={{ height: 5, borderRadius: 3, backgroundColor: COLORS.dark[200] }}>
+        <View
+          style={{
+            height: 5,
+            borderRadius: 3,
+            width: `${porcentaje * 100}%`,
+            backgroundColor: barColor,
+          }}
+        />
+      </View>
+      {excedido && (
+        <Text style={{ color: COLORS.danger.text, fontSize: 9, fontWeight: "700", marginTop: 2 }}>
+          LÍMITE SUPERADO
+        </Text>
+      )}
+    </View>
+  );
+}
 
 interface DayTimelineProps {
   dia: Date;
@@ -46,11 +109,32 @@ export const DayTimeline: React.FC<DayTimelineProps> = ({ dia, citas, onSelectCi
       ? (minutosDesdeInicio(ahora) / 60) * ALTO_HORA
       : null;
 
+  const cargaPorArtista = calcularCargaPorArtista(citas);
+
   return (
     <View className="flex-1">
       <Text className="text-primary text-xs font-bold tracking-widest text-center py-3">
         {tituloDia}
       </Text>
+
+      {cargaPorArtista.length > 0 && (
+        <View
+          style={{
+            marginHorizontal: 16,
+            marginBottom: 10,
+            padding: 12,
+            borderRadius: 12,
+            backgroundColor: COLORS.dark[100],
+            borderWidth: 1,
+            borderColor: COLORS.border.subtle,
+            gap: 10,
+          }}
+        >
+          {cargaPorArtista.map((a) => (
+            <WorkloadBar key={a.artistaId} artista={a} />
+          ))}
+        </View>
+      )}
 
       <ScrollView
         className="flex-1"
@@ -104,7 +188,7 @@ export const DayTimeline: React.FC<DayTimelineProps> = ({ dia, citas, onSelectCi
 
                 // Determinar en qué columna va esta cita
                 const artistaId = cita.artistaId ?? cita.artista?.id;
-                let colIndex = artistIds.indexOf(artistaId);
+                let colIndex = artistaId != null ? artistIds.indexOf(artistaId) : -1;
                 if (colIndex === -1) colIndex = 0; // Fallback
 
                 return (

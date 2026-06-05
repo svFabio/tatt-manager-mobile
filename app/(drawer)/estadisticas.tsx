@@ -1,10 +1,51 @@
 import React, { useEffect, useState } from "react";
-import { View, ScrollView, ActivityIndicator } from "react-native";
+import { View, ScrollView, ActivityIndicator, TouchableOpacity } from "react-native";
 import { Text } from "@/src/components/StyledText";
 import { COLORS } from "@/src/theme/colors";
 import { Feather } from "@expo/vector-icons";
 import Svg, { Polyline, Circle, G, Text as SvgText, Path } from "react-native-svg";
 import api from "@/src/api/axios";
+
+type RangoDias = 7 | 30;
+
+interface FilterToggleProps {
+  value: RangoDias;
+  onChange: (v: RangoDias) => void;
+}
+
+function FilterToggle({ value, onChange }: FilterToggleProps) {
+  const options: RangoDias[] = [7, 30];
+  return (
+    <View className="flex-row bg-dark-200 rounded-md p-0.5">
+      {options.map((opt) => {
+        const active = value === opt;
+        return (
+          <TouchableOpacity
+            key={opt}
+            onPress={() => onChange(opt)}
+            activeOpacity={0.8}
+            style={{
+              paddingHorizontal: 10,
+              paddingVertical: 4,
+              borderRadius: 6,
+              backgroundColor: active ? COLORS.primary.DEFAULT : "transparent",
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 11,
+                color: active ? "#fff" : COLORS.text.secondary,
+                fontFamily: "Montserrat_600SemiBold",
+              }}
+            >
+              {opt}d
+            </Text>
+          </TouchableOpacity>
+        );
+      })}
+    </View>
+  );
+}
 
 interface StatsData {
   estudio: string;
@@ -19,11 +60,15 @@ interface StatsData {
 export default function StatsScreen() {
   const [data, setData] = useState<StatsData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [citasDias, setCitasDias] = useState<RangoDias>(7);
+  const [articulosDias, setArticulosDias] = useState<RangoDias>(7);
 
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const res = await api.get("/statistics/estudio");
+        const res = await api.get("/statistics/estudio", {
+          params: { citasDias, articulosDias },
+        });
         setData(res.data);
       } catch (error) {
         console.error("Error fetching stats", error);
@@ -32,7 +77,7 @@ export default function StatsScreen() {
       }
     };
     fetchStats();
-  }, []);
+  }, [citasDias, articulosDias]);
 
   if (loading) {
     return (
@@ -53,8 +98,8 @@ export default function StatsScreen() {
   // --- Line Chart Math (Citas por Mes) ---
   const chartWidth = 320;
   const chartHeight = 150;
-  const lineLabels = data.citasPorMes.labels.slice(0, 7);
-  const lineValues = data.citasPorMes.valores.slice(0, 7);
+  const lineLabels = data.citasPorMes.labels.slice(0, citasDias);
+  const lineValues = data.citasPorMes.valores.slice(0, citasDias);
   const rawMaxLine = Math.max(...lineValues, 5);
   const stepYScale = Math.ceil(rawMaxLine / 5);
   const maxLineVal = stepYScale * 5;
@@ -85,9 +130,14 @@ export default function StatsScreen() {
 
       {/* CHART 1: LINE CHART */}
       <View className="bg-dark-100 rounded-2xl p-4 mb-6" style={{ borderWidth: 1, borderColor: COLORS.dark[200] }}>
-        <View className="flex-row items-center mb-6">
-          <Feather name="calendar" size={18} color={COLORS.primary.DEFAULT} />
-          <Text className="text-white text-lg font-bold ml-2">Sesiones en esta semana</Text>
+        <View className="flex-row items-center justify-between mb-6">
+          <View className="flex-row items-center flex-1 mr-2">
+            <Feather name="calendar" size={18} color={COLORS.primary.DEFAULT} />
+            <Text className="text-white text-lg font-bold ml-2">
+              {citasDias === 7 ? "Sesiones últimos 7 días" : "Sesiones últimos 30 días"}
+            </Text>
+          </View>
+          <FilterToggle value={citasDias} onChange={setCitasDias} />
         </View>
 
         <View className="flex-row">
@@ -120,9 +170,14 @@ export default function StatsScreen() {
 
       {/* CHART 2: DONUT CHART */}
       <View className="bg-dark-100 rounded-2xl p-4 mb-6" style={{ borderWidth: 1, borderColor: COLORS.dark[200] }}>
-        <View className="flex-row items-center mb-4">
-          <Feather name="box" size={18} color={COLORS.primary.DEFAULT} />
-          <Text className="text-white text-lg font-bold ml-2">Artículos Usados</Text>
+        <View className="flex-row items-center justify-between mb-4">
+          <View className="flex-row items-center flex-1 mr-2">
+            <Feather name="box" size={18} color={COLORS.primary.DEFAULT} />
+            <Text className="text-white text-lg font-bold ml-2">
+              {articulosDias === 7 ? "Artículos últimos 7 días" : "Artículos últimos 30 días"}
+            </Text>
+          </View>
+          <FilterToggle value={articulosDias} onChange={setArticulosDias} />
         </View>
 
         <View className="items-center justify-center py-4 relative h-[220px] w-full overflow-visible">

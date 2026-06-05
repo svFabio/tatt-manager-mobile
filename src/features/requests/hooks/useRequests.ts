@@ -37,8 +37,8 @@ export function useRequests() {
   );
 
   // Filtros por estado
-  const pendingRequests = (requests || []).filter((r) => r.status === "PENDIENTE" || r.status === "pending");
-  const quotedRequests = (requests || []).filter((r) => r.status === "COTIZADA" || r.status === "quoted");
+  const pendingRequests = (requests || []).filter((r) => r.estado === "PENDIENTE");
+  const quotedRequests = (requests || []).filter((r) => r.estado === "COTIZADA");
 
   return {
     requests,

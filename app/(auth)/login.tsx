@@ -48,37 +48,37 @@ export default function LoginScreen() {
 
   const handleGoogleLogin = async () => {
     try {
-      const sessionId = Math.random().toString(36).substring(2, 15);
-      const authUrl = `${process.env.EXPO_PUBLIC_API_URL}/auth/google-mobile?session=${sessionId}`;
+      // 1. Configuramos Google Sign In si no se ha hecho
+      const { GoogleSignin } = require('@react-native-google-signin/google-signin');
+      GoogleSignin.configure({
+        webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID, // Necesitas agregar esto al .env
+        offlineAccess: true,
+      });
+
+      // 2. Iniciamos el flujo nativo (Pop-up inferior de Android)
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
       
-      await WebBrowser.openBrowserAsync(authUrl);
+      // 3. Enviamos el idToken al backend
+      if (!userInfo.data?.idToken) {
+        throw new Error('No se recibió el token de Google');
+      }
 
-      // Iniciar el polling
-      const pollInterval = setInterval(async () => {
-        try {
-          const res = await api.get(`/auth/mobile-token?session=${sessionId}`);
-          if (res.data.status === 'ready') {
-            clearInterval(pollInterval);
-            WebBrowser.dismissBrowser();
-            
-            setAuth(res.data.token, res.data.usuario);
-            clearStudio();
-            router.replace("/(studio)/select");
-          } else if (res.data.status === 'expired') {
-            clearInterval(pollInterval);
-            WebBrowser.dismissBrowser();
-            Alert.alert("Error", "El tiempo de inicio de sesión ha expirado");
-          }
-        } catch (pollErr) {
-          console.error("Poll error", pollErr);
-        }
-      }, 2000);
+      setLoading(true);
+      const { data } = await api.post("/auth/google-native", {
+        idToken: userInfo.data.idToken
+      });
 
-      // Detener el polling si el usuario cierra el navegador manualmente (opcional, dejamos timeout de seguridad)
-      setTimeout(() => clearInterval(pollInterval), 5 * 60 * 1000); 
-    } catch (e) {
+      setAuth(data.token, data.usuario);
+      clearStudio();
+      router.replace("/(studio)/select");
+
+    } catch (e: any) {
       console.error(e);
-      Alert.alert("Error", "No se pudo iniciar sesión con Google");
+      const msg = e?.message || e?.code || 'Error desconocido';
+      Alert.alert("Error Google", msg);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -113,10 +113,17 @@ export default function LoginScreen() {
           <InputField
             label="Contraseña"
             placeholder="••••••••"
-            secureTextEntry
+            isPassword
             value={password}
             onChangeText={setPassword}
           />
+
+          {/* ── ¿Olvidaste tu contraseña? ── */}
+          <View className="items-end mb-2">
+            <TouchableOpacity onPress={() => router.push("/(auth)/recover")}>
+              <Text className="text-primary text-xs font-bold">¿Olvidaste tu contraseña?</Text>
+            </TouchableOpacity>
+          </View>
 
           <View className="mt-4">
             {error ? <Text className="text-xs text-center mb-3" style={{ color: COLORS.danger.text }}>{error}</Text> : null}

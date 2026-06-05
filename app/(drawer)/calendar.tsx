@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View, TouchableOpacity, ActivityIndicator, ScrollView, Alert, } from 'react-native';
 import { Text } from '@/src/components/StyledText';
@@ -13,6 +13,7 @@ import { DayTimeline } from "@/src/features/appointments/components/DayTimeline"
 import { AppointmentDetailModal } from "@/src/features/appointments/components/AppointmentDetailModal";
 import RegistroCitaModal from "@/src/components/ui/RegistroCita";
 import { sessionService } from "@/src/services/sessionService";
+import { useLocalSearchParams } from "expo-router";
 import type {
   Cita,
   VistaCalendario,
@@ -36,6 +37,28 @@ export default function CalendarScreen() {
   const [vista, setVista] = useState<VistaCalendario>("month");
   const [citaSeleccionada, setCitaSeleccionada] = useState<Cita | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
+
+  const params = useLocalSearchParams<{ date?: string, citaId?: string }>();
+  
+  useEffect(() => {
+    if (params.date) {
+      const targetDate = new Date(params.date);
+      if (!isNaN(targetDate.getTime())) {
+        seleccionarDia(targetDate);
+        setVista("day"); // Mover automáticamente a la vista de línea de tiempo
+      }
+    }
+  }, [params.date]);
+
+  useEffect(() => {
+    if (params.citaId && citas.length > 0) {
+      const idStr = String(params.citaId);
+      const targetCita = citas.find(c => String(c.id) === idStr);
+      if (targetCita) {
+        setCitaSeleccionada(targetCita);
+      }
+    }
+  }, [params.citaId, citas]);
 
   const handleSelectDay = (fecha: Date) => {
     seleccionarDia(fecha);
@@ -64,16 +87,16 @@ export default function CalendarScreen() {
       horario: nuevaCita.horario,
       cotizacion: cotizacionNum,
       artistaId: nuevaCita.artistaId,
+      foto: nuevaCita.foto,
     });
 
+    setModalVisible(false);
+    await refrescar();
     Alert.alert(
       "¡Éxito!",
       `Sesión registrada para ${nuevaCita.nombre}\nFecha: ${fechaFormateada}\nHora: ${nuevaCita.horario}\nMonto: Bs. ${cotizacionNum}`,
       [{ text: "OK" }]
     );
-
-    setModalVisible(false);
-    await refrescar();
   };
 
   return (
