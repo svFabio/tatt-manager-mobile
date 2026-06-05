@@ -48,51 +48,36 @@ export default function LoginScreen() {
 
   const handleGoogleLogin = async () => {
     try {
-      const sessionId = Math.random().toString(36).substring(2, 15);
-      const authUrl = `${process.env.EXPO_PUBLIC_API_URL}/auth/google-mobile?session=${sessionId}`;
-      const checkToken = async () => {
-        try {
-          const res = await api.get(`/auth/mobile-token?session=${sessionId}`);
-          if (res.data.status === 'ready') {
-            setAuth(res.data.token, res.data.usuario);
-            clearStudio();
-            router.replace("/(studio)/select");
-            return true;
-          } else if (res.data.status === 'expired') {
-            Alert.alert("Error", "El tiempo de inicio de sesión ha expirado");
-            return true;
-          }
-        } catch (pollErr) {
-          // Si da error silencioso ignoramos
-        }
-        return false;
-      };
+      // 1. Configuramos Google Sign In si no se ha hecho
+      const { GoogleSignin } = require('@react-native-google-signin/google-signin');
+      GoogleSignin.configure({
+        webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID, // Necesitas agregar esto al .env
+        offlineAccess: true,
+      });
 
-      // 1. Iniciamos el polling ANTES de abrir el navegador
-      const pollInterval = setInterval(async () => {
-        const done = await checkToken();
-        if (done) {
-          clearInterval(pollInterval);
-          WebBrowser.dismissBrowser();
-        }
-      }, 2000);
+      // 2. Iniciamos el flujo nativo (Pop-up inferior de Android)
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+      
+      // 3. Enviamos el idToken al backend
+      if (!userInfo.data?.idToken) {
+        throw new Error('No se recibió el token de Google');
+      }
 
-      // 2. Detener el polling por seguridad a los 5 minutos
-      const timeoutId = setTimeout(() => clearInterval(pollInterval), 5 * 60 * 1000); 
+      setLoading(true);
+      const { data } = await api.post("/auth/google-native", {
+        idToken: userInfo.data.idToken
+      });
 
-      // 3. Abrir el navegador. El código se detiene aquí hasta que se cierre (manualmente o por dismiss)
-      await WebBrowser.openBrowserAsync(authUrl);
+      setAuth(data.token, data.usuario);
+      clearStudio();
+      router.replace("/(studio)/select");
 
-      // 4. Si el navegador se cerró (el usuario lo cerró a mano o se hizo dismiss)
-      clearInterval(pollInterval);
-      clearTimeout(timeoutId); 
-
-      // 5. Último intento. En Android las tareas en segundo plano (setInterval) pueden pausarse 
-      // cuando el navegador está abierto. Si eso pasó, hacemos un check inmediato ahora que regresó.
-      await checkToken();
-    } catch (e) {
+    } catch (e: any) {
       console.error(e);
-      Alert.alert("Error", "No se pudo iniciar sesión con Google");
+      Alert.alert("Error", "No se pudo iniciar sesión nativamente con Google.");
+    } finally {
+      setLoading(false);
     }
   };
 
