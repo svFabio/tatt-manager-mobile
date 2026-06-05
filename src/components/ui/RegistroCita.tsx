@@ -8,6 +8,9 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { COLORS } from '../../theme/colors';
 import api from '../../api/axios';
+import { CitasAPI } from '../../api/citas';
+
+const LIMITE_HORAS_DIA = 8;
 
 interface SessionForm {
   nombre: string;
@@ -59,6 +62,7 @@ const RegistroCitaModal = ({ visible, onClose, onSave, selectedDate }: Props) =>
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [artistas, setArtistas] = useState<{ id: number, nombre: string }[]>([]);
   const [loadingArtistas, setLoadingArtistas] = useState(false);
+  const [cargaHoraria, setCargaHoraria] = useState<{ horasAgendadas: number; horasLibres: number; excedido: boolean } | null>(null);
 
   // Shake animations per field
   const shakeAnims = useRef<Record<string, Animated.Value>>({
@@ -110,9 +114,9 @@ const RegistroCitaModal = ({ visible, onClose, onSave, selectedDate }: Props) =>
         const res = await api.get('/citas/artistas');
         setArtistas(res.data);
       } catch (e) {
-         console.error('Error fetching artistas', e);
+        console.error('Error fetching artistas', e);
       } finally {
-         setLoadingArtistas(false);
+        setLoadingArtistas(false);
       }
     };
     if (visible) {
@@ -128,6 +132,18 @@ const RegistroCitaModal = ({ visible, onClose, onSave, selectedDate }: Props) =>
       setHorarios([]);
     }
   }, [visible, form.fecha, form.horas, form.artistaId, fetchHorarios]);
+
+  // Fetch carga horaria when artista or fecha changes
+  useEffect(() => {
+    if (!visible || !form.artistaId) {
+      setCargaHoraria(null);
+      return;
+    }
+    const fechaStr = `${form.fecha.getFullYear()}-${String(form.fecha.getMonth() + 1).padStart(2, '0')}-${String(form.fecha.getDate()).padStart(2, '0')}`;
+    CitasAPI.getCargaHoraria(form.artistaId, fechaStr)
+      .then(data => setCargaHoraria(data))
+      .catch(() => setCargaHoraria(null));
+  }, [visible, form.artistaId, form.fecha]);
 
   const ajustarHoras = (monto: number) => {
     setForm(prev => ({ ...prev, horas: Math.max(1, Math.min(12, prev.horas + monto)), horario: '' }));
@@ -198,7 +214,8 @@ const RegistroCitaModal = ({ visible, onClose, onSave, selectedDate }: Props) =>
         cotizacion: parseFloat(form.cotizacion),
       });
     } catch (e: unknown) {
-      // Error handling is done in the parent (calendar.tsx)
+      const mensaje = e instanceof Error ? e.message : 'Error al crear la cita';
+      Alert.alert('No se pudo crear la cita', mensaje, [{ text: 'Entendido' }]);
     } finally {
       setSaving(false);
     }
@@ -210,6 +227,7 @@ const RegistroCitaModal = ({ visible, onClose, onSave, selectedDate }: Props) =>
       fecha: new Date(), horario: '', cotizacion: '', artistaId: undefined, foto: undefined
     });
     setErrors({});
+    setCargaHoraria(null);
   };
 
   const pickImage = async (useCamera: boolean = false) => {
@@ -317,10 +335,10 @@ const RegistroCitaModal = ({ visible, onClose, onSave, selectedDate }: Props) =>
                     placeholder="Ej. 5x5 cm"
                     placeholderTextColor={COLORS.text.dimmed}
                     value={form.tamano}
-                    onChangeText={(t) => { 
+                    onChangeText={(t) => {
                       const formatted = t.replace(/[*_]/g, 'x').replace(/-/g, 'x');
-                      setForm({ ...form, tamano: formatted }); 
-                      setErrors(e => ({ ...e, tamano: false })); 
+                      setForm({ ...form, tamano: formatted });
+                      setErrors(e => ({ ...e, tamano: false }));
                     }}
                   />
                 </Animated.View>
@@ -338,9 +356,9 @@ const RegistroCitaModal = ({ visible, onClose, onSave, selectedDate }: Props) =>
                     placeholder="Ej. +59171234567"
                     placeholderTextColor={COLORS.text.dimmed}
                     value={form.telefono}
-                    onChangeText={(t) => { 
-                      setForm({ ...form, telefono: t.replace(/[^0-9+]/g, '') }); 
-                      setErrors(e => ({ ...e, telefono: false })); 
+                    onChangeText={(t) => {
+                      setForm({ ...form, telefono: t.replace(/[^0-9+]/g, '') });
+                      setErrors(e => ({ ...e, telefono: false }));
                     }}
                   />
                 </Animated.View>
@@ -394,7 +412,7 @@ const RegistroCitaModal = ({ visible, onClose, onSave, selectedDate }: Props) =>
               <Animated.View style={{ transform: [{ translateX: shakeAnims.artistaId }] }} className="mb-4">
                 <Text className="text-[10px] mb-1.5 uppercase font-bold tracking-widest" style={labelStyle('artistaId')}>Tatuador *</Text>
                 {loadingArtistas ? (
-                   <ActivityIndicator color={COLORS.primary.DEFAULT} size="small" className="self-start m-2" />
+                  <ActivityIndicator color={COLORS.primary.DEFAULT} size="small" className="self-start m-2" />
                 ) : (
                   <View className="flex-row flex-wrap" style={{ gap: 8 }}>
                     {artistas.map((a) => {
@@ -404,9 +422,8 @@ const RegistroCitaModal = ({ visible, onClose, onSave, selectedDate }: Props) =>
                           key={a.id}
                           onPress={() => { setForm({ ...form, artistaId: a.id }); setErrors(e => ({ ...e, artistaId: false })); }}
                           activeOpacity={0.7}
-                          className={`px-4 py-3 rounded-xl border-[1.5px] ${
-                            selected ? 'bg-primary border-primary' : 'bg-dark-100 border-dark-200'
-                          }`}
+                          className={`px-4 py-3 rounded-xl border-[1.5px] ${selected ? 'bg-primary border-primary' : 'bg-dark-100 border-dark-200'
+                            }`}
                         >
                           <Text className={`text-sm ${selected ? 'text-white font-bold' : 'text-text-secondary font-medium'}`}>
                             {a.nombre}
@@ -417,6 +434,65 @@ const RegistroCitaModal = ({ visible, onClose, onSave, selectedDate }: Props) =>
                   </View>
                 )}
               </Animated.View>
+
+              {/* Carga horaria del artista */}
+              {cargaHoraria && (
+                <View
+                  className="rounded-xl p-3 mb-4"
+                  style={{
+                    backgroundColor: cargaHoraria.excedido ? COLORS.danger.bg : COLORS.dark[100],
+                    borderWidth: 1,
+                    borderColor: cargaHoraria.excedido
+                      ? COLORS.danger.border
+                      : cargaHoraria.horasAgendadas >= LIMITE_HORAS_DIA * 0.75
+                        ? COLORS.warning.DEFAULT
+                        : COLORS.dark[200],
+                  }}
+                >
+                  <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 6 }}>
+                    <Text style={{ color: COLORS.text.muted, fontSize: 10, fontWeight: '700', textTransform: 'uppercase', letterSpacing: 1 }}>
+                      Carga del día
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: 10,
+                        fontWeight: '700',
+                        color: cargaHoraria.excedido
+                          ? COLORS.danger.text
+                          : cargaHoraria.horasAgendadas >= LIMITE_HORAS_DIA * 0.75
+                            ? COLORS.warning.text
+                            : COLORS.text.secondary,
+                      }}
+                    >
+                      {cargaHoraria.horasAgendadas}h / {LIMITE_HORAS_DIA}h
+                    </Text>
+                  </View>
+                  <View style={{ height: 6, borderRadius: 3, backgroundColor: COLORS.dark[200] }}>
+                    <View
+                      style={{
+                        height: 6,
+                        borderRadius: 3,
+                        width: `${Math.min(100, (cargaHoraria.horasAgendadas / LIMITE_HORAS_DIA) * 100)}%`,
+                        backgroundColor: cargaHoraria.excedido
+                          ? COLORS.danger.DEFAULT
+                          : cargaHoraria.horasAgendadas >= LIMITE_HORAS_DIA * 0.75
+                            ? COLORS.warning.DEFAULT
+                            : COLORS.primary.DEFAULT,
+                      }}
+                    />
+                  </View>
+                  {cargaHoraria.excedido && (
+                    <Text style={{ color: COLORS.danger.text, fontSize: 10, fontWeight: '700', marginTop: 4 }}>
+                      ⚠ Este artista ya superó las 8h diarias
+                    </Text>
+                  )}
+                  {!cargaHoraria.excedido && cargaHoraria.horasAgendadas >= LIMITE_HORAS_DIA * 0.75 && (
+                    <Text style={{ color: COLORS.warning.text, fontSize: 10, fontWeight: '700', marginTop: 4 }}>
+                      Quedan solo {cargaHoraria.horasLibres}h disponibles
+                    </Text>
+                  )}
+                </View>
+              )}
 
               {/* Horarios Disponibles */}
               <Animated.View style={{ transform: [{ translateX: shakeAnims.horario }] }}>
@@ -454,9 +530,8 @@ const RegistroCitaModal = ({ visible, onClose, onSave, selectedDate }: Props) =>
                           key={h}
                           onPress={() => { setForm({ ...form, horario: h }); setErrors(e => ({ ...e, horario: false })); }}
                           activeOpacity={0.7}
-                          className={`px-5 py-3 rounded-xl border-[1.5px] ${
-                            selected ? 'bg-primary border-primary' : 'bg-dark-100 border-dark-200'
-                          }`}
+                          className={`px-5 py-3 rounded-xl border-[1.5px] ${selected ? 'bg-primary border-primary' : 'bg-dark-100 border-dark-200'
+                            }`}
                         >
                           <Text className={`text-sm ${selected ? 'text-white font-bold' : 'text-text-secondary font-medium'}`}>
                             {h}
@@ -492,7 +567,7 @@ const RegistroCitaModal = ({ visible, onClose, onSave, selectedDate }: Props) =>
                 {form.foto ? (
                   <View className="relative mb-3 rounded-xl overflow-hidden" style={{ borderWidth: 1, borderColor: COLORS.dark[200], height: 150 }}>
                     <Image source={{ uri: form.foto.uri }} style={{ width: '100%', height: '100%' }} resizeMode="cover" />
-                    <TouchableOpacity 
+                    <TouchableOpacity
                       onPress={() => setForm({ ...form, foto: undefined })}
                       className="absolute top-2 right-2 w-8 h-8 rounded-full items-center justify-center bg-black/60"
                     >
