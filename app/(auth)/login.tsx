@@ -75,7 +75,8 @@ export default function LoginScreen() {
 
     } catch (e: any) {
       console.error(e);
-      Alert.alert("Error", "No se pudo iniciar sesión nativamente con Google.");
+      const msg = e?.message || e?.code || 'Error desconocido';
+      Alert.alert("Error Google", msg);
     } finally {
       setLoading(false);
     }
