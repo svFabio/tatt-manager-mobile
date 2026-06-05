@@ -65,4 +65,16 @@ export const CitasAPI = {
     getArtistasDisponibles: async (): Promise<{ id: number, nombre: string }[]> => {
         return api.get<{ id: number, nombre: string }[]>(`${BASE}/artistas`).then(r => r.data);
     },
+
+    getCargaHoraria: async (artistaId: number, fecha: string): Promise<{
+        artistaId: number;
+        fecha: string;
+        horasAgendadas: number;
+        horasLibres: number;
+        limiteDiario: number;
+        excedido: boolean;
+    }> => {
+        const res = await api.get(`${BASE}/carga-horaria`, { params: { artistaId, fecha } });
+        return unwrapData(res.data);
+    },
 } as const;

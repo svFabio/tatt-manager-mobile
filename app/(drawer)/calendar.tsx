@@ -90,14 +90,13 @@ export default function CalendarScreen() {
       foto: nuevaCita.foto,
     });
 
+    setModalVisible(false);
+    await refrescar();
     Alert.alert(
       "¡Éxito!",
       `Sesión registrada para ${nuevaCita.nombre}\nFecha: ${fechaFormateada}\nHora: ${nuevaCita.horario}\nMonto: Bs. ${cotizacionNum}`,
       [{ text: "OK" }]
     );
-
-    setModalVisible(false);
-    await refrescar();
   };
 
   return (
