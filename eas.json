@@ -11,11 +11,6 @@
     "apk": {
       "android": {
         "buildType": "apk"
-      },
-      "env": {
-        "EXPO_PUBLIC_API_URL": "https://tatt-manager-backend.onrender.com/api",
-        "EXPO_PUBLIC_SOCKET_URL": "https://tatt-manager-backend.onrender.com",
-        "EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID": "920465531517-1dg03d8pu9qlsvrg8pqlhs7hvqj6no4h.apps.googleusercontent.com"
       }
     },
     "preview": {

@@ -2,7 +2,7 @@
   "expo": {
     "name": "Tattoo Studio Manager",
     "slug": "tatt-manager",
-    "version": "1.0.0",
+    "version": "6.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "tattoostudio",
@@ -34,10 +34,23 @@
       "expo-router",
       "@react-native-community/datetimepicker",
       "expo-font",
-      "@react-native-google-signin/google-signin"
+      "@react-native-google-signin/google-signin",
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "933f8a9a-dca3-45e1-84bf-cf744b731b39"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/933f8a9a-dca3-45e1-84bf-cf744b731b39"
     }
   }
 }
