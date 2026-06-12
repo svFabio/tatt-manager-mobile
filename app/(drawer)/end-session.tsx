@@ -52,16 +52,17 @@ export default function EndSessionScreen() {
   const [fotoBase64, setFotoBase64] = useState<string | null>(null);
   const [observaciones, setObservaciones] = useState('');
   const [cobroTatuaje, setCobroTatuaje] = useState('');
-  
+  const [anticipoInput, setAnticipoInput] = useState('');
+
   // Caps State: { [tintaId]: { CHICA: count, MEDIANA: count, GRANDE: count } }
   const [capsUsadas, setCapsUsadas] = useState<Record<number, Record<string, number>>>({});
-  
+
   // Agujas State: { [agujaId]: count }
   const [agujasUsadasDict, setAgujasUsadasDict] = useState<Record<number, number>>({});
 
   // Computed values
   const selectedCita = citas.find(c => c.id === selectedCitaId);
-  const anticipo = selectedCita?.seniaPagada ? Number(selectedCita.seniaPagada) : 0;
+  const anticipo = Number(anticipoInput) || 0;
   const cobro = Number(cobroTatuaje) || 0;
   const totalSesion = anticipo + cobro;
 
@@ -320,6 +321,7 @@ export default function EndSessionScreen() {
                   className="px-4 py-3 border-b border-white/5"
                   onPress={() => {
                     setSelectedCitaId(cita.id);
+                    setAnticipoInput(String(Number(cita.seniaPagada) || 0));
                     setDropdownCitaOpen(false);
                   }}
                 >
@@ -385,20 +387,31 @@ export default function EndSessionScreen() {
             {/* Cobro y Anticipo */}
             <View className="flex-row gap-4 mb-4">
               <View className="flex-1">
-                <Text className="text-text-secondary text-xs font-semibold tracking-widest mb-2">ANTICIPO RECIBIDO</Text>
-                <View className="rounded-xl px-4 py-3 bg-dark-100 border border-transparent flex-row items-center h-12">
-                  <MaterialCommunityIcons name="cash" size={18} color={COLORS.primary.light} style={{ marginRight: 8 }} />
-                  <Text className="text-white text-sm font-semibold">{anticipo}</Text>
+                <View className="flex-row items-center mb-2">
+                  <MaterialCommunityIcons name="cash" size={14} color={COLORS.primary.light} style={{ marginRight: 4 }} />
+                  <Text className="text-text-secondary text-xs font-semibold tracking-widest">ANTICIPO RECIBIDO</Text>
+                </View>
+                <View className="rounded-xl px-4 py-3 bg-dark-100 border border-transparent">
+                  <TextInput
+                    className="text-white text-sm"
+                    keyboardType="number-pad"
+                    placeholder="0"
+                    placeholderTextColor={COLORS.text.dimmed}
+                    value={anticipoInput}
+                    onChangeText={setAnticipoInput}
+                  />
                 </View>
               </View>
               <View className="flex-1">
-                <Text className="text-text-secondary text-xs font-semibold tracking-widest mb-2">COBRO TATUAJE</Text>
-                <View className="rounded-xl px-4 py-3 bg-dark-100 border border-transparent flex-row items-center h-12">
-                  <MaterialCommunityIcons name="cash-register" size={18} color={COLORS.primary.light} style={{ marginRight: 8 }} />
+                <View className="flex-row items-center mb-2">
+                  <MaterialCommunityIcons name="cash-register" size={14} color={COLORS.primary.light} style={{ marginRight: 4 }} />
+                  <Text className="text-text-secondary text-xs font-semibold tracking-widest">COBRO TATUAJE</Text>
+                </View>
+                <View className="rounded-xl px-4 py-3 bg-dark-100 border border-transparent">
                   <TextInput
-                    className="flex-1 text-white text-sm"
-                    keyboardType="numeric"
-                    placeholder="250"
+                    className="text-white text-sm"
+                    keyboardType="number-pad"
+                    placeholder="0"
                     placeholderTextColor={COLORS.text.dimmed}
                     value={cobroTatuaje}
                     onChangeText={setCobroTatuaje}
