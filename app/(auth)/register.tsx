@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
-import { View, KeyboardAvoidingView, Platform, TouchableOpacity, TextInput as RNTextInput } from 'react-native';
+import { View, KeyboardAvoidingView, Platform, TouchableOpacity, TextInput as RNTextInput, ScrollView } from 'react-native';
 import { Text, TextInput } from '@/src/components/StyledText';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
@@ -183,8 +183,13 @@ export default function RegisterScreen() {
 
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-        className="flex-1 justify-center px-6 z-10"
+        className="flex-1 z-10"
       >
+        <ScrollView
+          contentContainerStyle={{ flexGrow: 1, paddingHorizontal: 24 }}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
         <SafeAreaView className="flex-1 justify-center">
           
           {/* ── Botón Volver ── */}
@@ -350,6 +355,7 @@ export default function RegisterScreen() {
           )}
 
         </SafeAreaView>
+        </ScrollView>
       </KeyboardAvoidingView>
     </View>
   );

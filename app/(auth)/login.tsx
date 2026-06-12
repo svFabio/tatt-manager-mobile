@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, KeyboardAvoidingView, Platform, TouchableOpacity, Alert } from 'react-native';
+import { View, KeyboardAvoidingView, Platform, TouchableOpacity, Alert, ScrollView } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import { Text } from '@/src/components/StyledText';
 import { router } from "expo-router";
@@ -90,8 +90,13 @@ export default function LoginScreen() {
 
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-        className="flex-1 justify-center px-6 z-10"
+        className="flex-1 z-10"
       >
+        <ScrollView
+          contentContainerStyle={{ flexGrow: 1, justifyContent: "center", paddingHorizontal: 24 }}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
         {/* ── Center Content Container ── */}
         <View className="flex-1 justify-center">
           {/* ── Logo / Título ── */}
@@ -158,7 +163,7 @@ export default function LoginScreen() {
             </TouchableOpacity>
           </View>
         </View>
-
+        </ScrollView>
       </KeyboardAvoidingView>
     </View>
   );
